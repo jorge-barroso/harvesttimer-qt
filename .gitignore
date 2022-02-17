@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Qt Creator Project files
+harvesttimer-qt.pro*
+
+# CMake build directories
+cmake-build*

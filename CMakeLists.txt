@@ -10,29 +10,33 @@ set(CMAKE_CXX_STANDARD 23)
 include_directories(.)
 
 add_executable(harvest-timer
-        src/addtaskform.cpp
-        src/addtaskform.h
-        src/datelabel.cpp
-        src/datelabel.h
-        src/favourite.h
-        src/favourites.cpp
-        src/favourites.h
-        src/favouritewidget.cpp
-        src/favouritewidget.h
-        src/harvesthandler.cpp
-        src/harvesthandler.h
-        src/main.cpp
-        src/mainwindow.cpp
-        src/mainwindow.h
-        src/task.h
-        src/taskwidget.cpp
-        src/taskwidget.h
-        resources/images.qrc
-        src/mainwindow.ui
-        src/taskwidget.ui
-        src/favourites.ui
-        src/favouritewidget.ui
-        src/addtaskform.ui src/settingsmanager.cpp src/settingsmanager.h src/project.h src/harvesttask.h)
+        addtaskform.cpp
+        addtaskform.h
+        datelabel.cpp
+        datelabel.h
+        favourite.h
+        favourites.cpp
+        favourites.h
+        favouritewidget.cpp
+        favouritewidget.h
+        harvesthandler.cpp
+        harvesthandler.h
+        main.cpp
+        mainwindow.cpp
+        mainwindow.h
+        task.h
+        taskwidget.cpp
+        taskwidget.h
+        icons.qrc
+        mainwindow.ui
+        taskwidget.ui
+        favourites.ui
+        favouritewidget.ui
+        addtaskform.ui
+        settingsmanager.cpp
+        settingsmanager.h
+        project.h
+        harvesttask.h)
 
 find_package(Qt6 REQUIRED
         Core

@@ -1,11 +1,11 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>icons/edit.png</file>
-        <file>icons/play.png</file>
-        <file>icons/plus.png</file>
-        <file>icons/star.png</file>
-        <file>icons/stop.png</file>
-        <file>icons/today.png</file>
-        <file>icons/bin.png</file>
+        <file>resources/icons/edit.png</file>
+        <file>resources/icons/play.png</file>
+        <file>resources/icons/plus.png</file>
+        <file>resources/icons/star.png</file>
+        <file>resources/icons/stop.png</file>
+        <file>resources/icons/today.png</file>
+        <file>resources/icons/bin.png</file>
     </qresource>
 </RCC>

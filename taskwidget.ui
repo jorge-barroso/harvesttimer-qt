@@ -29,6 +29,7 @@
     <widget class="QLabel" name="task_name_label">
      <property name="font">
       <font>
+       <pointsize>9</pointsize>
        <bold>true</bold>
       </font>
      </property>
@@ -70,6 +71,7 @@
     <widget class="QLabel" name="project_name_label">
      <property name="font">
       <font>
+       <pointsize>11</pointsize>
        <bold>true</bold>
        <kerning>true</kerning>
       </font>
@@ -81,6 +83,11 @@
    </item>
    <item row="0" column="0">
     <widget class="QLabel" name="organization_label">
+     <property name="font">
+      <font>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>TextLabel</string>
      </property>

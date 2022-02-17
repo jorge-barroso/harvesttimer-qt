@@ -7,9 +7,9 @@
 #include <QTextStream>
 #include "favouritewidget.h"
 
-Favourites::Favourites(const QDir& config_dir, QWidget* parent) : QDialog(parent), ui(new Ui::Favourites),
-																  favourites_file(config_dir.absolutePath() + "/" +
-																				  this->favourites_file_name)
+Favourites::Favourites(const QDir& config_dir, QWidget* parent)
+    : QDialog(parent), ui(new Ui::Favourites)
+    , favourites_file(config_dir.absolutePath() + "/" + this->favourites_file_name)
 {
 	ui->setupUi(this);
 

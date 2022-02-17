@@ -108,7 +108,7 @@
          <height>326</height>
         </rect>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_3"/>
+       <layout class="QVBoxLayout" name="scroll_area_widget_layout"/>
       </widget>
      </widget>
     </item>

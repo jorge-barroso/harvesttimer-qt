@@ -2,6 +2,7 @@
 #define TASKWIDGET_H
 
 #include <QWidget>
+#include "task.h"
 
 namespace Ui {
 class TaskWidget;
@@ -12,7 +13,7 @@ class TaskWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit TaskWidget(QWidget *parent = nullptr);
+    explicit TaskWidget(const Task& task, QWidget* parent);
     ~TaskWidget();
 
 private:

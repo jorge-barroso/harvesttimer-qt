@@ -1,6 +1,5 @@
 #include "addtaskform.h"
 #include "ui_addtaskform.h"
-#include <QTime>
 #include <QStringList>
 
 AddTaskForm::AddTaskForm(QWidget *parent) :
@@ -19,22 +18,10 @@ AddTaskForm::~AddTaskForm()
 Task AddTaskForm::build_task()
 {
     // TODO improve handling time user input (empty, only minutes, etc.)
-    QString time_worked{this->ui->time_worked_line->text()};
-    QTime time_tracked;
-    if (time_worked.isEmpty())
-    {
-        time_tracked = QTime(0, 0);
-    }
-    else
-    {
-        QStringList time_components{time_worked.split(":")};
-        time_tracked = QTime(time_components[0].toInt(), time_components[1].toInt());
-    }
-
     Task task{
         this->ui->project_dropdown->currentText(),
         this->ui->task_dropdown->currentText(),
-        time_tracked
+		this->ui->time_worked_line->time()
     };
 
     return task;

@@ -36,3 +36,6 @@ harvesttimer-qt.pro*
 
 # CMake build directories
 cmake-build*
+
+# JetBrains project
+.idea

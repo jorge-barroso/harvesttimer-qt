@@ -10,18 +10,17 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 
 	this->appDate = QDate::currentDate();
 	this->ui->date_label->setText(this->appDate.toString());
+	this->ui->scroll_area_widget_layout->setAlignment(Qt::AlignmentFlag::AlignTop);
 
-	// TODO gather data and pass to task form
+	// TODO gather previous data and pass to task form
 
 	// Wait for our harvest handler to be ready before we show the main window
+	// Harvest will be ready automatically when we have user credentials already present
+	// otherwise we'll have to wait for the user to log in and then receive the auth credentials
 	if (!harvest.is_ready())
-	{
 		connect(&harvest, &HarvestHandler::ready, this, &MainWindow::harvest_handler_ready);
-	}
 	else
-	{
 		harvest_handler_ready();
-	}
 
 	// connect to signals from modal forms
 	connect(&task_form, &AddTaskForm::task_started, this, &MainWindow::task_started);
@@ -48,7 +47,7 @@ void MainWindow::on_date_current_button_clicked()
 {
 	QDate appDate{ ui->date_label->getAppDate() };
 	// If we are already in the current date, there is no need to do anything else here
-	if(appDate == QDate::currentDate())
+	if (appDate == QDate::currentDate())
 		return
 
 	this->ui->date_label->resetDate();
@@ -65,16 +64,18 @@ void MainWindow::on_date_back_button_clicked()
 
 void MainWindow::update_task_widgets(QDate date)
 {
-	for (const auto& child: ui->scrollAreaWidgetContents->layout()->children())
+	QLayoutItem* child;
+	QLayout* layout = ui->scrollAreaWidgetContents->layout();
+	while ((child = layout->takeAt(0)) != 0)
 	{
-		delete child;
+		delete child->widget();
 	}
 
 	if (!task_widgets.contains(date))
 		return;
 
 	std::vector<TaskWidget*> task_widgets_vector{ task_widgets[date] };
-	for (const auto& task_widget : task_widgets_vector)
+	for (const auto& task_widget: task_widgets_vector)
 	{
 		ui->scrollAreaWidgetContents->layout()->addWidget(task_widget);
 	}

@@ -35,8 +35,12 @@ add_executable(harvest-timer
         addtaskform.ui
         settingsmanager.cpp
         settingsmanager.h
-        project.h
-        harvesttask.h)
+        harvestproject.h
+        harvesttask.h
+        tasksscrollarea.cpp
+        tasksscrollarea.h
+        maputils.cpp
+        maputils.h)
 
 find_package(Qt6 REQUIRED
         Core

@@ -89,7 +89,7 @@
      </layout>
     </item>
     <item>
-     <widget class="QScrollArea" name="scrollArea">
+     <widget class="TasksScrollArea" name="scrollArea">
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
@@ -172,6 +172,12 @@
    <class>DateLabel</class>
    <extends>QLabel</extends>
    <header>datelabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TasksScrollArea</class>
+   <extends>QScrollArea</extends>
+   <header>tasksscrollarea.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

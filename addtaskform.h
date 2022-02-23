@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include "task.h"
-#include "project.h"
+#include "harvestproject.h"
 
 namespace Ui
 {
@@ -19,7 +19,7 @@ class AddTaskForm : public QDialog
 
 		~AddTaskForm();
 
-		void add_projects(const std::vector<Project>& projects);
+		void add_projects(const std::vector<HarvestProject>& projects);
 
 	signals:
 
@@ -42,7 +42,9 @@ private:
 
 		Task build_task();
 
-		std::vector<Project> projects;
+		std::vector<HarvestProject> projects;
+
+		QTime zero_time{ QTime(0, 0) };
 };
 
 #endif // ADDTASKFORM_H

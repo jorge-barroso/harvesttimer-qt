@@ -1,15 +1,18 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <iostream>
+#include "maputils.h"
+#include "tasksscrollarea.h"
 
 MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
-		: QMainWindow(parent), ui(new Ui::MainWindow), favouritesForm(config_dir), harvest(config_dir)
+		: QMainWindow(parent), ui(new Ui::MainWindow), favouritesForm(config_dir), harvest(config_dir),
+		  currentTask{ nullptr }
 {
 	ui->setupUi(this);
 	setWindowTitle("Harvest Timer");
 
-	this->appDate = QDate::currentDate();
-	this->ui->date_label->setText(this->appDate.toString());
+	this->app_date = QDate::currentDate();
+	this->ui->date_label->setText(this->app_date.toString());
 	this->ui->scroll_area_widget_layout->setAlignment(Qt::AlignmentFlag::AlignTop);
 
 	// TODO gather previous data and pass to task form
@@ -39,46 +42,29 @@ MainWindow::~MainWindow()
 void MainWindow::on_date_forward_button_clicked()
 {
 	this->ui->date_label->moveForward();
-	update_task_widgets(ui->date_label->getAppDate());
+	app_date = ui->date_label->getAppDate();
+	ui->scrollArea->updateTaskWidgets(ui->date_label->getAppDate());
 }
 
 
 void MainWindow::on_date_current_button_clicked()
 {
-	QDate appDate{ ui->date_label->getAppDate() };
+	app_date = ui->date_label->getAppDate();
 	// If we are already in the current date, there is no need to do anything else here
-	if (appDate == QDate::currentDate())
-		return
+	if (app_date == QDate::currentDate())
+		return;
 
 	this->ui->date_label->resetDate();
 
-	update_task_widgets(appDate);
+	ui->scrollArea->updateTaskWidgets(app_date);
 }
 
 
 void MainWindow::on_date_back_button_clicked()
 {
 	this->ui->date_label->moveBackwards();
-	update_task_widgets(ui->date_label->getAppDate());
-}
-
-void MainWindow::update_task_widgets(QDate date)
-{
-	QLayoutItem* child;
-	QLayout* layout = ui->scrollAreaWidgetContents->layout();
-	while ((child = layout->takeAt(0)) != 0)
-	{
-		delete child->widget();
-	}
-
-	if (!task_widgets.contains(date))
-		return;
-
-	std::vector<TaskWidget*> task_widgets_vector{ task_widgets[date] };
-	for (const auto& task_widget: task_widgets_vector)
-	{
-		ui->scrollAreaWidgetContents->layout()->addWidget(task_widget);
-	}
+	app_date = ui->date_label->getAppDate();
+	ui->scrollArea->updateTaskWidgets(ui->date_label->getAppDate());
 }
 
 // Bottom buttons operations
@@ -98,19 +84,23 @@ void MainWindow::on_favourites_button_clicked()
 
 void MainWindow::task_started(Task& task)
 {
-	map_insert_or_create(tasks, appDate, task);
+	if (!harvest.addTask(task))
+		return;
 
-	auto* task_widget = new TaskWidget(task, ui->scrollAreaWidgetContents);
-	ui->scrollAreaWidgetContents->layout()->addWidget(task_widget);
+//	MapUtils::map_insert_or_create_vector(tasks, app_date, task);
 
-	// TODO if time is 00:00 then start tracking and timing, else just add it to harvest
-	map_insert_or_create(task_widgets, appDate, task_widget);
+	ui->scrollArea->addTask(task, app_date);
+//
+//	if (currentTask != nullptr)
+//		ui->scrollArea->stopCurrentTask();
+//
+//	currentTask = &task;
 }
-
 
 void MainWindow::task_to_favourites(Task& task)
 {
-	std::cout << "Task Favourited: " << task.project.toStdString() << " // " << task.task_name.toStdString() << " at "
+	std::cout << "Task Favourited: " << task.project_name.toStdString() << " // " << task.task_name.toStdString()
+			  << " at "
 			  << task.time_tracked.toString().toStdString() << std::endl;
 }
 
@@ -119,7 +109,7 @@ void MainWindow::task_to_favourites(Task& task)
 
 void MainWindow::harvest_handler_ready()
 {
-	const std::vector<Project> projects(harvest.get_user_data());
+	const std::vector<HarvestProject> projects(harvest.update_user_data());
 	task_form.add_projects(projects);
 
 	// TODO get tasks history

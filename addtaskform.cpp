@@ -18,10 +18,16 @@ AddTaskForm::~AddTaskForm()
 Task AddTaskForm::build_task()
 {
     // TODO improve handling time user input (empty, only minutes, etc.)
+	const HarvestProject chosen_project { projects[ui->project_dropdown->currentIndex()] };
+	const QTime time{ this->ui->time_worked_line->time() };
     Task task{
+		chosen_project.project_id,
+		chosen_project.task[ui->task_dropdown->currentIndex()].task_id,
         this->ui->project_dropdown->currentText(),
         this->ui->task_dropdown->currentText(),
-		this->ui->time_worked_line->time()
+		time,
+		this->ui->notes_text_edit->toPlainText(),
+		zero_time.secsTo(task.time_tracked) == 0,
     };
 
     return task;
@@ -54,10 +60,10 @@ void AddTaskForm::on_cancel_button_clicked()
     // TODO reset
 }
 
-void AddTaskForm::add_projects(const std::vector<Project>& new_projects)
+void AddTaskForm::add_projects(const std::vector<HarvestProject>& new_projects)
 {
 	projects = new_projects;
-	for (const Project& project: projects)
+	for (const HarvestProject& project: projects)
 	{
 		ui->project_dropdown->addItem(project.project_name);
 	}

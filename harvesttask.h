@@ -10,8 +10,8 @@
 
 struct HarvestTask
 {
-	long harvest_id;
-	long task_id;
+	qint64 harvest_id;
+	qint64 task_id;
 	QString task_name;
 };
 

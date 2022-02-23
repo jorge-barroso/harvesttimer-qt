@@ -10,7 +10,8 @@
 #include <QJsonDocument>
 #include <QEventLoop>
 #include "settingsmanager.h"
-#include "project.h"
+#include "harvestproject.h"
+#include "task.h"
 
 class HarvestHandler : public QObject
 {
@@ -26,15 +27,17 @@ class HarvestHandler : public QObject
 
         ~HarvestHandler() override;
 
-		std::vector<Project> get_user_data();
+		std::vector<HarvestProject> update_user_data();
 
 		[[nodiscard]] bool is_ready() const;
+
+		bool addTask(Task& task);
 
 	signals:
 
 		void ready();
 
-		void data_ready(std::vector<Project>);
+		void data_ready(std::vector<HarvestProject>);
 
 	private slots:
 
@@ -47,16 +50,18 @@ class HarvestHandler : public QObject
 		QTcpSocket* auth_socket;
 
 		const QString client_id{ "VkKA3WoB2M5cEQGwf82VkeHb" };
-		const QString client_secret{
-				"QUwB8dtQxMwY5omBHgZBsXAhB2h_jzKZcGZkCUom1CPBYvTKUGPty7ree7ao92PV5FT5VQHbVWwNzTQUITVLmg" };
+		const QString client_secret{"QUwB8dtQxMwY5omBHgZBsXAhB2h_jzKZcGZkCUom1CPBYvTKUGPty7ree7ao92PV5FT5VQHbVWwNzTQUITVLmg" };
 		const QString grant_type{ "authorization_code" };
+
 		const QString auth_host{ "https://id.getharvest.com" };
-		const QString login_url{
-				auth_host + "/oauth2/authorize?client_id=" + client_id + "&response_type=code" };
+		const QString login_url{auth_host + "/oauth2/authorize?client_id=" + client_id + "&response_type=code" };
 		const QString auth_url{ auth_host + "/api/v2/oauth2/token" };
 
 		const QString requests_host{ "https://api.harvestapp.com" };
 		const QString assignments_url{ requests_host + "/v2/users/me/project_assignments" };
+		const QString time_entries_url { requests_host + "/v2/time_entries" };
+
+		std::vector<HarvestProject> projects;
 
 		const QString auth_file_name = "harvest_auth.json";
 		QFile auth_file;
@@ -98,9 +103,12 @@ class HarvestHandler : public QObject
 
 		void load_account_id();
 
-		void request_with_auth(const QUrl& url, const bool sync_request);
+		void getRequestWithAuth(const QUrl& url, const bool sync_request);
 
-		static void get_projects_data(const QJsonDocument& json_payload, std::vector<Project>& projects_vector);
+		static void get_projects_data(const QJsonDocument& json_payload, std::vector<HarvestProject>& projects_vector);
+
+		void postRequestWithAuth(const QUrl& url, const QJsonDocument& payload, const bool sync_request);
+
 };
 
 #endif // HARVESTHANDLER_H

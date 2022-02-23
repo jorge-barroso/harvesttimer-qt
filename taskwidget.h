@@ -22,6 +22,16 @@ class TaskWidget : public QWidget
 
 		void addMinute();
 
+private slots:
+
+        void on_delete_button_clicked();
+
+        void on_stop_resume_button_clicked();
+
+        void on_add_favourite_button_clicked();
+
+        void on_edit_button_clicked();
+
 private:
 		Ui::TaskWidget* ui;
 };

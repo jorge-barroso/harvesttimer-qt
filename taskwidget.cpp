@@ -6,13 +6,18 @@
 // TODO edit to allow changing all task details, both in widget and on the system
 TaskWidget::TaskWidget(const Task* task, QWidget* parent) :
 		QWidget(parent),
-		ui(new Ui::TaskWidget)
+		ui(new Ui::TaskWidget),
+		stop_icon(),
+		start_icon()
 {
 	ui->setupUi(this);
 	ui->organization_label->setText("");
 	ui->project_name_label->setText(task->project_name);
 	ui->task_name_label->setText(task->task_name);
 	ui->time_label->setText(task->time_tracked.toString("hh:mm"));
+
+	stop_icon.addFile(QString::fromUtf8(":/icons/resources/icons/stop.png"), QSize(), QIcon::Normal, QIcon::Off);
+	start_icon.addFile(QString::fromUtf8(":/icons/resources/icons/play.png"), QSize(), QIcon::Normal, QIcon::Off);
 
 	setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
 
@@ -63,11 +68,13 @@ void TaskWidget::on_stop_resume_button_clicked()
 {
 	if (ui->stop_resume_button->isChecked())
 	{
+		ui->stop_resume_button->setIcon(stop_icon);
 		// TODO start
 		// TODO emit signal for tasksscrollarea to stop currently running task (if needed), start this one, and update variables
 	}
 	else
 	{
+		ui->stop_resume_button->setIcon(start_icon);
 		emit task_stopped();
 	}
 }

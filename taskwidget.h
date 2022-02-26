@@ -2,6 +2,7 @@
 #define TASKWIDGET_H
 
 #include <QWidget>
+#include <QIcon>
 #include "task.h"
 
 namespace Ui
@@ -39,6 +40,10 @@ class TaskWidget : public QWidget
 
 	private:
 		Ui::TaskWidget* ui;
+
+		QIcon stop_icon;
+
+		QIcon start_icon;
 };
 
 #endif // TASKWIDGET_H

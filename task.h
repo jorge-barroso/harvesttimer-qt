@@ -7,6 +7,7 @@
 struct Task {
 	long long project_id;
 	long long task_id;
+	long long time_entry_id;
     QString project_name;
     QString task_name;
     QTime time_tracked;

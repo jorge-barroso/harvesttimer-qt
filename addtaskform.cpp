@@ -15,19 +15,20 @@ AddTaskForm::~AddTaskForm()
     delete ui;
 }
 
-Task AddTaskForm::build_task()
+Task* AddTaskForm::build_task()
 {
     // TODO improve handling time user input (empty, only minutes, etc.)
 	const HarvestProject chosen_project { projects[ui->project_dropdown->currentIndex()] };
 	const QTime time{ this->ui->time_worked_line->time() };
-    Task task{
+    Task* task = new Task{
 		chosen_project.project_id,
 		chosen_project.task[ui->task_dropdown->currentIndex()].task_id,
+		0,
         this->ui->project_dropdown->currentText(),
         this->ui->task_dropdown->currentText(),
 		time,
 		this->ui->notes_text_edit->toPlainText(),
-		zero_time.secsTo(task.time_tracked) == 0,
+		zero_time.secsTo(task->time_tracked) == 0,
     };
 
     return task;
@@ -35,7 +36,7 @@ Task AddTaskForm::build_task()
 
 void AddTaskForm::on_start_button_clicked()
 {
-    Task task{build_task()};
+    Task* task{build_task()};
 
     emit task_started(task);
 
@@ -45,7 +46,7 @@ void AddTaskForm::on_start_button_clicked()
 
 void AddTaskForm::on_favourite_button_clicked()
 {
-    Task task{build_task()};
+    Task* task{build_task()};
 
     emit task_to_favourites(task);
 

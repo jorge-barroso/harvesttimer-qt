@@ -8,6 +8,7 @@
 #include <QObject>
 #include <QScrollArea>
 #include "taskwidget.h"
+#include "harvesthandler.h"
 #include <QTimer>
 
 QT_BEGIN_NAMESPACE
@@ -22,12 +23,11 @@ class TasksScrollArea : public QScrollArea
 	Q_OBJECT
 
 	public:
-
 		explicit TasksScrollArea(QWidget* widget);
 
 		~TasksScrollArea() override;
 
-		void addTask(const Task& task, const QDate& app_date);
+		void addTask(Task* task, const QDate& app_date);
 
 		void updateTaskWidgets(QDate date);
 
@@ -35,14 +35,18 @@ class TasksScrollArea : public QScrollArea
 
 		void stopCurrentTask();
 
+		void setHarvestHandler(HarvestHandler* harvest_handler);
+
 	private:
 		std::map<QDate, std::vector<TaskWidget*>> task_widgets;
 
 		TaskWidget* runningTaskWidget;
+		const Task* runningTask;
 
 		QTimer timer;
-
 		const int timer_seconds { 60 };
+
+		HarvestHandler* harvest_handler;
 };
 
 

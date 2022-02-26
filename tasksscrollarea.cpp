@@ -17,19 +17,20 @@ TasksScrollArea::TasksScrollArea(QWidget* widget)
 	timer.setInterval(timer_seconds * 1000);
 }
 
-void TasksScrollArea::addTask(const Task& task, const QDate& app_date)
+void TasksScrollArea::addTask(Task* task, const QDate& app_date)
 {
 	TaskWidget* task_widget{ new TaskWidget(task, this->widget()) };
 	this->widget()->layout()->addWidget(task_widget);
 	MapUtils::map_insert_or_create_vector(task_widgets, app_date, task_widget);
 
-	if (task.started)
+	if (task->started)
 	{
-		if(runningTaskWidget != nullptr)
-			runningTaskWidget->stop();
+		stopCurrentTask();
 
 		// no need to run start because that's the default state
 		runningTaskWidget = task_widget;
+		runningTask = task;
+		connect(runningTaskWidget, &TaskWidget::task_stopped, this, &TasksScrollArea::stopCurrentTask);
 	}
 
 	timer.start();
@@ -69,9 +70,28 @@ void TasksScrollArea::stopCurrentTask()
 	if (runningTaskWidget == nullptr)
 		return;
 
+	disconnect(runningTaskWidget, &TaskWidget::task_stopped, nullptr, nullptr);
 	runningTaskWidget = nullptr;
+
 	timer.stop();
+
+	harvest_handler->stopTask(*runningTask);
+}
+
+void TasksScrollArea::setHarvestHandler(HarvestHandler* harvest_handler)
+{
+	this->harvest_handler = harvest_handler;
 }
 
 TasksScrollArea::~TasksScrollArea()
-= default;
+{
+	delete runningTaskWidget;
+	delete runningTask;
+	for (const auto& widgets : task_widgets)
+	{
+		for (auto* task_widget : widgets.second)
+		{
+			delete task_widget;
+		}
+	}
+}

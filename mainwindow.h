@@ -31,9 +31,9 @@ private slots:
 
     void on_favourites_button_clicked();
 
-    void task_started(Task &task);
+    void task_started(Task* task);
 
-    void task_to_favourites(Task &task);
+    void task_to_favourites(Task* task);
 
 	void harvest_handler_ready();
 
@@ -42,7 +42,7 @@ private:
     AddTaskForm task_form;
     Favourites favouritesForm;
     QDate app_date;
-    HarvestHandler harvest;
+    HarvestHandler* harvest;
 //	std::map<QDate, std::vector<Task>> tasks;
 //	Task* currentTask;
 

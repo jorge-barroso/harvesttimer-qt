@@ -14,7 +14,7 @@ class TaskWidget : public QWidget
 	Q_OBJECT
 
 	public:
-		explicit TaskWidget(const Task& task, QWidget* parent);
+		explicit TaskWidget(const Task* task, QWidget* parent);
 
 		~TaskWidget() override;
 
@@ -22,17 +22,22 @@ class TaskWidget : public QWidget
 
 		void addMinute();
 
-private slots:
+	signals:
+		void task_stopped();
 
-        void on_delete_button_clicked();
+		void task_started();
 
-        void on_stop_resume_button_clicked();
+	private slots:
 
-        void on_add_favourite_button_clicked();
+		void on_delete_button_clicked();
 
-        void on_edit_button_clicked();
+		void on_stop_resume_button_clicked();
 
-private:
+		void on_add_favourite_button_clicked();
+
+		void on_edit_button_clicked();
+
+	private:
 		Ui::TaskWidget* ui;
 };
 

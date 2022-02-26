@@ -41,7 +41,7 @@ QDir get_config_directory(const QString& conf_dir_name)
 		user_conf_dir.mkdir(conf_dir_name);
 	}
 
-	return QDir(user_conf_dir.absolutePath() + "/" + conf_dir_name);
+	return { user_conf_dir.absolutePath() + "/" + conf_dir_name };
 }
 
 void show_window(QMainWindow* parent)

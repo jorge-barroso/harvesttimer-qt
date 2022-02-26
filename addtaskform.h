@@ -23,9 +23,9 @@ class AddTaskForm : public QDialog
 
 	signals:
 
-		void task_started(Task& task);
+		void task_started(Task* task);
 
-		void task_to_favourites(Task& task);
+		void task_to_favourites(Task* task);
 
 	private slots:
 
@@ -40,7 +40,7 @@ class AddTaskForm : public QDialog
 private:
 		Ui::AddTaskForm* ui;
 
-		Task build_task();
+		Task* build_task();
 
 		std::vector<HarvestProject> projects;
 

@@ -22,7 +22,9 @@ SettingsManager::SettingsManager(const QDir& config_dir)
 {}
 
 SettingsManager::~SettingsManager()
-{}
+{
+	delete instance;
+}
 
 void SettingsManager::add_setting(const QString& key, const QString& value)
 {

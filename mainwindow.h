@@ -42,9 +42,6 @@ private:
     AddTaskForm task_form;
     Favourites favouritesForm;
     QDate app_date;
-    HarvestHandler* harvest;
-//	std::map<QDate, std::vector<Task>> tasks;
-//	Task* currentTask;
-
+    HarvestHandler* harvest_handler;
 };
 #endif // MAINWINDOW_H

@@ -6,7 +6,7 @@
 
 MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 		: QMainWindow(parent), ui(new Ui::MainWindow), favouritesForm(config_dir),
-		  harvest{ HarvestHandler::getInstance(config_dir) }
+		  harvest_handler{ HarvestHandler::getInstance(config_dir) }
 {
 	ui->setupUi(this);
 	setWindowTitle("Harvest Timer");
@@ -15,15 +15,15 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 	this->app_date = QDate::currentDate();
 	this->ui->date_label->setText(this->app_date.toString());
 	this->ui->scroll_area_widget_layout->setAlignment(Qt::AlignmentFlag::AlignTop); // TODO can be added on the UI file?
-	this->ui->scrollArea->setHarvestHandler(harvest);
+	this->ui->scrollArea->setHarvestHandler(harvest_handler);
 
 	// TODO gather previous data and pass to task form
 
 	// Wait for our harvest handler to be ready before we show the main window
 	// Harvest will be ready automatically when we have user credentials already present
 	// otherwise we'll have to wait for the user to log in and then receive the auth credentials
-	if (!harvest->is_ready())
-		connect(harvest, &HarvestHandler::ready, this, &MainWindow::harvest_handler_ready);
+	if (!harvest_handler->is_ready())
+		connect(harvest_handler, &HarvestHandler::ready, this, &MainWindow::harvest_handler_ready);
 	else
 		harvest_handler_ready();
 
@@ -35,6 +35,7 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 MainWindow::~MainWindow()
 {
 	delete ui;
+	delete harvest_handler;
 }
 
 
@@ -86,7 +87,7 @@ void MainWindow::on_favourites_button_clicked()
 
 void MainWindow::task_started(Task* task)
 {
-	std::optional<long long> time_entry_id{ harvest->addTask(task) };
+	std::optional<long long> time_entry_id{ harvest_handler->addTask(task) };
 	if (!time_entry_id.has_value())
 		return;
 
@@ -112,7 +113,7 @@ void MainWindow::task_to_favourites(Task* task)
 
 void MainWindow::harvest_handler_ready()
 {
-	const std::vector<HarvestProject> projects(harvest->update_user_data());
+	const std::vector<HarvestProject> projects(harvest_handler->update_user_data());
 	task_form.add_projects(projects);
 
 	// TODO get tasks history

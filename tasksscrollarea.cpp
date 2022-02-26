@@ -78,9 +78,9 @@ void TasksScrollArea::stopCurrentTask()
 	harvest_handler->stopTask(*runningTask);
 }
 
-void TasksScrollArea::setHarvestHandler(HarvestHandler* harvest_handler)
+void TasksScrollArea::setHarvestHandler(HarvestHandler* handler)
 {
-	this->harvest_handler = harvest_handler;
+	this->harvest_handler = handler;
 }
 
 TasksScrollArea::~TasksScrollArea()

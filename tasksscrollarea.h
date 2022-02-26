@@ -35,7 +35,7 @@ class TasksScrollArea : public QScrollArea
 
 		void stopCurrentTask();
 
-		void setHarvestHandler(HarvestHandler* harvest_handler);
+		void setHarvestHandler(HarvestHandler* handler);
 
 	private:
 		std::map<QDate, std::vector<TaskWidget*>> task_widgets;

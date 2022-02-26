@@ -19,7 +19,7 @@
 #include <QMessageBox>
 #include <QDebug>
 
-HarvestHandler* HarvestHandler::harvestHandler{ nullptr };
+HarvestHandler* HarvestHandler::harvest_handler{ nullptr };
 
 HarvestHandler::HarvestHandler(const QDir& config_dir)
 		: auth_server{ nullptr }, auth_socket{ nullptr }, auth_file(config_dir.absolutePath() + "/" + auth_file_name),
@@ -44,7 +44,17 @@ HarvestHandler::HarvestHandler(const QDir& config_dir)
 	}
 }
 
-HarvestHandler::~HarvestHandler() = default;
+HarvestHandler::~HarvestHandler()
+{
+	delete HarvestHandler::harvest_handler;
+
+	delete auth_server;
+	delete auth_socket;
+
+	delete settings_manager;
+
+	delete reply;
+}
 
 QJsonDocument HarvestHandler::get_authentication()
 {
@@ -111,6 +121,7 @@ void HarvestHandler::newConnection()
 {
 	auth_socket = auth_server->nextPendingConnection();
 	auth_server->close();
+	delete auth_server;
 	connect(auth_socket, &QTcpSocket::readyRead, this, &HarvestHandler::code_received);
 }
 
@@ -123,6 +134,7 @@ void HarvestHandler::code_received()
 		auth_socket->write("Authentication successful, you may now close this tab");
 		auth_socket->flush();
 		auth_socket->close();
+		delete auth_socket;
 
 		for (QString& token: tokens)
 		{
@@ -366,9 +378,9 @@ void HarvestHandler::doRequestWithAuth(const QUrl& url, const bool sync_request,
 
 HarvestHandler* HarvestHandler::getInstance(const QDir& config_dir)
 {
-	if (harvestHandler == nullptr)
-		harvestHandler = new HarvestHandler(config_dir);
+	if (harvest_handler == nullptr)
+		harvest_handler = new HarvestHandler(config_dir);
 
-	return harvestHandler;
+	return harvest_handler;
 }
 

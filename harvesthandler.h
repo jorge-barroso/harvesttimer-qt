@@ -50,7 +50,7 @@ class HarvestHandler : public QObject
 		void authentication_received();
 
 	private:
-		static HarvestHandler* harvestHandler;
+		static HarvestHandler* harvest_handler;
 
 		QTcpServer* auth_server;
 		QTcpSocket* auth_socket;
@@ -114,7 +114,7 @@ class HarvestHandler : public QObject
 
 		void load_account_id();
 
-		void doRequestWithAuth(const QUrl& url, const bool sync_request, const QByteArray& verb,
+		void doRequestWithAuth(const QUrl& url, bool sync_request, const QByteArray& verb,
 							   const std::optional<QJsonDocument>& payload = std::nullopt);
 
 		static void get_projects_data(const QJsonDocument& json_payload, std::vector<HarvestProject>& projects_vector);

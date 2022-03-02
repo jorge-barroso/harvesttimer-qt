@@ -4,7 +4,6 @@
 
 #include "maputils.h"
 #include "ui_mainwindow.h"
-#include "mainwindow.h"
 #include "tasksscrollarea.h"
 #include <QLayout>
 
@@ -23,16 +22,14 @@ void TasksScrollArea::addTask(Task* task, const QDate& app_date)
 	this->widget()->layout()->addWidget(task_widget);
 	MapUtils::map_insert_or_create_vector(task_widgets, app_date, task_widget);
 
-	if (task->started)
-	{
-		stopCurrentTask();
+	if (!task->started)
+		return;
 
-		// no need to run start because that's the default state
-		runningTaskWidget = task_widget;
-		runningTask = task;
-		connect(runningTaskWidget, &TaskWidget::task_stopped, this, &TasksScrollArea::stopCurrentTask);
-	}
-
+	stopCurrentTask();
+	// no need to change start/stop button because that's its default state
+	runningTaskWidget = task_widget;
+	runningTask = task;
+	connect(runningTaskWidget, &TaskWidget::task_stopped, this, &TasksScrollArea::stopCurrentTask);
 	timer.start();
 }
 

@@ -20,6 +20,8 @@
 #include <QDebug>
 
 HarvestHandler* HarvestHandler::harvest_handler{ nullptr };
+const QString HarvestHandler::default_grant_type{ "authorization_code" };
+const QString HarvestHandler::refresh_grant_type{ "refresh_token" };
 
 HarvestHandler::HarvestHandler(const QDir& config_dir)
 		: auth_server{ nullptr }, auth_socket{ nullptr }, auth_file(config_dir.absolutePath() + "/" + auth_file_name),
@@ -32,13 +34,13 @@ HarvestHandler::HarvestHandler(const QDir& config_dir)
 	{
 		login();
 	}
-//	else if (!json_auth_is_safely_active())
-//	{
-//		QString refresh_token(json_auth["refresh_token"].toString());
-//		authenticate_request(nullptr, &refresh_token);
-//	}
 	else
 	{
+		if (!json_auth_is_safely_active())
+		{
+			QString refresh_token(json_auth["refresh_token"].toString());
+			authenticate_request(nullptr, &refresh_token);
+		}
 		load_account_id();
 		emit ready();
 	}
@@ -107,21 +109,18 @@ bool HarvestHandler::json_auth_is_complete()
 	return contains_access_token && contains_refresh_token && contains_token_type && contains_expires_in;
 }
 
-[[maybe_unused]] bool HarvestHandler::json_auth_is_safely_active()
+bool HarvestHandler::json_auth_is_safely_active()
 {
-	const long expiry_time = json_auth["expires_in"].toInteger();
+	auto expires_on{ QDateTime::fromMSecsSinceEpoch(json_auth["expires_on"].toInteger()) };
 
-	const std::chrono::time_point renewal_chrono = std::chrono::system_clock::now() + std::chrono::hours{ 24 };
-	const auto renewal_epoch = std::chrono::duration_cast<std::chrono::seconds>(renewal_chrono.time_since_epoch());
-
-	return expiry_time >= renewal_epoch.count();
+	// if there's less than a full day of time left before the token expires...
+	return expires_on > QDateTime::currentDateTime().addDays(1);
 }
 
 void HarvestHandler::newConnection()
 {
 	auth_socket = auth_server->nextPendingConnection();
 	auth_server->close();
-	delete auth_server;
 	connect(auth_socket, &QTcpSocket::readyRead, this, &HarvestHandler::code_received);
 }
 
@@ -135,6 +134,7 @@ void HarvestHandler::code_received()
 		auth_socket->flush();
 		auth_socket->close();
 		delete auth_socket;
+		delete auth_server;
 
 		for (QString& token: tokens)
 		{
@@ -149,7 +149,7 @@ void HarvestHandler::code_received()
 					QApplication::quit();
 				}
 				get_new_account_id(query_map["scope"]);
-				authenticate_request(&query_map["code"]);
+				authenticate_request(&query_map["code"], nullptr);
 			}
 		}
 	}
@@ -179,9 +179,14 @@ void HarvestHandler::authentication_received()
 		const QString error_string{ "Error while authenticating with Harvest services: " + reply->errorString() };
 		QMessageBox::information(nullptr, "Error authenticating", error_string);
 		QApplication::quit();
+		return;
 	}
 
 	json_auth = readReply();
+	QJsonObject json_object{ json_auth.object() };
+	qint64 seconds{ json_object["expires_in"].toInteger() };
+	json_object.insert("expires_on", QDateTime::currentDateTime().addSecs(seconds).toMSecsSinceEpoch());
+	json_auth.setObject(json_object);
 
 	save_authentication();
 
@@ -191,6 +196,7 @@ void HarvestHandler::authentication_received()
 QJsonDocument HarvestHandler::readReply()
 {
 	QByteArray response_body{ static_cast<QString>(reply->readAll()).toUtf8() };
+	qDebug() << "Harvest response body:" << response_body;
 	reply->close();
 	return QJsonDocument::fromJson(response_body);
 }
@@ -219,12 +225,20 @@ void HarvestHandler::authenticate_request(QString* auth_code, QString* refresh_t
 	QUrlQuery url_query;
 	url_query.addQueryItem("client_id", client_id);
 	url_query.addQueryItem("client_secret", client_secret);
+
+	QString grant_type;
+	if (auth_code != nullptr)
+	{
+		url_query.addQueryItem("code", *auth_code);
+		grant_type = HarvestHandler::default_grant_type;
+	}
+	else if (refresh_token != nullptr)
+	{
+		url_query.addQueryItem("refresh_token", *refresh_token);
+		grant_type = HarvestHandler::refresh_grant_type;
+	}
 	url_query.addQueryItem("grant_type", grant_type);
 
-	if (auth_code != nullptr)
-		url_query.addQueryItem("code", *auth_code);
-	else if (refresh_token != nullptr)
-		url_query.addQueryItem("refresh_token", *refresh_token);
 
 	reply = network_manager.post(request, url_query.toString().toUtf8());
 
@@ -233,6 +247,7 @@ void HarvestHandler::authenticate_request(QString* auth_code, QString* refresh_t
 
 	authentication_received();
 }
+
 
 std::vector<HarvestProject> HarvestHandler::update_user_data()
 {
@@ -247,6 +262,17 @@ std::vector<HarvestProject> HarvestHandler::update_user_data()
 		request_url.setQuery(url_query);
 
 		doRequestWithAuth(request_url, true, "GET");
+		if (reply->error() != QNetworkReply::NoError)
+		{
+			qDebug() << reply->error();
+			// if we need to re-authenticate, let's do it and call this function again
+			if (reply->error() == QNetworkReply::AuthenticationRequiredError)
+			{
+				QString refresh_token{ json_auth["refresh_token"].toString() };
+				authenticate_request(nullptr, &refresh_token);
+				update_user_data();
+			}
+		}
 
 		const QJsonDocument json_payload{ readReply() };
 		get_projects_data(json_payload, projects);
@@ -383,4 +409,5 @@ HarvestHandler* HarvestHandler::getInstance(const QDir& config_dir)
 
 	return harvest_handler;
 }
+
 

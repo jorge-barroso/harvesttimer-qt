@@ -57,7 +57,8 @@ class HarvestHandler : public QObject
 
 		const QString client_id{ "VkKA3WoB2M5cEQGwf82VkeHb" };
 		const QString client_secret{"QUwB8dtQxMwY5omBHgZBsXAhB2h_jzKZcGZkCUom1CPBYvTKUGPty7ree7ao92PV5FT5VQHbVWwNzTQUITVLmg" };
-		const QString grant_type{ "authorization_code" };
+		static const QString default_grant_type;
+		static const QString refresh_grant_type;
 
 		// Authentication endpoints
 		const QString auth_host{ "https://id.getharvest.com" };
@@ -108,7 +109,7 @@ class HarvestHandler : public QObject
 
 		void save_authentication();
 
-		void authenticate_request(QString* auth_code = nullptr, QString* refresh_token = nullptr);
+		void authenticate_request(QString* auth_code, QString* refresh_token);
 
 		void get_new_account_id(QString& scope);
 

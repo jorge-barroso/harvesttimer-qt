@@ -37,6 +37,10 @@ class TasksScrollArea : public QScrollArea
 
 		void setHarvestHandler(HarvestHandler* handler);
 
+	private slots:
+
+		void startTask(const Task* task, TaskWidget* task_widget);
+
 	private:
 		std::map<QDate, std::vector<TaskWidget*>> task_widgets;
 
@@ -44,7 +48,7 @@ class TasksScrollArea : public QScrollArea
 		const Task* runningTask;
 
 		QTimer timer;
-		const int timer_seconds { 60 };
+		const int timer_seconds{ 60 };
 
 		HarvestHandler* harvest_handler;
 };

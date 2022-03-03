@@ -19,18 +19,14 @@ TasksScrollArea::TasksScrollArea(QWidget* widget)
 void TasksScrollArea::addTask(Task* task, const QDate& app_date)
 {
 	TaskWidget* task_widget{ new TaskWidget(task, this->widget()) };
+	connect(task_widget, &TaskWidget::task_started, this, &TasksScrollArea::startTask);
 	this->widget()->layout()->addWidget(task_widget);
 	MapUtils::map_insert_or_create_vector(task_widgets, app_date, task_widget);
 
 	if (!task->started)
 		return;
 
-	stopCurrentTask();
-	// no need to change start/stop button because that's its default state
-	runningTaskWidget = task_widget;
-	runningTask = task;
-	connect(runningTaskWidget, &TaskWidget::task_stopped, this, &TasksScrollArea::stopCurrentTask);
-	timer.start();
+	startTask(task, task_widget);
 }
 
 void TasksScrollArea::updateTaskWidgets(QDate date)
@@ -60,6 +56,16 @@ void TasksScrollArea::updateTaskTimer()
 		return;
 
 	runningTaskWidget->addMinute();
+}
+
+void TasksScrollArea::startTask(const Task* task, TaskWidget* task_widget)
+{
+	stopCurrentTask();
+	// no need to change start/stop button because that's its default state
+	runningTaskWidget = task_widget;
+	runningTask = task;
+	connect(runningTaskWidget, &TaskWidget::task_stopped, this, &TasksScrollArea::stopCurrentTask);
+	timer.start();
 }
 
 void TasksScrollArea::stopCurrentTask()

@@ -8,7 +8,8 @@ TaskWidget::TaskWidget(const Task* task, QWidget* parent) :
 		QWidget(parent),
 		ui(new Ui::TaskWidget),
 		stop_icon(),
-		start_icon()
+		start_icon(),
+		task{ task }
 {
 	ui->setupUi(this);
 	ui->organization_label->setText("");
@@ -31,11 +32,6 @@ TaskWidget::TaskWidget(const Task* task, QWidget* parent) :
 TaskWidget::~TaskWidget()
 {
 	delete ui;
-}
-
-void TaskWidget::stop()
-{
-	// TODO change icon
 }
 
 void TaskWidget::addMinute()
@@ -69,6 +65,7 @@ void TaskWidget::on_stop_resume_button_clicked()
 	if (ui->stop_resume_button->isChecked())
 	{
 		ui->stop_resume_button->setIcon(stop_icon);
+		emit task_started(task, this);
 		// TODO start
 		// TODO emit signal for tasksscrollarea to stop currently running task (if needed), start this one, and update variables
 	}

@@ -26,7 +26,7 @@ class TaskWidget : public QWidget
 	signals:
 		void task_stopped();
 
-		void task_started();
+		void task_started(const Task* task, TaskWidget* task_widget);
 
 	private slots:
 
@@ -44,6 +44,8 @@ class TaskWidget : public QWidget
 		QIcon stop_icon;
 
 		QIcon start_icon;
+
+		const Task * task;
 };
 
 #endif // TASKWIDGET_H

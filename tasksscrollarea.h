@@ -51,6 +51,8 @@ class TasksScrollArea : public QScrollArea
 		const int timer_seconds{ 60 };
 
 		HarvestHandler* harvest_handler;
+
+		void edit_task(const Task* task, TaskWidget* task_widget);
 };
 
 

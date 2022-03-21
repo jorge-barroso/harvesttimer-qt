@@ -20,7 +20,7 @@ void TasksScrollArea::add_task(Task* task, const QDate& app_date)
 {
 	TaskWidget* task_widget{ new TaskWidget(task, this->widget()) };
 	connect(task_widget, &TaskWidget::task_started, this, &TasksScrollArea::start_task);
-	connect(task_widget, &TaskWidget::edit_task, this, &TasksScrollArea::editTask);
+	connect(task_widget, &TaskWidget::edit_task, this, &TasksScrollArea::edit_task);
 	this->widget()->layout()->addWidget(task_widget);
 	MapUtils::map_insert_or_create_vector(task_widgets, app_date, task_widget);
 
@@ -61,6 +61,17 @@ void TasksScrollArea::update_task_timer()
 
 void TasksScrollArea::start_task(const Task* task, TaskWidget* task_widget)
 {
+	stop_current_task();
+	// no need to change start/stop button because that's its default state
+	runningTaskWidget = task_widget;
+	runningTask = task;
+	connect(runningTaskWidget, &TaskWidget::task_stopped, this, &TasksScrollArea::stop_current_task);
+	timer.start();
+}
+
+void TasksScrollArea::edit_task(const Task* task, TaskWidget* task_widget)
+{
+	// TODO gather the task details, show a pop-up window for the user to edit the details, and then on confirmation send an update request
 	stop_current_task();
 	// no need to change start/stop button because that's its default state
 	runningTaskWidget = task_widget;

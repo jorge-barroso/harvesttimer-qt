@@ -359,14 +359,14 @@ std::optional<long long int> HarvestHandler::add_task(const Task* task)
 void HarvestHandler::start_task(const Task& task)
 {
 	const QUrl url{ time_entries_url + "/" + QString::number(task.task_id) + "/restart" };
-	do_request_with_auth(url, true, "PATCH");
+	do_request_with_auth(url, false, "PATCH");
 }
 
 void HarvestHandler::stop_task(const Task& task)
 {
 	const QUrl url{ time_entries_url + "/" + QString::number(task.time_entry_id) + "/stop" };
 	qDebug() << url.toString();
-	do_request_with_auth(url, true, "PATCH");
+	do_request_with_auth(url, false, "PATCH");
 
 	if (reply->error() != QNetworkReply::NetworkError::NoError)
 	{
@@ -400,6 +400,7 @@ void HarvestHandler::do_request_with_auth(const QUrl& url, const bool sync_reque
 		connect(reply, &QNetworkReply::readyRead, &loop, &QEventLoop::quit);
 		loop.exec();
 	}
+	// TODO if not sync connect to a provided function
 }
 
 HarvestHandler* HarvestHandler::get_instance(const QDir& config_dir)

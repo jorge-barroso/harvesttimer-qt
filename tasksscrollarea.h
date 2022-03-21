@@ -27,19 +27,19 @@ class TasksScrollArea : public QScrollArea
 
 		~TasksScrollArea() override;
 
-		void addTask(Task* task, const QDate& app_date);
+		void add_task(Task* task, const QDate& app_date);
 
-		void updateTaskWidgets(QDate date);
+		void update_task_widgets(QDate date);
 
-		void updateTaskTimer();
+		void update_task_timer();
 
-		void stopCurrentTask();
+		void stop_current_task();
 
-		void setHarvestHandler(HarvestHandler* handler);
+		void set_harvest_handler(HarvestHandler* handler);
 
 	private slots:
 
-		void startTask(const Task* task, TaskWidget* task_widget);
+		void start_task(const Task* task, TaskWidget* task_widget);
 
 	private:
 		std::map<QDate, std::vector<TaskWidget*>> task_widgets;

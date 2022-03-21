@@ -12,24 +12,25 @@ TasksScrollArea::TasksScrollArea(QWidget* widget)
 		, timer{ QTimer(this) }
 		, runningTaskWidget{ nullptr }
 {
-	connect(&timer, &QTimer::timeout, this, &TasksScrollArea::updateTaskTimer);
+	connect(&timer, &QTimer::timeout, this, &TasksScrollArea::update_task_timer);
 	timer.setInterval(timer_seconds * 1000);
 }
 
-void TasksScrollArea::addTask(Task* task, const QDate& app_date)
+void TasksScrollArea::add_task(Task* task, const QDate& app_date)
 {
 	TaskWidget* task_widget{ new TaskWidget(task, this->widget()) };
-	connect(task_widget, &TaskWidget::task_started, this, &TasksScrollArea::startTask);
+	connect(task_widget, &TaskWidget::task_started, this, &TasksScrollArea::start_task);
+	connect(task_widget, &TaskWidget::edit_task, this, &TasksScrollArea::editTask);
 	this->widget()->layout()->addWidget(task_widget);
 	MapUtils::map_insert_or_create_vector(task_widgets, app_date, task_widget);
 
 	if (!task->started)
 		return;
 
-	startTask(task, task_widget);
+	start_task(task, task_widget);
 }
 
-void TasksScrollArea::updateTaskWidgets(QDate date)
+void TasksScrollArea::update_task_widgets(QDate date)
 {
 	QLayoutItem* child;
 	QLayout* layout = this->widget()->layout();
@@ -50,7 +51,7 @@ void TasksScrollArea::updateTaskWidgets(QDate date)
 	}
 }
 
-void TasksScrollArea::updateTaskTimer()
+void TasksScrollArea::update_task_timer()
 {
 	if (runningTaskWidget == nullptr)
 		return;
@@ -58,17 +59,17 @@ void TasksScrollArea::updateTaskTimer()
 	runningTaskWidget->addMinute();
 }
 
-void TasksScrollArea::startTask(const Task* task, TaskWidget* task_widget)
+void TasksScrollArea::start_task(const Task* task, TaskWidget* task_widget)
 {
-	stopCurrentTask();
+	stop_current_task();
 	// no need to change start/stop button because that's its default state
 	runningTaskWidget = task_widget;
 	runningTask = task;
-	connect(runningTaskWidget, &TaskWidget::task_stopped, this, &TasksScrollArea::stopCurrentTask);
+	connect(runningTaskWidget, &TaskWidget::task_stopped, this, &TasksScrollArea::stop_current_task);
 	timer.start();
 }
 
-void TasksScrollArea::stopCurrentTask()
+void TasksScrollArea::stop_current_task()
 {
 	if (runningTaskWidget == nullptr)
 		return;
@@ -78,10 +79,10 @@ void TasksScrollArea::stopCurrentTask()
 
 	timer.stop();
 
-	harvest_handler->stopTask(*runningTask);
+	harvest_handler->stop_task(*runningTask);
 }
 
-void TasksScrollArea::setHarvestHandler(HarvestHandler* handler)
+void TasksScrollArea::set_harvest_handler(HarvestHandler* handler)
 {
 	this->harvest_handler = handler;
 }

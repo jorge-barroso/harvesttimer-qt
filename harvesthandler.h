@@ -20,10 +20,10 @@ class HarvestHandler : public QObject
 
 	public slots:
 
-		void newConnection();
+		void new_connection();
 
 	public:
-		static HarvestHandler* getInstance(const QDir& config_dir);
+		static HarvestHandler* get_instance(const QDir& config_dir);
 
         ~HarvestHandler() override;
 
@@ -31,11 +31,11 @@ class HarvestHandler : public QObject
 
 		[[nodiscard]] bool is_ready() const;
 
-		std::optional<long long int> addTask(const Task* task);
+		std::optional<long long int> add_task(const Task* task);
 
-		void startTask(const Task& task);
+		void start_task(const Task& task);
 
-		void stopTask(const Task& task);
+		void stop_task(const Task& task);
 
 	signals:
 
@@ -115,12 +115,12 @@ class HarvestHandler : public QObject
 
 		void load_account_id();
 
-		void doRequestWithAuth(const QUrl& url, bool sync_request, const QByteArray& verb,
-							   const std::optional<QJsonDocument>& payload = std::nullopt);
+		void do_request_with_auth(const QUrl& url, const bool sync_request, const QByteArray& verb,
+								  const std::optional<QJsonDocument>& payload = std::nullopt);
 
 		static void get_projects_data(const QJsonDocument& json_payload, std::vector<HarvestProject>& projects_vector);
 
-		QJsonDocument readReply();
+		QJsonDocument read_reply();
 };
 
 #endif // HARVESTHANDLER_H

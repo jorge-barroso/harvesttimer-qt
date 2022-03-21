@@ -28,6 +28,8 @@ class TaskWidget : public QWidget
 
 		void task_started(const Task* task, TaskWidget* task_widget);
 
+		void edit_task(const Task* task, TaskWidget* task_widget);
+
 	private slots:
 
 		void on_delete_button_clicked();

@@ -66,8 +66,6 @@ void TaskWidget::on_stop_resume_button_clicked()
 	{
 		ui->stop_resume_button->setIcon(stop_icon);
 		emit task_started(task, this);
-		// TODO start
-		// TODO emit signal for tasksscrollarea to stop currently running task (if needed), start this one, and update variables
 	}
 	else
 	{
@@ -85,6 +83,6 @@ void TaskWidget::on_add_favourite_button_clicked()
 
 void TaskWidget::on_edit_button_clicked()
 {
-
+	emit edit_task(task, this);
 }
 

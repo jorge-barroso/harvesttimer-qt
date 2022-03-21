@@ -6,7 +6,7 @@
 
 MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 		: QMainWindow(parent), ui(new Ui::MainWindow), favouritesForm(config_dir),
-		  harvest_handler{ HarvestHandler::getInstance(config_dir) }
+		  harvest_handler{ HarvestHandler::get_instance(config_dir) }
 {
 	ui->setupUi(this);
 	setWindowTitle("Harvest Timer");
@@ -15,7 +15,7 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 	this->app_date = QDate::currentDate();
 	this->ui->date_label->setText(this->app_date.toString());
 	this->ui->scroll_area_widget_layout->setAlignment(Qt::AlignmentFlag::AlignTop); // TODO can be added on the UI file?
-	this->ui->scrollArea->setHarvestHandler(harvest_handler);
+	this->ui->scrollArea->set_harvest_handler(harvest_handler);
 
 	// TODO gather previous data and pass to task form
 
@@ -46,7 +46,7 @@ void MainWindow::on_date_forward_button_clicked()
 {
 	this->ui->date_label->moveForward();
 	app_date = ui->date_label->getAppDate();
-	ui->scrollArea->updateTaskWidgets(ui->date_label->getAppDate());
+	ui->scrollArea->update_task_widgets(ui->date_label->getAppDate());
 }
 
 
@@ -59,7 +59,7 @@ void MainWindow::on_date_current_button_clicked()
 
 	this->ui->date_label->resetDate();
 
-	ui->scrollArea->updateTaskWidgets(app_date);
+	ui->scrollArea->update_task_widgets(app_date);
 }
 
 
@@ -67,7 +67,7 @@ void MainWindow::on_date_back_button_clicked()
 {
 	this->ui->date_label->moveBackwards();
 	app_date = ui->date_label->getAppDate();
-	ui->scrollArea->updateTaskWidgets(ui->date_label->getAppDate());
+	ui->scrollArea->update_task_widgets(ui->date_label->getAppDate());
 }
 
 // Bottom buttons operations
@@ -87,16 +87,16 @@ void MainWindow::on_favourites_button_clicked()
 
 void MainWindow::task_started(Task* task)
 {
-	std::optional<long long> time_entry_id{ harvest_handler->addTask(task) };
+	std::optional<long long> time_entry_id{ harvest_handler->add_task(task) };
 	if (!time_entry_id.has_value())
 		return;
 
 	task->time_entry_id = time_entry_id.value();
 
-	ui->scrollArea->addTask(task, app_date);
+	ui->scrollArea->add_task(task, app_date);
 //
 //	if (currentTask != nullptr)
-//		ui->scrollArea->stopCurrentTask();
+//		ui->scrollArea->stop_current_task();
 //
 //	currentTask = &task;
 }

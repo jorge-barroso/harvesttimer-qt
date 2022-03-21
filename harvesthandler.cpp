@@ -81,7 +81,7 @@ void HarvestHandler::login()
 		QApplication::quit();
 	}
 
-	connect(auth_server, &QTcpServer::newConnection, this, &HarvestHandler::newConnection);
+	connect(auth_server, &QTcpServer::newConnection, this, &HarvestHandler::new_connection);
 }
 
 QJsonDocument HarvestHandler::get_auth_details()
@@ -117,7 +117,7 @@ bool HarvestHandler::json_auth_is_safely_active()
 	return expires_on > QDateTime::currentDateTime().addDays(1);
 }
 
-void HarvestHandler::newConnection()
+void HarvestHandler::new_connection()
 {
 	auth_socket = auth_server->nextPendingConnection();
 	auth_server->close();
@@ -182,7 +182,7 @@ void HarvestHandler::authentication_received()
 		return;
 	}
 
-	json_auth = readReply();
+	json_auth = read_reply();
 	QJsonObject json_object{ json_auth.object() };
 	qint64 seconds{ json_object["expires_in"].toInteger() };
 	json_object.insert("expires_on", QDateTime::currentDateTime().addSecs(seconds).toMSecsSinceEpoch());
@@ -193,7 +193,7 @@ void HarvestHandler::authentication_received()
 	emit ready();
 }
 
-QJsonDocument HarvestHandler::readReply()
+QJsonDocument HarvestHandler::read_reply()
 {
 	QByteArray response_body{ static_cast<QString>(reply->readAll()).toUtf8() };
 	qDebug() << "Harvest response body:" << response_body;
@@ -261,7 +261,7 @@ std::vector<HarvestProject> HarvestHandler::update_user_data()
 		url_query.addQueryItem("per_page", pagination_records);
 		request_url.setQuery(url_query);
 
-		doRequestWithAuth(request_url, true, "GET");
+		do_request_with_auth(request_url, true, "GET");
 		if (reply->error() != QNetworkReply::NoError)
 		{
 			qDebug() << reply->error();
@@ -274,7 +274,7 @@ std::vector<HarvestProject> HarvestHandler::update_user_data()
 			}
 		}
 
-		const QJsonDocument json_payload{ readReply() };
+		const QJsonDocument json_payload{ read_reply() };
 		get_projects_data(json_payload, projects);
 
 		if (total_pages == -1)
@@ -329,7 +329,7 @@ bool HarvestHandler::is_ready() const
 	return auth_found;
 }
 
-std::optional<long long int> HarvestHandler::addTask(const Task* task)
+std::optional<long long int> HarvestHandler::add_task(const Task* task)
 {
 	const QString spent_date{ QDate::currentDate().toString(Qt::ISODate) };
 	const float seconds{ static_cast<float>(QTime(0, 0).secsTo(task->time_tracked)) };
@@ -342,7 +342,7 @@ std::optional<long long int> HarvestHandler::addTask(const Task* task)
 	request_payload.insert("hours", seconds / 60 / 60);
 	request_payload.insert("is_running", seconds == 0);
 
-	doRequestWithAuth(time_entries_url, true, "POST", QJsonDocument(request_payload));
+	do_request_with_auth(time_entries_url, true, "POST", QJsonDocument(request_payload));
 
 	if (reply->error() != QNetworkReply::NetworkError::NoError)
 	{
@@ -351,33 +351,33 @@ std::optional<long long int> HarvestHandler::addTask(const Task* task)
 		return std::nullopt;
 	}
 
-	QJsonDocument add_task_response = readReply();
+	QJsonDocument add_task_response = read_reply();
 
 	return add_task_response["id"].toInteger();
 }
 
-void HarvestHandler::startTask(const Task& task)
+void HarvestHandler::start_task(const Task& task)
 {
 	const QUrl url{ time_entries_url + "/" + QString::number(task.task_id) + "/restart" };
-	doRequestWithAuth(url, true, "PATCH");
+	do_request_with_auth(url, true, "PATCH");
 }
 
-void HarvestHandler::stopTask(const Task& task)
+void HarvestHandler::stop_task(const Task& task)
 {
 	const QUrl url{ time_entries_url + "/" + QString::number(task.time_entry_id) + "/stop" };
 	qDebug() << url.toString();
-	doRequestWithAuth(url, true, "PATCH");
+	do_request_with_auth(url, true, "PATCH");
 
 	if (reply->error() != QNetworkReply::NetworkError::NoError)
 	{
-		const QJsonDocument error_report{ readReply() };
+		const QJsonDocument error_report{ read_reply() };
 		const QString error_string{ "Could not stop this task: " + error_report["error"].toString() };
 		QMessageBox::information(nullptr, "Error Stopping Task", error_string);
 	}
 }
 
-void HarvestHandler::doRequestWithAuth(const QUrl& url, const bool sync_request, const QByteArray& verb,
-									   const std::optional<QJsonDocument>& payload)
+void HarvestHandler::do_request_with_auth(const QUrl& url, const bool sync_request, const QByteArray& verb,
+										  const std::optional<QJsonDocument>& payload)
 {
 	QNetworkRequest request(url);
 	request.setRawHeader("Authorization", "Bearer " + json_auth["access_token"].toString().toUtf8());
@@ -402,7 +402,7 @@ void HarvestHandler::doRequestWithAuth(const QUrl& url, const bool sync_request,
 	}
 }
 
-HarvestHandler* HarvestHandler::getInstance(const QDir& config_dir)
+HarvestHandler* HarvestHandler::get_instance(const QDir& config_dir)
 {
 	if (harvest_handler == nullptr)
 		harvest_handler = new HarvestHandler(config_dir);

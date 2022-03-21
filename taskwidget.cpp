@@ -24,8 +24,15 @@ TaskWidget::TaskWidget(const Task* task, QWidget* parent) :
 
 	if (task->time_tracked.hour() + task->time_tracked.minute() != 0)
 	{
-		// TODO change icon to "play" icon
-		ui->stop_resume_button->setIcon(QIcon());
+		// It's not running
+		ui->stop_resume_button->setIcon(QIcon(start_icon));
+		ui->stop_resume_button->setChecked(false);
+	}
+	else
+	{
+		// It's running
+		ui->stop_resume_button->setIcon(QIcon(stop_icon));
+		ui->stop_resume_button->setChecked(true);
 	}
 }
 

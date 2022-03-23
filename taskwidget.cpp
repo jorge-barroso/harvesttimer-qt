@@ -63,7 +63,7 @@ void TaskWidget::addMinute()
 
 void TaskWidget::on_delete_button_clicked()
 {
-
+	emit task_deleted(task->started, this);
 }
 
 
@@ -90,6 +90,6 @@ void TaskWidget::on_add_favourite_button_clicked()
 
 void TaskWidget::on_edit_button_clicked()
 {
-	emit edit_task(task, this);
+	emit task_edited(task, this);
 }
 

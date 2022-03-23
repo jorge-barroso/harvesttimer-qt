@@ -46,7 +46,10 @@ void MainWindow::on_date_forward_button_clicked()
 {
 	this->ui->date_label->moveForward();
 	app_date = ui->date_label->getAppDate();
-	ui->scrollArea->update_task_widgets(ui->date_label->getAppDate());
+
+	const QDate new_date{ ui->date_label->getAppDate() };
+	ui->scrollArea->set_lookup_date(new_date);
+	ui->scrollArea->update_task_widgets();
 }
 
 
@@ -59,15 +62,21 @@ void MainWindow::on_date_current_button_clicked()
 
 	this->ui->date_label->resetDate();
 
-	ui->scrollArea->update_task_widgets(app_date);
+	const QDate new_date{ ui->date_label->getAppDate() };
+	ui->scrollArea->set_lookup_date(new_date);
+	ui->scrollArea->update_task_widgets();
 }
 
 
 void MainWindow::on_date_back_button_clicked()
 {
 	this->ui->date_label->moveBackwards();
-	app_date = ui->date_label->getAppDate();
-	ui->scrollArea->update_task_widgets(ui->date_label->getAppDate());
+
+	const QDate new_date{ ui->date_label->getAppDate() };
+	app_date = new_date;
+	ui->scrollArea->set_lookup_date(new_date);
+	ui->scrollArea->update_task_widgets();
+
 }
 
 // Bottom buttons operations
@@ -93,7 +102,7 @@ void MainWindow::task_started(Task* task)
 
 	task->time_entry_id = time_entry_id.value();
 
-	ui->scrollArea->add_task(task, app_date);
+	ui->scrollArea->add_task(task);
 //
 //	if (currentTask != nullptr)
 //		ui->scrollArea->stop_current_task();

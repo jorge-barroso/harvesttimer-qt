@@ -7,6 +7,7 @@
 
 #include <QObject>
 #include <QScrollArea>
+#include <QLayoutItem>
 #include "taskwidget.h"
 #include "harvesthandler.h"
 #include <QTimer>
@@ -27,9 +28,9 @@ class TasksScrollArea : public QScrollArea
 
 		~TasksScrollArea() override;
 
-		void add_task(Task* task, const QDate& app_date);
+		void add_task(Task* task);
 
-		void update_task_widgets(QDate date);
+		void update_task_widgets();
 
 		void update_task_timer();
 
@@ -37,11 +38,19 @@ class TasksScrollArea : public QScrollArea
 
 		void set_harvest_handler(HarvestHandler* handler);
 
+		void set_lookup_date(const QDate& date);
+
 	private slots:
 
 		void start_task(const Task* task, TaskWidget* task_widget);
 
+		void edit_task(const Task* task, TaskWidget* task_widget);
+
+		void delete_task(const bool task_started, TaskWidget* task_widget);
+
 	private:
+		QDate lookup_date;
+
 		std::map<QDate, std::vector<TaskWidget*>> task_widgets;
 
 		TaskWidget* runningTaskWidget;
@@ -52,7 +61,13 @@ class TasksScrollArea : public QScrollArea
 
 		HarvestHandler* harvest_handler;
 
-		void edit_task(const Task* task, TaskWidget* task_widget);
+		void clear_task_widgets() const;
+
+		void remove_task_widget(QLayoutItem* child) const;
+
+		void add_task_widget(TaskWidget*& task_widget) const;
+
+		void stop_task_locally();
 };
 
 

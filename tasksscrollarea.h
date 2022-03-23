@@ -42,9 +42,9 @@ class TasksScrollArea : public QScrollArea
 
 	private slots:
 
-		void start_task(const Task* task, TaskWidget* task_widget);
-
 		void edit_task(const Task* task, TaskWidget* task_widget);
+
+		void start_task(const Task* task, TaskWidget* task_widget);
 
 		void delete_task(const bool task_started, TaskWidget* task_widget);
 
@@ -66,6 +66,8 @@ class TasksScrollArea : public QScrollArea
 		void remove_task_widget(QLayoutItem* child) const;
 
 		void add_task_widget(TaskWidget*& task_widget) const;
+
+		void start_task_locally(const Task* task, TaskWidget* task_widget);
 
 		void stop_task_locally();
 };

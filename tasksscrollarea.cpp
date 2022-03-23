@@ -29,7 +29,7 @@ void TasksScrollArea::add_task(Task* task)
 	if (!task->started)
 		return;
 
-	start_task(task, task_widget);
+	start_task_locally(task, task_widget);
 }
 
 void TasksScrollArea::update_task_widgets()
@@ -77,6 +77,14 @@ void TasksScrollArea::update_task_timer()
 }
 
 void TasksScrollArea::start_task(const Task* task, TaskWidget* task_widget)
+{
+	// send restart request to harvest
+	harvest_handler->start_task(*task);
+	// now the request is sent we can proceed to change our UI to a "started" status
+	start_task_locally(task, task_widget);
+}
+
+void TasksScrollArea::start_task_locally(const Task* task, TaskWidget* task_widget)
 {
 	stop_current_task();
 	// no need to change start/stop button because that's its default state

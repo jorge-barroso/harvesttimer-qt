@@ -37,6 +37,8 @@ class HarvestHandler : public QObject
 
 		void stop_task(const Task& task);
 
+		void delete_task(const Task& task);
+
 	signals:
 
 		void ready();
@@ -121,6 +123,16 @@ class HarvestHandler : public QObject
 		static void get_projects_data(const QJsonDocument& json_payload, std::vector<HarvestProject>& projects_vector);
 
 		QJsonDocument read_reply();
+
+		void default_error_check(const QString& base_error_title, const QString& base_error_body);
+
+		void start_task_checks();
+
+		void stop_task_checks();
+
+		void delete_task_checks();
+
+		void check_authenticate();
 };
 
 #endif // HARVESTHANDLER_H

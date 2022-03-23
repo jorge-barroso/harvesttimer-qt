@@ -63,7 +63,7 @@ void TaskWidget::addMinute()
 
 void TaskWidget::on_delete_button_clicked()
 {
-	emit task_deleted(task->started, this);
+	emit task_deleted(task, this);
 }
 
 

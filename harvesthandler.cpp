@@ -3,7 +3,6 @@
 #include "harvestproject.h"
 #include "task.h"
 #include <QTextStream>
-#include <chrono>
 #include <QApplication>
 #include <QTcpSocket>
 #include <QDataStream>
@@ -27,7 +26,9 @@ HarvestHandler::HarvestHandler(const QDir& config_dir)
 		: auth_server{ nullptr }, auth_socket{ nullptr }, auth_file(config_dir.absolutePath() + "/" + auth_file_name),
 		  settings_manager{ SettingsManager::get_instance(config_dir) }, network_manager(this), reply{ nullptr }, loop()
 {
+	// try and load the authentication details stored in the user configuration directories
 	this->json_auth = get_authentication();
+	// this auth is considered found not only if we read it, but we also need to make sure all the necessary fields are present
 	auth_found = !json_auth.isEmpty() && json_auth_is_complete();
 
 	if (!auth_found)
@@ -36,13 +37,19 @@ HarvestHandler::HarvestHandler(const QDir& config_dir)
 	}
 	else
 	{
-		if (!json_auth_is_safely_active())
-		{
-			QString refresh_token(json_auth["refresh_token"].toString());
-			authenticate_request(nullptr, &refresh_token);
-		}
 		load_account_id();
 		emit ready();
+	}
+}
+
+// this is an additional check that validates whether there's at least one more day of validity in the auth
+// token or we need to refresh it before any requests can be performed
+void HarvestHandler::check_authenticate()
+{
+	if (!json_auth_is_safely_active())
+	{
+		QString refresh_token(json_auth["refresh_token"].toString());
+		authenticate_request(nullptr, &refresh_token);
 	}
 }
 
@@ -265,13 +272,6 @@ std::vector<HarvestProject> HarvestHandler::update_user_data()
 		if (reply->error() != QNetworkReply::NoError)
 		{
 			qDebug() << reply->error();
-			// if we need to re-authenticate, let's do it and call this function again
-			if (reply->error() == QNetworkReply::AuthenticationRequiredError)
-			{
-				QString refresh_token{ json_auth["refresh_token"].toString() };
-				authenticate_request(nullptr, &refresh_token);
-				update_user_data();
-			}
 		}
 
 		const QJsonDocument json_payload{ read_reply() };
@@ -319,6 +319,7 @@ void HarvestHandler::get_new_account_id(QString& scope)
 	settings_manager->add_setting("account_id", account_id);
 }
 
+// the account id was previously extracted and saved in a settings file
 void HarvestHandler::load_account_id()
 {
 	account_id = settings_manager->get_setting("account_id").toString();
@@ -342,6 +343,7 @@ std::optional<long long int> HarvestHandler::add_task(const Task* task)
 	request_payload.insert("hours", seconds / 60 / 60);
 	request_payload.insert("is_running", seconds == 0);
 
+	// TODO do request async and add callbacks and connections to start the timer
 	do_request_with_auth(time_entries_url, true, "POST", QJsonDocument(request_payload));
 
 	if (reply->error() != QNetworkReply::NetworkError::NoError)
@@ -358,27 +360,32 @@ std::optional<long long int> HarvestHandler::add_task(const Task* task)
 
 void HarvestHandler::start_task(const Task& task)
 {
-	const QUrl url{ time_entries_url + "/" + QString::number(task.task_id) + "/restart" };
+	const QUrl url{ time_entries_url + "/" + QString::number(task.time_entry_id) + "/restart" };
 	do_request_with_auth(url, false, "PATCH");
+	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::start_task_checks);
 }
 
 void HarvestHandler::stop_task(const Task& task)
 {
 	const QUrl url{ time_entries_url + "/" + QString::number(task.time_entry_id) + "/stop" };
-	qDebug() << url.toString();
 	do_request_with_auth(url, false, "PATCH");
+	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::stop_task_checks);
+}
 
-	if (reply->error() != QNetworkReply::NetworkError::NoError)
-	{
-		const QJsonDocument error_report{ read_reply() };
-		const QString error_string{ "Could not stop this task: " + error_report["error"].toString() };
-		QMessageBox::information(nullptr, "Error Stopping Task", error_string);
-	}
+void HarvestHandler::delete_task(const Task& task)
+{
+	const QUrl url{ time_entries_url + "/" + QString::number(task.time_entry_id) };
+	do_request_with_auth(url, false, "DELETE");
+	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::delete_task_checks);
 }
 
 void HarvestHandler::do_request_with_auth(const QUrl& url, const bool sync_request, const QByteArray& verb,
 										  const std::optional<QJsonDocument>& payload)
 {
+	qDebug() << "New request to: " << url;
+
+	check_authenticate();
+
 	QNetworkRequest request(url);
 	request.setRawHeader("Authorization", "Bearer " + json_auth["access_token"].toString().toUtf8());
 	request.setRawHeader("Harvest-Account-Id", account_id.toUtf8());
@@ -400,7 +407,6 @@ void HarvestHandler::do_request_with_auth(const QUrl& url, const bool sync_reque
 		connect(reply, &QNetworkReply::readyRead, &loop, &QEventLoop::quit);
 		loop.exec();
 	}
-	// TODO if not sync connect to a provided function
 }
 
 HarvestHandler* HarvestHandler::get_instance(const QDir& config_dir)
@@ -411,4 +417,27 @@ HarvestHandler* HarvestHandler::get_instance(const QDir& config_dir)
 	return harvest_handler;
 }
 
+void HarvestHandler::start_task_checks()
+{
+	default_error_check("Could not start this task: ", "Error Starting Task");
+}
 
+void HarvestHandler::stop_task_checks()
+{
+	default_error_check("Could not stop this task: ", "Error Stopping Task");
+}
+
+void HarvestHandler::delete_task_checks()
+{
+	default_error_check("Could not delete this task: ", "Error Deleting Task");
+}
+
+void HarvestHandler::default_error_check(const QString& base_error_title, const QString& base_error_body)
+{
+	if (reply->error() != QNetworkReply::NetworkError::NoError)
+	{
+		const QJsonDocument error_report{ read_reply() };
+		const QString error_string{ base_error_body + error_report["error"].toString() };
+		QMessageBox::information(nullptr, base_error_title, error_string);
+	}
+}

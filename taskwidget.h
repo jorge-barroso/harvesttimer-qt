@@ -30,7 +30,7 @@ class TaskWidget : public QWidget
 
 		void task_edited(const Task* task, TaskWidget* task_widget);
 
-		void task_deleted(const bool task_started, TaskWidget* task_widget);
+		void task_deleted(const Task* task, TaskWidget* task_widget);
 
 	private slots:
 

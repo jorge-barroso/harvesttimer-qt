@@ -105,13 +105,13 @@ void TasksScrollArea::edit_task(const Task* task, TaskWidget* task_widget)
 	timer.start();
 }
 
-void TasksScrollArea::delete_task(const bool task_started, TaskWidget* task_widget)
+void TasksScrollArea::delete_task(const Task* task, TaskWidget* task_widget)
 {
-	// TODO request task deletion to harvest
-
+	// request task deletion to harvest
+	harvest_handler->delete_task(*task);
 
 	// delete from our local list
-	if (task_started)
+	if (task->started)
 	{
 		stop_task_locally();
 	}

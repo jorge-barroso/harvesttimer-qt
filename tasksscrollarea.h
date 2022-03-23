@@ -46,7 +46,7 @@ class TasksScrollArea : public QScrollArea
 
 		void start_task(const Task* task, TaskWidget* task_widget);
 
-		void delete_task(const bool task_started, TaskWidget* task_widget);
+		void delete_task(const Task* task, TaskWidget* task_widget);
 
 	private:
 		QDate lookup_date;

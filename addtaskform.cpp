@@ -28,7 +28,7 @@ Task* AddTaskForm::build_task()
         this->ui->task_dropdown->currentText(),
 		time,
 		this->ui->notes_text_edit->toPlainText(),
-		zero_time.secsTo(task->time_tracked) == 0,
+		zero_time.secsTo(time) == 0,
     };
 
     return task;

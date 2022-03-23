@@ -35,7 +35,7 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 MainWindow::~MainWindow()
 {
 	delete ui;
-	delete harvest_handler;
+	HarvestHandler::reset_instance();
 }
 
 

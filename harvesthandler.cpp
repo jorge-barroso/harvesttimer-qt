@@ -22,6 +22,22 @@ HarvestHandler* HarvestHandler::harvest_handler{ nullptr };
 const QString HarvestHandler::default_grant_type{ "authorization_code" };
 const QString HarvestHandler::refresh_grant_type{ "refresh_token" };
 
+HarvestHandler* HarvestHandler::get_instance(const QDir& config_dir)
+{
+	if (harvest_handler == nullptr)
+	{
+		harvest_handler = new HarvestHandler(config_dir);
+	}
+
+	return harvest_handler;
+}
+
+void HarvestHandler::reset_instance()
+{
+	delete harvest_handler;
+	harvest_handler = nullptr;
+}
+
 HarvestHandler::HarvestHandler(const QDir& config_dir)
 		: auth_server{ nullptr }, auth_socket{ nullptr }, auth_file(config_dir.absolutePath() + "/" + auth_file_name),
 		  settings_manager{ SettingsManager::get_instance(config_dir) }, network_manager(this), reply{ nullptr }, loop()
@@ -42,6 +58,16 @@ HarvestHandler::HarvestHandler(const QDir& config_dir)
 	}
 }
 
+HarvestHandler::~HarvestHandler()
+{
+	SettingsManager::reset_instance();
+
+	delete auth_server;
+	delete auth_socket;
+
+	delete reply;
+}
+
 // this is an additional check that validates whether there's at least one more day of validity in the auth
 // token or we need to refresh it before any requests can be performed
 void HarvestHandler::check_authenticate()
@@ -51,18 +77,6 @@ void HarvestHandler::check_authenticate()
 		QString refresh_token(json_auth["refresh_token"].toString());
 		authenticate_request(nullptr, &refresh_token);
 	}
-}
-
-HarvestHandler::~HarvestHandler()
-{
-	delete HarvestHandler::harvest_handler;
-
-	delete auth_server;
-	delete auth_socket;
-
-	delete settings_manager;
-
-	delete reply;
 }
 
 QJsonDocument HarvestHandler::get_authentication()
@@ -407,14 +421,6 @@ void HarvestHandler::do_request_with_auth(const QUrl& url, const bool sync_reque
 		connect(reply, &QNetworkReply::readyRead, &loop, &QEventLoop::quit);
 		loop.exec();
 	}
-}
-
-HarvestHandler* HarvestHandler::get_instance(const QDir& config_dir)
-{
-	if (harvest_handler == nullptr)
-		harvest_handler = new HarvestHandler(config_dir);
-
-	return harvest_handler;
 }
 
 void HarvestHandler::start_task_checks()

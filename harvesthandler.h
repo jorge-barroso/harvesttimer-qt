@@ -25,7 +25,7 @@ class HarvestHandler : public QObject
 	public:
 		static HarvestHandler* get_instance(const QDir& config_dir);
 
-        ~HarvestHandler() override;
+		static void reset_instance();
 
 		std::vector<HarvestProject> update_user_data();
 
@@ -50,6 +50,11 @@ class HarvestHandler : public QObject
 		void code_received();
 
 		void authentication_received();
+
+	protected:
+		// We're taking a singleton approach here so the constructor will remain protected
+		explicit HarvestHandler(const QDir& config_dir); // Prevent construction
+		~HarvestHandler() override; // Prevent unwanted destruction
 
 	private:
 		static HarvestHandler* harvest_handler;
@@ -89,9 +94,6 @@ class HarvestHandler : public QObject
 		QEventLoop loop;
 
 		const QString pagination_records{ "100" };
-
-		// We're taking a singleton approach here so the constructor will remain private
-		explicit HarvestHandler(const QDir& config_dir);
 
 		QJsonDocument get_authentication();
 

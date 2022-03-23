@@ -16,15 +16,18 @@ SettingsManager* SettingsManager::get_instance(const QDir& config_dir)
 	return instance;
 }
 
+void SettingsManager::reset_instance()
+{
+	delete instance;
+	instance = nullptr;
+}
+
 SettingsManager::SettingsManager(const QDir& config_dir)
 		: settings_file_path(config_dir.absolutePath() + "/" + settings_filename),
 		  settings(settings_file_path, QSettings::NativeFormat)
 {}
 
-SettingsManager::~SettingsManager()
-{
-	delete instance;
-}
+SettingsManager::~SettingsManager() = default;
 
 void SettingsManager::add_setting(const QString& key, const QString& value)
 {

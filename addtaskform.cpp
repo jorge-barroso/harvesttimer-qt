@@ -40,7 +40,7 @@ void AddTaskForm::on_start_button_clicked()
 
     emit task_started(task);
 
-    this->close();
+    this->reset_and_close();
 }
 
 
@@ -50,13 +50,13 @@ void AddTaskForm::on_favourite_button_clicked()
 
     emit task_to_favourites(task);
 
-    this->close();
+    this->reset_and_close();
 }
 
 
 void AddTaskForm::on_cancel_button_clicked()
 {
-    this->close();
+    this->reset_and_close();
 
     // TODO reset
 }
@@ -81,3 +81,16 @@ void AddTaskForm::on_project_dropdown_currentIndexChanged(int index)
 	}
 }
 
+void AddTaskForm::reset_and_close()
+{
+	this->close();
+	this->reset_inputs();
+}
+
+void AddTaskForm::reset_inputs()
+{
+	ui->project_dropdown->setCurrentIndex(0);
+	ui->task_dropdown->setCurrentIndex(0);
+	ui->notes_text_edit->setText({});
+	ui->time_worked_line->setTime({0, 0});
+}

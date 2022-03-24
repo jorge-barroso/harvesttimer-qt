@@ -45,6 +45,10 @@ private:
 		std::vector<HarvestProject> projects;
 
 		QTime zero_time{ QTime(0, 0) };
+
+		void reset_and_close();
+
+		void reset_inputs();
 };
 
 #endif // ADDTASKFORM_H

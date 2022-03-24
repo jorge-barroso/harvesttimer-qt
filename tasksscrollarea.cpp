@@ -18,17 +18,7 @@ TasksScrollArea::TasksScrollArea(QWidget* widget)
 
 void TasksScrollArea::add_task(Task* task)
 {
-	TaskWidget* task_widget{ new TaskWidget(task, this->widget()) };
-	connect(task_widget, &TaskWidget::task_started, this, &TasksScrollArea::start_task);
-	connect(task_widget, &TaskWidget::task_edited, this, &TasksScrollArea::edit_task);
-	connect(task_widget, &TaskWidget::task_deleted, this, &TasksScrollArea::delete_task);
-	this->widget()->layout()->addWidget(task_widget);
-	MapUtils::map_insert_or_create_vector(task_widgets, lookup_date, task_widget);
-
-	if (!task->started)
-		return;
-
-	start_task_locally(task, task_widget);
+	harvest_handler->add_task(task);
 }
 
 void TasksScrollArea::update_task_widgets()
@@ -85,20 +75,24 @@ void TasksScrollArea::start_task(const Task* task, TaskWidget* task_widget)
 
 void TasksScrollArea::start_task_locally(const Task* task, TaskWidget* task_widget)
 {
+	// If there is a currently running task we want to set_stopped it, because we're only allowed to track one task at a time
 	stop_current_task();
-	// no need to change start/stop button because that's its default state
+
+	// Restart timer
+	timer.start();
+	connect(&timer, &QTimer::timeout, this, &TasksScrollArea::update_task_timer);
+
+	// Save our currently running tasks
 	runningTaskWidget = task_widget;
 	runningTask = task;
 	connect(runningTaskWidget, &TaskWidget::task_stopped, this, &TasksScrollArea::stop_current_task);
-	connect(&timer, &QTimer::timeout, this, &TasksScrollArea::update_task_timer);
-	timer.start();
 }
 
 void TasksScrollArea::edit_task(const Task* task, TaskWidget* task_widget)
 {
 	// TODO gather the task details, show a pop-up window for the user to edit the details, and then on confirmation send an update request
 	stop_current_task();
-	// no need to change start/stop button because that's its default state
+	// no need to change start/set_stopped button because that's its default state
 	runningTaskWidget = task_widget;
 	runningTask = task;
 	connect(runningTaskWidget, &TaskWidget::task_stopped, this, &TasksScrollArea::stop_current_task);
@@ -139,6 +133,7 @@ void TasksScrollArea::stop_current_task()
 void TasksScrollArea::stop_task_locally()
 {
 	disconnect(runningTaskWidget, &TaskWidget::task_stopped, nullptr, nullptr);
+	runningTaskWidget->set_stopped();
 	runningTaskWidget = nullptr;
 
 	timer.stop();
@@ -147,6 +142,9 @@ void TasksScrollArea::stop_task_locally()
 void TasksScrollArea::set_harvest_handler(HarvestHandler* handler)
 {
 	this->harvest_handler = handler;
+
+	// Set connections between harvest handler and our scroll area
+	connect(harvest_handler, &HarvestHandler::task_added, this, &TasksScrollArea::task_added);
 }
 
 TasksScrollArea::~TasksScrollArea()
@@ -165,4 +163,19 @@ TasksScrollArea::~TasksScrollArea()
 void TasksScrollArea::set_lookup_date(const QDate& date)
 {
 	lookup_date = date;
+}
+
+void TasksScrollArea::task_added(const Task* task)
+{
+	TaskWidget* task_widget{ new TaskWidget(const_cast<Task*>(task), this->widget()) };
+	connect(task_widget, &TaskWidget::task_started, this, &TasksScrollArea::start_task);
+	connect(task_widget, &TaskWidget::task_edited, this, &TasksScrollArea::edit_task);
+	connect(task_widget, &TaskWidget::task_deleted, this, &TasksScrollArea::delete_task);
+	this->widget()->layout()->addWidget(task_widget);
+	MapUtils::map_insert_or_create_vector(task_widgets, lookup_date, task_widget);
+
+	if (!task->started)
+		return;
+
+	start_task_locally(task, task_widget);
 }

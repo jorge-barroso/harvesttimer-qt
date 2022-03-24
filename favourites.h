@@ -19,7 +19,7 @@ class Favourites : public QDialog
 
 public:
     explicit Favourites(const QDir & config_dir, QWidget *parent = nullptr);
-    ~Favourites();
+    ~Favourites() override;
 
 private:
     Ui::Favourites *ui;

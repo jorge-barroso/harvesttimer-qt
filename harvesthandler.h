@@ -31,7 +31,7 @@ class HarvestHandler : public QObject
 
 		[[nodiscard]] bool is_ready() const;
 
-		std::optional<long long int> add_task(const Task* task);
+		void add_task(Task* task);
 
 		void start_task(const Task& task);
 
@@ -44,6 +44,8 @@ class HarvestHandler : public QObject
 		void ready();
 
 		void data_ready(std::vector<HarvestProject>);
+
+		void task_added(const Task*);
 
 	private slots:
 
@@ -128,6 +130,8 @@ class HarvestHandler : public QObject
 
 		void default_error_check(const QString& base_error_title, const QString& base_error_body);
 
+		void add_task_checks();
+
 		void start_task_checks();
 
 		void stop_task_checks();
@@ -135,6 +139,8 @@ class HarvestHandler : public QObject
 		void delete_task_checks();
 
 		void check_authenticate();
+
+		std::unordered_map<size_t, Task*> tasks_queue;
 };
 
 #endif // HARVESTHANDLER_H

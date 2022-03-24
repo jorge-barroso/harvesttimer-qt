@@ -28,8 +28,6 @@ class TasksScrollArea : public QScrollArea
 
 		~TasksScrollArea() override;
 
-		void add_task(Task* task);
-
 		void update_task_widgets();
 
 		void update_task_timer();
@@ -40,7 +38,13 @@ class TasksScrollArea : public QScrollArea
 
 		void set_lookup_date(const QDate& date);
 
+	public slots:
+
+		void add_task(Task* task);
+
 	private slots:
+
+		void task_added(const Task* task);
 
 		void edit_task(const Task* task, TaskWidget* task_widget);
 

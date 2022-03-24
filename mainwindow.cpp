@@ -5,7 +5,7 @@
 #include "tasksscrollarea.h"
 
 MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
-		: QMainWindow(parent), ui(new Ui::MainWindow), favouritesForm(config_dir),
+		: QMainWindow(parent), ui(new Ui::MainWindow), favouritesForm(config_dir, this),
 		  harvest_handler{ HarvestHandler::get_instance(config_dir) }
 {
 	ui->setupUi(this);
@@ -28,7 +28,7 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 		harvest_handler_ready();
 
 	// connect to signals from modal forms
-	connect(&task_form, &AddTaskForm::task_started, this, &MainWindow::task_started);
+	connect(&task_form, &AddTaskForm::task_started, ui->scrollArea, &TasksScrollArea::add_task);
 	connect(&task_form, &AddTaskForm::task_to_favourites, this, &MainWindow::task_to_favourites);
 }
 
@@ -96,18 +96,7 @@ void MainWindow::on_favourites_button_clicked()
 
 void MainWindow::task_started(Task* task)
 {
-	std::optional<long long> time_entry_id{ harvest_handler->add_task(task) };
-	if (!time_entry_id.has_value())
-		return;
-
-	task->time_entry_id = time_entry_id.value();
-
 	ui->scrollArea->add_task(task);
-//
-//	if (currentTask != nullptr)
-//		ui->scrollArea->stop_current_task();
-//
-//	currentTask = &task;
 }
 
 void MainWindow::task_to_favourites(Task* task)

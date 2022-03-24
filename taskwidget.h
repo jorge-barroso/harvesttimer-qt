@@ -15,15 +15,18 @@ class TaskWidget : public QWidget
 	Q_OBJECT
 
 	public:
-		explicit TaskWidget(const Task* task, QWidget* parent);
+		explicit TaskWidget(Task* task, QWidget* parent);
 
 		~TaskWidget() override;
 
-		void stop();
+		void set_stopped();
+
+		void set_started();
 
 		void addMinute();
 
 	signals:
+
 		void task_stopped();
 
 		void task_started(const Task* task, TaskWidget* task_widget);
@@ -49,7 +52,7 @@ class TaskWidget : public QWidget
 
 		QIcon start_icon;
 
-		const Task * task;
+		Task* task;
 };
 
 #endif // TASKWIDGET_H

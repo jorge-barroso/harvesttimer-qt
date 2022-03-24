@@ -66,6 +66,8 @@ HarvestHandler::~HarvestHandler()
 	delete auth_socket;
 
 	delete reply;
+
+	// https://stackoverflow.com/questions/19157946/does-stdmap-destructor-call-key-destructors-as-well-as-value-destructors
 }
 
 // this is an additional check that validates whether there's at least one more day of validity in the auth
@@ -344,7 +346,7 @@ bool HarvestHandler::is_ready() const
 	return auth_found;
 }
 
-std::optional<long long int> HarvestHandler::add_task(const Task* task)
+void HarvestHandler::add_task(Task* task)
 {
 	const QString spent_date{ QDate::currentDate().toString(Qt::ISODate) };
 	const float seconds{ static_cast<float>(QTime(0, 0).secsTo(task->time_tracked)) };
@@ -357,19 +359,12 @@ std::optional<long long int> HarvestHandler::add_task(const Task* task)
 	request_payload.insert("hours", seconds / 60 / 60);
 	request_payload.insert("is_running", seconds == 0);
 
-	// TODO do request async and add callbacks and connections to start the timer
-	do_request_with_auth(time_entries_url, true, "POST", QJsonDocument(request_payload));
+	// We save our task in a map so that we can retrieve it later when the response comes
+	size_t key{ qHash(QString::number(task->project_id).append(QString::number(task->task_id))) };
+	tasks_queue.insert({key, task});
 
-	if (reply->error() != QNetworkReply::NetworkError::NoError)
-	{
-		const QString error_string{ "Could not add your task: " + reply->errorString() };
-		QMessageBox::information(nullptr, "Error Adding Task", error_string);
-		return std::nullopt;
-	}
-
-	QJsonDocument add_task_response = read_reply();
-
-	return add_task_response["id"].toInteger();
+	do_request_with_auth(time_entries_url, false, "POST", QJsonDocument(request_payload));
+	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::add_task_checks);
 }
 
 void HarvestHandler::start_task(const Task& task)
@@ -381,7 +376,7 @@ void HarvestHandler::start_task(const Task& task)
 
 void HarvestHandler::stop_task(const Task& task)
 {
-	const QUrl url{ time_entries_url + "/" + QString::number(task.time_entry_id) + "/stop" };
+	const QUrl url{ time_entries_url + "/" + QString::number(task.time_entry_id) + "/set_stopped" };
 	do_request_with_auth(url, false, "PATCH");
 	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::stop_task_checks);
 }
@@ -423,6 +418,40 @@ void HarvestHandler::do_request_with_auth(const QUrl& url, const bool sync_reque
 	}
 }
 
+void HarvestHandler::add_task_checks()
+{
+	if (reply->error() != QNetworkReply::NetworkError::NoError)
+	{
+		const QString error_string{ "Could not add your task: " + reply->errorString() };
+		QMessageBox::information(nullptr, "Error Adding Task", error_string);
+		return;
+	}
+
+	// Get response from the reply object
+	const QJsonDocument add_task_response{ read_reply() };
+
+	// TODO sort out how we deal with the fact that a new request will override the current reply:
+	//  And alternative would be to have a list of replies so that all can be processed (PREFERRED)
+	//  Another one is to accept that only one request can be done and a new request will override it (on our UI, harvest will still receive both)
+	//   and then a map is not necessary at all as only one task needs to be kept at a time
+
+	// Find the task we've just received response from
+	const long long int project_id {add_task_response["project"]["id"].toInteger()};
+	const long long int task_id {add_task_response["task"]["id"].toInteger()};
+	const size_t key{ qHash(QString::number(project_id).append(QString::number(task_id))) };
+
+	const auto task_element = tasks_queue.find(key);
+	if (task_element == tasks_queue.end())
+		return;
+
+	// if we could find a task, let's fetch it and remove it from the queue map
+	Task* task = task_element->second;
+	tasks_queue.erase(task_element);
+	task->time_entry_id = add_task_response["id"].toInteger();
+
+	emit task_added(task);
+}
+
 void HarvestHandler::start_task_checks()
 {
 	default_error_check("Could not start this task: ", "Error Starting Task");
@@ -430,7 +459,7 @@ void HarvestHandler::start_task_checks()
 
 void HarvestHandler::stop_task_checks()
 {
-	default_error_check("Could not stop this task: ", "Error Stopping Task");
+	default_error_check("Could not set_stopped this task: ", "Error Stopping Task");
 }
 
 void HarvestHandler::delete_task_checks()

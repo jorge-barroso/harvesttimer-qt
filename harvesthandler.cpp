@@ -40,8 +40,9 @@ void HarvestHandler::reset_instance()
 
 HarvestHandler::HarvestHandler(const QDir& config_dir)
 		: auth_server{ nullptr }, auth_socket{ nullptr }, auth_file(config_dir.absolutePath() + "/" + auth_file_name),
-		  settings_manager{ SettingsManager::get_instance(config_dir) }, network_manager(this), reply{ nullptr }, loop()
+		  settings_manager{ SettingsManager::get_instance(config_dir) }, network_manager(this), loop()
 {
+	network_manager.setAutoDeleteReplies(true);
 	// try and load the authentication details stored in the user configuration directories
 	this->json_auth = get_authentication();
 	// this auth is considered found not only if we read it, but we also need to make sure all the necessary fields are present
@@ -64,8 +65,6 @@ HarvestHandler::~HarvestHandler()
 
 	delete auth_server;
 	delete auth_socket;
-
-	delete reply;
 
 	// https://stackoverflow.com/questions/19157946/does-stdmap-destructor-call-key-destructors-as-well-as-value-destructors
 }
@@ -195,7 +194,7 @@ std::map<QString, QString> HarvestHandler::parse_query_string(QString& query_str
 	return query_map;
 }
 
-void HarvestHandler::authentication_received()
+void HarvestHandler::authentication_received(const QNetworkReply* reply)
 {
 	if (reply->error() != QNetworkReply::NetworkError::NoError)
 	{
@@ -205,7 +204,9 @@ void HarvestHandler::authentication_received()
 		return;
 	}
 
-	json_auth = read_reply();
+	// reply is originally non-const so this cast should be safe while allowing to use it
+	// as const in the previous error handling
+	json_auth = read_reply(const_cast<QNetworkReply*>(reply));
 	QJsonObject json_object{ json_auth.object() };
 	qint64 seconds{ json_object["expires_in"].toInteger() };
 	json_object.insert("expires_on", QDateTime::currentDateTime().addSecs(seconds).toMSecsSinceEpoch());
@@ -216,7 +217,7 @@ void HarvestHandler::authentication_received()
 	emit ready();
 }
 
-QJsonDocument HarvestHandler::read_reply()
+QJsonDocument HarvestHandler::read_reply(QNetworkReply* reply)
 {
 	QByteArray response_body{ static_cast<QString>(reply->readAll()).toUtf8() };
 	qDebug() << "Harvest response body:" << response_body;
@@ -263,12 +264,13 @@ void HarvestHandler::authenticate_request(QString* auth_code, QString* refresh_t
 	url_query.addQueryItem("grant_type", grant_type);
 
 
-	reply = network_manager.post(request, url_query.toString().toUtf8());
+	QNetworkReply* reply{ network_manager.post(request, url_query.toString().toUtf8()) };
 
 	connect(reply, &QNetworkReply::readyRead, &loop, &QEventLoop::quit);
 	loop.exec();
 
-	authentication_received();
+	authentication_received(reply);
+	reply->deleteLater();
 }
 
 
@@ -284,13 +286,13 @@ std::vector<HarvestProject> HarvestHandler::update_user_data()
 		url_query.addQueryItem("per_page", pagination_records);
 		request_url.setQuery(url_query);
 
-		do_request_with_auth(request_url, true, "GET");
+		QNetworkReply* reply{ do_request_with_auth(request_url, true, "GET") };
 		if (reply->error() != QNetworkReply::NoError)
 		{
 			qDebug() << reply->error();
 		}
 
-		const QJsonDocument json_payload{ read_reply() };
+		const QJsonDocument json_payload{ read_reply(reply) };
 		get_projects_data(json_payload, projects);
 
 		if (total_pages == -1)
@@ -361,35 +363,35 @@ void HarvestHandler::add_task(Task* task)
 
 	// We save our task in a map so that we can retrieve it later when the response comes
 	size_t key{ qHash(QString::number(task->project_id).append(QString::number(task->task_id))) };
-	tasks_queue.insert({key, task});
+	tasks_queue.insert({ key, task });
 
-	do_request_with_auth(time_entries_url, false, "POST", QJsonDocument(request_payload));
+	QNetworkReply* reply{ do_request_with_auth(time_entries_url, false, "POST", QJsonDocument(request_payload)) };
 	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::add_task_checks);
 }
 
 void HarvestHandler::start_task(const Task& task)
 {
 	const QUrl url{ time_entries_url + "/" + QString::number(task.time_entry_id) + "/restart" };
-	do_request_with_auth(url, false, "PATCH");
+	QNetworkReply* reply{ do_request_with_auth(url, false, "PATCH") };
 	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::start_task_checks);
 }
 
 void HarvestHandler::stop_task(const Task& task)
 {
 	const QUrl url{ time_entries_url + "/" + QString::number(task.time_entry_id) + "/set_stopped" };
-	do_request_with_auth(url, false, "PATCH");
+	QNetworkReply* reply{ do_request_with_auth(url, false, "PATCH") };
 	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::stop_task_checks);
 }
 
 void HarvestHandler::delete_task(const Task& task)
 {
 	const QUrl url{ time_entries_url + "/" + QString::number(task.time_entry_id) };
-	do_request_with_auth(url, false, "DELETE");
+	QNetworkReply* reply{ do_request_with_auth(url, false, "DELETE") };
 	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::delete_task_checks);
 }
 
-void HarvestHandler::do_request_with_auth(const QUrl& url, const bool sync_request, const QByteArray& verb,
-										  const std::optional<QJsonDocument>& payload)
+QNetworkReply* HarvestHandler::do_request_with_auth(const QUrl& url, const bool sync_request, const QByteArray& verb,
+													const std::optional<QJsonDocument>& payload)
 {
 	qDebug() << "New request to: " << url;
 
@@ -399,6 +401,7 @@ void HarvestHandler::do_request_with_auth(const QUrl& url, const bool sync_reque
 	request.setRawHeader("Authorization", "Bearer " + json_auth["access_token"].toString().toUtf8());
 	request.setRawHeader("Harvest-Account-Id", account_id.toUtf8());
 
+	QNetworkReply* reply;
 	if (payload.has_value())
 	{
 		request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -416,10 +419,13 @@ void HarvestHandler::do_request_with_auth(const QUrl& url, const bool sync_reque
 		connect(reply, &QNetworkReply::readyRead, &loop, &QEventLoop::quit);
 		loop.exec();
 	}
+
+	return reply;
 }
 
 void HarvestHandler::add_task_checks()
 {
+	QNetworkReply* reply{ dynamic_cast<QNetworkReply*>(sender()) };
 	if (reply->error() != QNetworkReply::NetworkError::NoError)
 	{
 		const QString error_string{ "Could not add your task: " + reply->errorString() };
@@ -428,16 +434,11 @@ void HarvestHandler::add_task_checks()
 	}
 
 	// Get response from the reply object
-	const QJsonDocument add_task_response{ read_reply() };
-
-	// TODO sort out how we deal with the fact that a new request will override the current reply:
-	//  And alternative would be to have a list of replies so that all can be processed (PREFERRED)
-	//  Another one is to accept that only one request can be done and a new request will override it (on our UI, harvest will still receive both)
-	//   and then a map is not necessary at all as only one task needs to be kept at a time
+	const QJsonDocument add_task_response{ read_reply(reply) };
 
 	// Find the task we've just received response from
-	const long long int project_id {add_task_response["project"]["id"].toInteger()};
-	const long long int task_id {add_task_response["task"]["id"].toInteger()};
+	const long long int project_id{ add_task_response["project"]["id"].toInteger() };
+	const long long int task_id{ add_task_response["task"]["id"].toInteger() };
 	const size_t key{ qHash(QString::number(project_id).append(QString::number(task_id))) };
 
 	const auto task_element = tasks_queue.find(key);
@@ -454,24 +455,31 @@ void HarvestHandler::add_task_checks()
 
 void HarvestHandler::start_task_checks()
 {
-	default_error_check("Could not start this task: ", "Error Starting Task");
+	auto* reply{ dynamic_cast<QNetworkReply*>(sender()) };
+	default_error_check(reply, "Could not start this task: ", "Error Starting Task");
+	reply->deleteLater();
 }
 
 void HarvestHandler::stop_task_checks()
 {
-	default_error_check("Could not set_stopped this task: ", "Error Stopping Task");
+	auto* reply{ dynamic_cast<QNetworkReply*>(sender()) };
+	default_error_check(reply, "Could not set_stopped this task: ", "Error Stopping Task");
+	reply->deleteLater();
 }
 
 void HarvestHandler::delete_task_checks()
 {
-	default_error_check("Could not delete this task: ", "Error Deleting Task");
+	auto* reply{ dynamic_cast<QNetworkReply*>(sender()) };
+	default_error_check(reply, "Could not delete this task: ", "Error Deleting Task");
+	reply->deleteLater();
 }
 
-void HarvestHandler::default_error_check(const QString& base_error_title, const QString& base_error_body)
+void HarvestHandler::default_error_check(QNetworkReply* reply, const QString& base_error_title,
+										 const QString& base_error_body)
 {
 	if (reply->error() != QNetworkReply::NetworkError::NoError)
 	{
-		const QJsonDocument error_report{ read_reply() };
+		const QJsonDocument error_report{ read_reply(const_cast<QNetworkReply*>(reply)) };
 		const QString error_string{ base_error_body + error_report["error"].toString() };
 		QMessageBox::information(nullptr, base_error_title, error_string);
 	}

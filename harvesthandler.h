@@ -51,7 +51,7 @@ class HarvestHandler : public QObject
 
 		void code_received();
 
-		void authentication_received();
+		void authentication_received(const QNetworkReply* reply);
 
 	protected:
 		// We're taking a singleton approach here so the constructor will remain protected
@@ -86,7 +86,6 @@ class HarvestHandler : public QObject
         SettingsManager* settings_manager;
 
 		QNetworkAccessManager network_manager;
-		QNetworkReply* reply;
 
 		QJsonDocument json_auth;
 		QString account_id;
@@ -121,14 +120,15 @@ class HarvestHandler : public QObject
 
 		void load_account_id();
 
-		void do_request_with_auth(const QUrl& url, const bool sync_request, const QByteArray& verb,
-								  const std::optional<QJsonDocument>& payload = std::nullopt);
+		QNetworkReply* do_request_with_auth(const QUrl& url, const bool sync_request, const QByteArray& verb,
+											const std::optional<QJsonDocument>& payload = std::nullopt);
 
 		static void get_projects_data(const QJsonDocument& json_payload, std::vector<HarvestProject>& projects_vector);
 
-		QJsonDocument read_reply();
+		static QJsonDocument read_reply(QNetworkReply* reply);
 
-		void default_error_check(const QString& base_error_title, const QString& base_error_body);
+		void default_error_check(QNetworkReply* reply, const QString& base_error_title,
+								 const QString& base_error_body);
 
 		void add_task_checks();
 

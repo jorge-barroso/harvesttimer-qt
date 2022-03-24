@@ -13,7 +13,6 @@ TasksScrollArea::TasksScrollArea(QWidget* widget)
 		, runningTaskWidget{ nullptr }
 		, lookup_date{ QDate::currentDate() }
 {
-	connect(&timer, &QTimer::timeout, this, &TasksScrollArea::update_task_timer);
 	timer.setInterval(timer_seconds * 1000);
 }
 
@@ -91,6 +90,7 @@ void TasksScrollArea::start_task_locally(const Task* task, TaskWidget* task_widg
 	runningTaskWidget = task_widget;
 	runningTask = task;
 	connect(runningTaskWidget, &TaskWidget::task_stopped, this, &TasksScrollArea::stop_current_task);
+	connect(&timer, &QTimer::timeout, this, &TasksScrollArea::update_task_timer);
 	timer.start();
 }
 

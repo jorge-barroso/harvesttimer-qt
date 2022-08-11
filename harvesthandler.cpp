@@ -348,6 +348,18 @@ bool HarvestHandler::is_ready() const
 	return auth_found;
 }
 
+void HarvestHandler::list_tasks(const QDate& tasks_date)
+{
+	QUrl request_url(time_entries_url);
+	QUrlQuery url_query;
+	url_query.addQueryItem("from", tasks_date.toString(Qt::ISODate));
+	url_query.addQueryItem("to", tasks_date.toString(Qt::ISODate));
+	request_url.setQuery(url_query);
+
+	QNetworkReply* reply{ do_request_with_auth(request_url, false, "GET") };
+	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::tasks_list_ready);
+}
+
 void HarvestHandler::add_task(Task* task)
 {
 	const QString spent_date{ QDate::currentDate().toString(Qt::ISODate) };
@@ -423,6 +435,51 @@ QNetworkReply* HarvestHandler::do_request_with_auth(const QUrl& url, const bool 
 	return reply;
 }
 
+void HarvestHandler::tasks_list_ready()
+{
+	QNetworkReply* reply{ dynamic_cast<QNetworkReply*>(sender()) };
+	if (default_error_check(reply, "Could not add your task: ", "Error Adding Task"))
+	{
+		return;
+	}
+
+	// Get response from the reply object
+	const QJsonDocument list_tasks_response{ read_reply(reply) };
+	const QJsonValue tasks_object{ list_tasks_response.object().value("time_entries") };
+
+	for (const QJsonValueRef&& harvestTask: tasks_object.toArray())
+	{
+		const QJsonObject task_object{ harvestTask.toObject() };
+		qDebug() << "Task: " << harvestTask;
+
+		const long long int task_entry_id{ task_object["id"].toInteger() };
+		const long long int project_id{ task_object["project"]["id"].toInteger() };
+		const QString project_name{ task_object["project"]["name"].toString() };
+		const long long int task_id{ task_object["task"]["id"].toInteger() };
+		const QString task_name{ task_object["task"]["name"].toString() };
+		const QString note{ task_object["notes"].toString() };
+
+		const double time_tracked{ task_object["hours"].toDouble() };
+		double tracked_hours, tracked_minutes;
+		tracked_minutes = std::modf(time_tracked, &tracked_hours);
+
+		const bool started{ !task_object["started_time"].toString().isNull() };
+
+		Task* task = new Task{
+				project_id,
+				task_id,
+				task_entry_id,
+				project_name,
+				task_name,
+				QTime(static_cast<int>(tracked_hours), static_cast<int>(tracked_minutes * 60)),
+				note,
+				started
+		};
+		emit task_added(task);
+	}
+}
+
+//
 void HarvestHandler::add_task_checks()
 {
 	QNetworkReply* reply{ dynamic_cast<QNetworkReply*>(sender()) };
@@ -434,7 +491,6 @@ void HarvestHandler::add_task_checks()
 	// Get response from the reply object
 	const QJsonDocument add_task_response{ read_reply(reply) };
 
-	// Find the task we've just received response from
 	const long long int project_id{ add_task_response["project"]["id"].toInteger() };
 	const long long int task_id{ add_task_response["task"]["id"].toInteger() };
 	const size_t key{ qHash(QString::number(project_id).append(QString::number(task_id))) };
@@ -451,6 +507,13 @@ void HarvestHandler::add_task_checks()
 	task->time_entry_id = add_task_response["id"].toInteger();
 
 	emit task_added(task);
+}
+
+void HarvestHandler::process_added_task(const QJsonObject& add_task_response)
+{
+	qDebug() << "Task: " << add_task_response;
+	// Find the task we've just received response from
+
 }
 
 void HarvestHandler::start_task_checks()

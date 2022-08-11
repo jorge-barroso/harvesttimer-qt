@@ -119,7 +119,7 @@ void MainWindow::harvest_handler_ready()
 	task_form.add_projects(projects);
 
 	// TODO get tasks history
-	harvest_handler->list_tasks(app_date, app_date.addDays(1));
+	harvest_handler->list_tasks(app_date);
 
 	show();
 }

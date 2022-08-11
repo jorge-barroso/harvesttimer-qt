@@ -39,6 +39,8 @@ class HarvestHandler : public QObject
 
 		void delete_task(const Task& task);
 
+		void list_tasks(const QDate& tasks_date);
+
 	signals:
 
 		void ready();
@@ -52,6 +54,8 @@ class HarvestHandler : public QObject
 		void code_received();
 
 		void authentication_received(const QNetworkReply* reply);
+
+		void tasks_list_ready();
 
 	protected:
 		// We're taking a singleton approach here so the constructor will remain protected
@@ -142,6 +146,8 @@ class HarvestHandler : public QObject
 		void check_authenticate();
 
 		std::unordered_map<size_t, Task*> tasks_queue;
+
+		void process_added_task(const QJsonObject& add_task_response);
 };
 
 #endif // HARVESTHANDLER_H

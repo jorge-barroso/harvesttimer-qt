@@ -127,7 +127,7 @@ void TasksScrollArea::stop_current_task()
 
 	// stopping remotely takes longer due to the network overhead, so we kick it first and then stop locally
 	// to try and be as accurate as possible
-	// TODO maybe stop locally on success response received
+	// TODO maybe stop locally on success response received instead of always stopping locally
 	harvest_handler->stop_task(*runningTask);
 
 	stop_task_locally();
@@ -170,6 +170,7 @@ void TasksScrollArea::set_lookup_date(const QDate& date)
 
 void TasksScrollArea::task_added(const Task* task)
 {
+	qDebug() << task;
 	TaskWidget* task_widget{ new TaskWidget(const_cast<Task*>(task), this->widget()) };
 	connect(task_widget, &TaskWidget::task_started, this, &TasksScrollArea::start_task);
 	connect(task_widget, &TaskWidget::task_edited, this, &TasksScrollArea::edit_task);
@@ -179,7 +180,7 @@ void TasksScrollArea::task_added(const Task* task)
 
 	if (!task->started) {
 		return;
-}
+	}
 
 	start_task_locally(task, task_widget);
 }

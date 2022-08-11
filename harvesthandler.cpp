@@ -459,19 +459,20 @@ void HarvestHandler::tasks_list_ready()
 		const QString task_name{ task_object["task"]["name"].toString() };
 		const QString note{ task_object["notes"].toString() };
 
-		const double time_tracked{ task_object["hours"].toDouble() };
+		const double time_tracked_decimal{ task_object["hours"].toDouble() };
 		double tracked_hours, tracked_minutes;
-		tracked_minutes = std::modf(time_tracked, &tracked_hours);
+		tracked_minutes = std::modf(time_tracked_decimal, &tracked_hours);
+		const QTime time_tracked(static_cast<int>(tracked_hours), static_cast<int>(tracked_minutes * 60));
 
 		const bool started{ !task_object["started_time"].toString().isNull() };
 
-		Task* task = new Task{
+		const Task* task = new Task{
 				project_id,
 				task_id,
 				task_entry_id,
 				project_name,
 				task_name,
-				QTime(static_cast<int>(tracked_hours), static_cast<int>(tracked_minutes * 60)),
+				time_tracked,
 				note,
 				started
 		};

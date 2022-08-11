@@ -22,15 +22,15 @@ TaskWidget::TaskWidget(Task* task, QWidget* parent) :
 
 	setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
 
-	if (task->time_tracked.hour() + task->time_tracked.minute() != 0)
-	{
-		// It's not running
-		set_stopped();
-	}
-	else
+	if (task->started)
 	{
 		// It's running
 		set_started();
+	}
+	else
+	{
+		// It's not running
+		set_stopped();
 	}
 }
 

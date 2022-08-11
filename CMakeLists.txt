@@ -7,8 +7,6 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 23)
 
-set(CMAKE_INSTALL_PREFIX /usr)
-
 include_directories(.)
 
 add_executable(harvest

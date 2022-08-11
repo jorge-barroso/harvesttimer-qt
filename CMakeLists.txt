@@ -7,6 +7,8 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 23)
 
+set(CMAKE_INSTALL_PREFIX /usr)
+
 include_directories(.)
 
 add_executable(harvest
@@ -41,6 +43,11 @@ add_executable(harvest
         tasksscrollarea.h
         maputils.cpp
         maputils.h)
+
+install(TARGETS harvest
+        DESTINATION ${CMAKE_INSTALL_PREFIX}
+)
+
 
 find_package(Qt6 REQUIRED
         Core

@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 23)
 
 include_directories(.)
 
-add_executable(harvest-timer
+add_executable(harvest
         addtaskform.cpp
         addtaskform.h
         datelabel.cpp
@@ -49,4 +49,4 @@ find_package(Qt6 REQUIRED
         Network
         )
 
-target_link_libraries(harvest-timer Qt6::Core Qt6::Widgets Qt6::Gui Qt6::Network)
+target_link_libraries(harvest Qt6::Core Qt6::Widgets Qt6::Gui Qt6::Network)

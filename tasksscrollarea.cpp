@@ -125,9 +125,12 @@ void TasksScrollArea::stop_current_task()
 	if (runningTaskWidget == nullptr)
 		return;
 
-	stop_task_locally();
-
+	// stopping remotely takes longer due to the network overhead, so we kick it first and then stop locally
+	// to try and be as accurate as possible
+	// TODO maybe stop locally on success response received
 	harvest_handler->stop_task(*runningTask);
+
+	stop_task_locally();
 }
 
 void TasksScrollArea::stop_task_locally()
@@ -174,8 +177,9 @@ void TasksScrollArea::task_added(const Task* task)
 	this->widget()->layout()->addWidget(task_widget);
 	MapUtils::map_insert_or_create_vector(task_widgets, lookup_date, task_widget);
 
-	if (!task->started)
+	if (!task->started) {
 		return;
+}
 
 	start_task_locally(task, task_widget);
 }

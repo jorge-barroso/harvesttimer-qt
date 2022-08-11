@@ -23,9 +23,13 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 	// Harvest will be ready automatically when we have user credentials already present
 	// otherwise we'll have to wait for the user to log in and then receive the auth credentials
 	if (!harvest_handler->is_ready())
+	{
 		connect(harvest_handler, &HarvestHandler::ready, this, &MainWindow::harvest_handler_ready);
+	}
 	else
+	{
 		harvest_handler_ready();
+	}
 
 	// connect to signals from modal forms
 	connect(&task_form, &AddTaskForm::task_started, ui->scrollArea, &TasksScrollArea::add_task);
@@ -108,13 +112,14 @@ void MainWindow::task_to_favourites(Task* task)
 
 
 // Ready up the application once we have the basic data from harvest
-
 void MainWindow::harvest_handler_ready()
 {
 	const std::vector<HarvestProject> projects(harvest_handler->update_user_data());
+
 	task_form.add_projects(projects);
 
 	// TODO get tasks history
+	harvest_handler->list_tasks(app_date, app_date.addDays(1));
 
 	show();
 }

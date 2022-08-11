@@ -65,25 +65,26 @@ class HarvestHandler : public QObject
 		QTcpSocket* auth_socket;
 
 		const QString client_id{ "VkKA3WoB2M5cEQGwf82VkeHb" };
-		const QString client_secret{"QUwB8dtQxMwY5omBHgZBsXAhB2h_jzKZcGZkCUom1CPBYvTKUGPty7ree7ao92PV5FT5VQHbVWwNzTQUITVLmg" };
+		const QString client_secret{
+				"QUwB8dtQxMwY5omBHgZBsXAhB2h_jzKZcGZkCUom1CPBYvTKUGPty7ree7ao92PV5FT5VQHbVWwNzTQUITVLmg" };
 		static const QString default_grant_type;
 		static const QString refresh_grant_type;
 
 		// Authentication endpoints
 		const QString auth_host{ "https://id.getharvest.com" };
-		const QString login_url{auth_host + "/oauth2/authorize?client_id=" + client_id + "&response_type=code" };
+		const QString login_url{ auth_host + "/oauth2/authorize?client_id=" + client_id + "&response_type=code" };
 		const QString auth_url{ auth_host + "/api/v2/oauth2/token" };
 
 		// Task-related endpoints
 		const QString requests_host{ "https://api.harvestapp.com" };
 		const QString assignments_url{ requests_host + "/v2/users/me/project_assignments" };
-		const QString time_entries_url { requests_host + "/v2/time_entries" };
+		const QString time_entries_url{ requests_host + "/v2/time_entries" };
 
 		std::vector<HarvestProject> projects;
 
 		const QString auth_file_name = "harvest_auth.json";
 		QFile auth_file;
-        SettingsManager* settings_manager;
+		SettingsManager* settings_manager;
 
 		QNetworkAccessManager network_manager;
 
@@ -127,8 +128,8 @@ class HarvestHandler : public QObject
 
 		static QJsonDocument read_reply(QNetworkReply* reply);
 
-		void default_error_check(QNetworkReply* reply, const QString& base_error_title,
-								 const QString& base_error_body);
+		static bool default_error_check(QNetworkReply* reply, const QString& base_error_title,
+										const QString& base_error_body);
 
 		void add_task_checks();
 

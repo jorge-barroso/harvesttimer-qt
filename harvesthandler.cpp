@@ -378,7 +378,7 @@ void HarvestHandler::start_task(const Task& task)
 
 void HarvestHandler::stop_task(const Task& task)
 {
-	const QUrl url{ time_entries_url + "/" + QString::number(task.time_entry_id) + "/set_stopped" };
+	const QUrl url{ time_entries_url + "/" + QString::number(task.time_entry_id) + "/stop" };
 	QNetworkReply* reply{ do_request_with_auth(url, false, "PATCH") };
 	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::stop_task_checks);
 }
@@ -426,10 +426,8 @@ QNetworkReply* HarvestHandler::do_request_with_auth(const QUrl& url, const bool 
 void HarvestHandler::add_task_checks()
 {
 	QNetworkReply* reply{ dynamic_cast<QNetworkReply*>(sender()) };
-	if (reply->error() != QNetworkReply::NetworkError::NoError)
+	if (default_error_check(reply, "Could not add your task: ", "Error Adding Task"))
 	{
-		const QString error_string{ "Could not add your task: " + reply->errorString() };
-		QMessageBox::information(nullptr, "Error Adding Task", error_string);
 		return;
 	}
 
@@ -443,7 +441,9 @@ void HarvestHandler::add_task_checks()
 
 	const auto task_element = tasks_queue.find(key);
 	if (task_element == tasks_queue.end())
+	{
 		return;
+	}
 
 	// if we could find a task, let's fetch it and remove it from the queue map
 	Task* task = task_element->second;
@@ -474,7 +474,7 @@ void HarvestHandler::delete_task_checks()
 	reply->deleteLater();
 }
 
-void HarvestHandler::default_error_check(QNetworkReply* reply, const QString& base_error_title,
+bool HarvestHandler::default_error_check(QNetworkReply* reply, const QString& base_error_title,
 										 const QString& base_error_body)
 {
 	if (reply->error() != QNetworkReply::NetworkError::NoError)
@@ -482,5 +482,7 @@ void HarvestHandler::default_error_check(QNetworkReply* reply, const QString& ba
 		const QJsonDocument error_report{ read_reply(const_cast<QNetworkReply*>(reply)) };
 		const QString error_string{ base_error_body + error_report["error"].toString() };
 		QMessageBox::information(nullptr, base_error_title, error_string);
+		return true;
 	}
+	return false;
 }

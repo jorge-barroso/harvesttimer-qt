@@ -35,6 +35,8 @@ class TaskWidget : public QWidget
 
 		void task_deleted(const Task* task, TaskWidget* task_widget);
 
+		void task_favourited(const Task* task, TaskWidget* task_widget);
+
 	private slots:
 
 		void on_delete_button_clicked();

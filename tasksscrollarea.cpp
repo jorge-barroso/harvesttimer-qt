@@ -6,6 +6,7 @@
 #include "ui_mainwindow.h"
 #include "tasksscrollarea.h"
 #include <QLayout>
+#include <QMessageBox>
 
 TasksScrollArea::TasksScrollArea(QWidget* widget)
 		: QScrollArea(widget)
@@ -92,12 +93,7 @@ void TasksScrollArea::start_task_locally(const Task* task, TaskWidget* task_widg
 void TasksScrollArea::edit_task(const Task* task, TaskWidget* task_widget)
 {
 	// TODO gather the task details, show a pop-up window for the user to edit the details, and then on confirmation send an update request
-	stop_current_task();
-	// no need to change start/set_stopped button because that's its default state
-	runningTaskWidget = task_widget;
-	runningTask = task;
-	connect(runningTaskWidget, &TaskWidget::task_stopped, this, &TasksScrollArea::stop_current_task);
-	timer.start();
+	QMessageBox::information(this, "Coming soon!", "This functionality has not been added yet, but it will come very soon!");
 }
 
 void TasksScrollArea::delete_task(const Task* task, TaskWidget* task_widget)
@@ -175,6 +171,7 @@ void TasksScrollArea::task_added(const Task* task)
 	connect(task_widget, &TaskWidget::task_started, this, &TasksScrollArea::start_task);
 	connect(task_widget, &TaskWidget::task_edited, this, &TasksScrollArea::edit_task);
 	connect(task_widget, &TaskWidget::task_deleted, this, &TasksScrollArea::delete_task);
+	connect(task_widget, &TaskWidget::task_favourited, this, &TasksScrollArea::favourite_task);
 	MapUtils::map_insert_or_create_vector(task_widgets, task->date, task_widget);
 	if(task->date == lookup_date)
 	{
@@ -186,4 +183,10 @@ void TasksScrollArea::task_added(const Task* task)
 	}
 
 	start_task_locally(task, task_widget);
+}
+
+void TasksScrollArea::favourite_task(const Task* task, TaskWidget* task_widget)
+{
+	// TODO create favourites system
+	QMessageBox::information(this, "Coming soon!", "This functionality has not been added yet, but it will come very soon!");
 }

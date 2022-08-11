@@ -18,6 +18,7 @@ TasksScrollArea::TasksScrollArea(QWidget* widget)
 
 void TasksScrollArea::add_task(Task* task)
 {
+	task->date = lookup_date;
 	harvest_handler->add_task(task);
 }
 
@@ -170,13 +171,15 @@ void TasksScrollArea::set_lookup_date(const QDate& date)
 
 void TasksScrollArea::task_added(const Task* task)
 {
-	qDebug() << task;
 	TaskWidget* task_widget{ new TaskWidget(const_cast<Task*>(task), this->widget()) };
 	connect(task_widget, &TaskWidget::task_started, this, &TasksScrollArea::start_task);
 	connect(task_widget, &TaskWidget::task_edited, this, &TasksScrollArea::edit_task);
 	connect(task_widget, &TaskWidget::task_deleted, this, &TasksScrollArea::delete_task);
-	this->widget()->layout()->addWidget(task_widget);
-	MapUtils::map_insert_or_create_vector(task_widgets, lookup_date, task_widget);
+	MapUtils::map_insert_or_create_vector(task_widgets, task->date, task_widget);
+	if(task->date == lookup_date)
+	{
+		this->widget()->layout()->addWidget(task_widget);
+	}
 
 	if (!task->started) {
 		return;

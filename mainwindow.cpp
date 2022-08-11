@@ -54,6 +54,7 @@ void MainWindow::on_date_forward_button_clicked()
 	const QDate new_date{ ui->date_label->getAppDate() };
 	ui->scrollArea->set_lookup_date(new_date);
 	ui->scrollArea->update_task_widgets();
+	harvest_handler->list_tasks(app_date.addDays(2), app_date.addDays(2));
 }
 
 
@@ -69,6 +70,7 @@ void MainWindow::on_date_current_button_clicked()
 	const QDate new_date{ ui->date_label->getAppDate() };
 	ui->scrollArea->set_lookup_date(new_date);
 	ui->scrollArea->update_task_widgets();
+//	harvest_handler->list_tasks(app_date.addDays(-2), app_date.addDays(2));
 }
 
 
@@ -80,7 +82,7 @@ void MainWindow::on_date_back_button_clicked()
 	app_date = new_date;
 	ui->scrollArea->set_lookup_date(new_date);
 	ui->scrollArea->update_task_widgets();
-
+	harvest_handler->list_tasks(app_date.addDays(-2), app_date.addDays(-2));
 }
 
 // Bottom buttons operations
@@ -118,8 +120,8 @@ void MainWindow::harvest_handler_ready()
 
 	task_form.add_projects(projects);
 
-	// TODO get tasks history
-	harvest_handler->list_tasks(app_date);
+	// we want to load 5 days, two behind and two in advance, to make the day switching experience more fluid
+	harvest_handler->list_tasks(app_date.addDays(-2), app_date.addDays(2));
 
 	show();
 }

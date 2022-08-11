@@ -39,7 +39,7 @@ class HarvestHandler : public QObject
 
 		void delete_task(const Task& task);
 
-		void list_tasks(const QDate& tasks_date);
+		void list_tasks(const QDate& from_date, const QDate& to_date);
 
 	signals:
 

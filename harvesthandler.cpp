@@ -348,12 +348,12 @@ bool HarvestHandler::is_ready() const
 	return auth_found;
 }
 
-void HarvestHandler::list_tasks(const QDate& tasks_date)
+void HarvestHandler::list_tasks(const QDate& from_date, const QDate& to_date)
 {
 	QUrl request_url(time_entries_url);
 	QUrlQuery url_query;
-	url_query.addQueryItem("from", tasks_date.toString(Qt::ISODate));
-	url_query.addQueryItem("to", tasks_date.toString(Qt::ISODate));
+	url_query.addQueryItem("from", from_date.toString(Qt::ISODate));
+	url_query.addQueryItem("to", to_date.toString(Qt::ISODate));
 	request_url.setQuery(url_query);
 
 	QNetworkReply* reply{ do_request_with_auth(request_url, false, "GET") };
@@ -362,7 +362,7 @@ void HarvestHandler::list_tasks(const QDate& tasks_date)
 
 void HarvestHandler::add_task(Task* task)
 {
-	const QString spent_date{ QDate::currentDate().toString(Qt::ISODate) };
+	const QString spent_date{ task->date.toString(Qt::ISODate) };
 	const float seconds{ static_cast<float>(QTime(0, 0).secsTo(task->time_tracked)) };
 
 	QJsonObject request_payload;
@@ -465,6 +465,7 @@ void HarvestHandler::tasks_list_ready()
 		const QTime time_tracked(static_cast<int>(tracked_hours), static_cast<int>(tracked_minutes * 60));
 
 		const bool started{ !task_object["started_time"].toString().isNull() };
+		const QDate task_date{ QDate::fromString(task_object["spent_date"].toString(), Qt::DateFormat::ISODate) };
 
 		const Task* task = new Task{
 				project_id,
@@ -474,7 +475,8 @@ void HarvestHandler::tasks_list_ready()
 				task_name,
 				time_tracked,
 				note,
-				started
+				started,
+				task_date
 		};
 		emit task_added(task);
 	}

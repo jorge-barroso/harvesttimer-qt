@@ -13,6 +13,7 @@ struct Task {
     QTime time_tracked;
 	QString note;
 	bool started{ false };
+	QDate date{ QDate::currentDate() };
 };
 
 #endif // TASK_H

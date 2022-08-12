@@ -6,34 +6,40 @@ A Qt app that integrates with Harvest (https://www.getharvest.com) to keep track
 
 Ideal for KDE desktops but 100% suitable for any other OS and DE!
 
-# App Screenshots
-## Main Window
+## First Run
+You will need to log in the first time you use the application.
+
+The first run system needs some work, but still, you should be able to use it to log in and come back to the app once you're done.
+If that seems to fail, you can just reopen the app, and you will see how everything has been done: you are logged in and ready to go.
+
+## App Screenshots
+### Main Window
 ![Main Window](/assets/main_window.png?raw=true "the main window of the application")
 
-## Adding a Task
+### Adding a Task
 ![Adding a Task](/assets/add_task_window.png?raw=true "the form to add a new task from the applications")
 
-## System Tray Icon
+### System Tray Icon
 ![System Tray](/assets/systray_icon.png?raw=true "the app giving you quick access ")
 
 
-# Installation
+## Installation
 You can build the app for yourself, or simply grab the prebuilt binary in the [releases section](https://github.com/jorge-barroso/harvesttimer-qt/releases).
 Additionally, the distros listed below have the app in their repos.
 
-## Binary File
+### Binary File
 If you are happy with just grabbing the binary file, you can do so from the latest release in the [releases section](https://github.com/jorge-barroso/harvesttimer-qt/releases), download the binary pack and use it on your system as you prefer.
 
-## Arch Linux (AUR-based distros)
+### Arch Linux (AUR-based distros)
 You can use your favourite installation method (yay, software centre, etc.) to install [harvest-timer-qt](https://aur.archlinux.org/packages/harvest-timer-qt)
 
-## Dependencies
+### Dependencies
 The app has very few dependencies, but you need to bear these in mind especially if you are going to build it from sources:
 
-### Build Dependencies
+#### Build Dependencies
 - Modern C++ compiler (g++, clang)
 - CMake
 
-### Runtime Dependencies
+#### Runtime Dependencies
 - Qt6 Base package, usually named qt6-base
 

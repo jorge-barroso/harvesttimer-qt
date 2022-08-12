@@ -7,9 +7,13 @@ A Qt app that integrates with Harvest (https://www.getharvest.com) to keep track
 Ideal for KDE desktops but 100% suitable for any other OS and DE!
 
 # App Screenshots
+## Main Window
 ![Main Window](/assets/main_window.png?raw=true "the main window of the application")
+
+## Adding a Task
 ![Adding a Task](/assets/add_task_window.png?raw=true "the form to add a new task from the applications")
 
+## System Tray Icon
 ![System Tray](/assets/systray_icon.png?raw=true "the app giving you quick access ")
 
 

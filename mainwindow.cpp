@@ -1,12 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <iostream>
+#include <QSystemTrayIcon>
 #include "maputils.h"
 #include "tasksscrollarea.h"
 
 MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 		: QMainWindow(parent), ui(new Ui::MainWindow), favouritesForm(config_dir, this),
-		  harvest_handler{ HarvestHandler::get_instance(config_dir) }
+		  harvest_handler{ HarvestHandler::get_instance(config_dir) },
+		  exit_from_menu{ false }
 {
 	ui->setupUi(this);
 	setWindowTitle("Harvest Timer");
@@ -34,10 +36,19 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 	// connect to signals from modal forms
 	connect(&task_form, &AddTaskForm::task_started, ui->scrollArea, &TasksScrollArea::add_task);
 	connect(&task_form, &AddTaskForm::task_to_favourites, this, &MainWindow::task_to_favourites);
+
+	create_tray_icon();
 }
 
 MainWindow::~MainWindow()
 {
+	delete quit_action;
+	delete show_hide_action;
+	delete add_task_action;
+
+	delete tray_icon;
+	delete tray_menu;
+
 	delete ui;
 	HarvestHandler::reset_instance();
 }
@@ -124,4 +135,98 @@ void MainWindow::harvest_handler_ready()
 	harvest_handler->list_tasks(app_date.addDays(-2), app_date.addDays(2));
 
 	show();
+}
+
+void MainWindow::show_hide(const QSystemTrayIcon::ActivationReason& activation_reason)
+{
+	switch (activation_reason)
+	{
+		case QSystemTrayIcon::Trigger:
+		{
+			// TODO needs improving
+			this->tray_menu->popup(QCursor::pos());
+			break;
+		}
+		case QSystemTrayIcon::Context:
+		{
+			if (this->isVisible())
+			{
+				this->hide();
+			}
+			else
+			{
+				this->show();
+				this->raise();
+				this->setFocus();
+			}
+			break;
+		}
+		default:
+			break;
+	}
+}
+
+void MainWindow::create_tray_icon()
+{
+	tray_icon = new QSystemTrayIcon(QIcon(":/icons/resources/icons/monochrome/32x32.png"), this);
+
+	connect(tray_icon, &QSystemTrayIcon::activated, this, &MainWindow::show_hide);
+
+	quit_action = new QAction("Exit", tray_icon);
+	connect(quit_action, &QAction::triggered, this, &MainWindow::exit_triggered);
+
+	show_hide_action = new QAction("Show/Hide", tray_icon);
+	connect(show_hide_action, &QAction::triggered, this, &MainWindow::show_hide_triggered);
+
+	add_task_action = new QAction("Add Task", tray_icon);
+	connect(add_task_action, &QAction::triggered, this, &MainWindow::add_task_triggered);
+
+	tray_menu = new QMenu();
+	tray_menu->addAction(show_hide_action);
+	tray_menu->addAction(add_task_action);
+	tray_menu->addAction(quit_action);
+
+	tray_icon->setContextMenu(tray_menu);
+
+	tray_icon->show();
+}
+
+void MainWindow::exit_triggered(bool checked)
+{
+	this->exit_from_menu = true;
+	this->close();
+}
+
+void MainWindow::show_hide_triggered(bool checked)
+{
+	this->show_hide(QSystemTrayIcon::ActivationReason::Context);
+}
+
+void MainWindow::add_task_triggered(bool checked)
+{
+	bool was_hidden = !this->isVisible();
+	if (was_hidden)
+	{
+		this->show();
+	}
+
+	this->on_new_task_button_clicked();
+
+	if (was_hidden)
+	{
+		this->hide();
+	}
+}
+
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+	if(this->exit_from_menu)
+	{
+		event->accept();
+	}
+	else
+	{
+		this->hide();
+		event->ignore();
+	}
 }

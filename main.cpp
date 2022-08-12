@@ -29,6 +29,8 @@ int main(int argc, char* argv[])
 	const QDir config_dir = get_config_directory(conf_dir_name);
 
 	MainWindow w(config_dir);
+
+//	connect(w, &MainWindow::close, a, &QApplication::exit)
 	return a.exec();
 }
 
@@ -42,9 +44,4 @@ QDir get_config_directory(const QString& conf_dir_name)
 	}
 
 	return { user_conf_dir.absolutePath() + "/" + conf_dir_name };
-}
-
-void show_window(QMainWindow* parent)
-{
-	parent->show();
 }

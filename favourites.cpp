@@ -1,28 +1,16 @@
 #include "favourites.h"
 #include <iostream>
 #include "ui_favourites.h"
-#include <cstdio>
-#include <QStandardPaths>
 #include <QMessageBox>
 #include <QTextStream>
-#include "favouritewidget.h"
 
 Favourites::Favourites(const QDir& config_dir, QWidget* parent)
-    : QDialog(parent), ui(new Ui::Favourites)
-    , favourites_file(config_dir.absolutePath() + "/" + this->favourites_file_name)
+		: QDialog(parent), ui(new Ui::Favourites)
+		, favourites_file(config_dir.absolutePath() + "/" + this->favourites_file_name)
 {
 	ui->setupUi(this);
 
 	load_favourites();
-
-	favourite_widgets.reserve(favourites.size());
-
-	for (uint8_t i = 0; i < favourites.size(); ++i)
-	{
-		const Favourite favourite = favourites[i];
-		const FavouriteWidget* widget = new FavouriteWidget(favourite, ui->scrollAreaWidgetContents);
-		favourite_widgets[i] = widget;
-	}
 }
 
 Favourites::~Favourites()
@@ -36,9 +24,9 @@ Favourites::~Favourites()
 		favourites_file.close();
 	}
 
-	for (const FavouriteWidget* favourite_widget: favourite_widgets)
+	for(const Task* task : tasks)
 	{
-		delete favourite_widget;
+		delete task;
 	}
 }
 
@@ -49,25 +37,36 @@ void Favourites::load_favourites()
 		QMessageBox::information(this, "Could not load favourites", favourites_file.errorString());
 	}
 
-	QTextStream in(&favourites_file);
+	Task task;
+	QDataStream in(&favourites_file);
 	while (!in.atEnd())
 	{
-		const QString line = in.readLine();
-		const QStringList fields = line.split(",");
-		const Favourite new_favourite = { fields[0], fields[1], fields[2] };
-		favourites.emplace_back(new_favourite);
+		in >> task;
+		ui->favourites_scroll_area->add_favourite(&task);
 	}
 	favourites_file.close();
 }
 
 void Favourites::save_favourites()
 {
-	favourites_file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
-	for (const Favourite& favourite: favourites)
+	favourites_file.open(QIODevice::WriteOnly | QIODevice::Truncate);
+	for (const Task* task : tasks)
 	{
-		QTextStream stream(&favourites_file);
-		stream << favourite.company << "," << favourite.project_name << "," << favourite.task_name << "\n";
+		QDataStream stream(&favourites_file);
+		stream << *task;
 	}
 
 	favourites_file.close();
+}
+
+void Favourites::add_favourite_task(const Task* task)
+{
+	tasks.emplace_back(task);
+	ui->favourites_scroll_area->add_favourite(task);
+}
+
+void Favourites::remove_favourite_task(const Task* task)
+{
+	std::remove(tasks.begin(), tasks.end(), task);
+	ui->favourites_scroll_area->remove_favourite(task);
 }

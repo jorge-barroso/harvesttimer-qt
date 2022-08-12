@@ -82,7 +82,17 @@ void TaskWidget::on_stop_resume_button_clicked()
 
 void TaskWidget::on_add_favourite_button_clicked()
 {
+	bool checked{ ui->add_favourite_button->isChecked() };
+	if (checked)
+	{
+		emit task_favourited(task);
+	}
+	else
+	{
+		emit task_unfavourited(task);
+	}
 
+	ui->add_favourite_button->setChecked(!checked);
 }
 
 

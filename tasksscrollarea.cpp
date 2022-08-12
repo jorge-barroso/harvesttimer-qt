@@ -9,7 +9,7 @@
 #include <QMessageBox>
 
 TasksScrollArea::TasksScrollArea(QWidget* widget)
-		: QScrollArea(widget)
+		: CustomScrollArea(widget)
 		, timer{ QTimer(this) }
 		, runningTaskWidget{ nullptr }
 		, lookup_date{ QDate::currentDate() }
@@ -31,32 +31,10 @@ void TasksScrollArea::update_task_widgets()
 		return;
 
 	std::vector<TaskWidget*> task_widgets_vector{ task_widgets[lookup_date] };
-	for (auto& task_widget: task_widgets_vector)
+	for (auto task_widget: task_widgets_vector)
 	{
 		add_task_widget(task_widget);
 	}
-}
-
-void TasksScrollArea::clear_task_widgets() const
-{
-	QLayoutItem* child;
-	QLayout* layout = widget()->layout();
-	while ((child = layout->takeAt(0)) != nullptr)
-	{
-		remove_task_widget(child);
-	}
-}
-
-void TasksScrollArea::remove_task_widget(QLayoutItem* child) const
-{
-	child->widget()->hide();
-	widget()->layout()->removeItem(child);
-}
-
-void TasksScrollArea::add_task_widget(TaskWidget*& task_widget) const
-{
-	widget()->layout()->addWidget(task_widget);
-	task_widget->show();
 }
 
 void TasksScrollArea::update_task_timer()
@@ -172,6 +150,7 @@ void TasksScrollArea::task_added(const Task* task)
 	connect(task_widget, &TaskWidget::task_edited, this, &TasksScrollArea::edit_task);
 	connect(task_widget, &TaskWidget::task_deleted, this, &TasksScrollArea::delete_task);
 	connect(task_widget, &TaskWidget::task_favourited, this, &TasksScrollArea::favourite_task);
+	connect(task_widget, &TaskWidget::task_unfavourited, this, &TasksScrollArea::unfavourite_task);
 	MapUtils::map_insert_or_create_vector(task_widgets, task->date, task_widget);
 	if(task->date == lookup_date)
 	{
@@ -185,8 +164,12 @@ void TasksScrollArea::task_added(const Task* task)
 	start_task_locally(task, task_widget);
 }
 
-void TasksScrollArea::favourite_task(const Task* task, TaskWidget* task_widget)
+void TasksScrollArea::favourite_task(const Task* task)
 {
-	// TODO create favourites system
-	QMessageBox::information(this, "Coming soon!", "This functionality has not been added yet, but it will come very soon!");
+	emit task_to_favourites(task);
+}
+
+void TasksScrollArea::unfavourite_task(const Task* task)
+{
+	emit task_out_of_favourites(task);
 }

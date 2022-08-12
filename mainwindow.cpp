@@ -40,7 +40,9 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 
 	// connect to signals from modal forms
 	connect(&task_form, &AddTaskForm::task_started, ui->scrollArea, &TasksScrollArea::add_task);
-	connect(&task_form, &AddTaskForm::task_to_favourites, this, &MainWindow::task_to_favourites);
+	connect(&task_form, &AddTaskForm::task_to_favourites, &favouritesForm, &Favourites::add_favourite_task);
+	connect(ui->scrollArea, &TasksScrollArea::task_to_favourites, &favouritesForm, &Favourites::add_favourite_task);
+	connect(ui->scrollArea, &TasksScrollArea::task_out_of_favourites, &favouritesForm, &Favourites::remove_favourite_task);
 
 	create_tray_icon();
 }
@@ -49,6 +51,7 @@ MainWindow::~MainWindow()
 {
 	delete ui;
 	HarvestHandler::reset_instance();
+
 }
 
 
@@ -111,14 +114,6 @@ void MainWindow::task_started(Task* task)
 {
 	ui->scrollArea->add_task(task);
 }
-
-void MainWindow::task_to_favourites(Task* task)
-{
-	std::cout << "Task Favourited: " << task->project_name.toStdString() << " // " << task->task_name.toStdString()
-			  << " at "
-			  << task->time_tracked.toString().toStdString() << std::endl;
-}
-
 
 // Ready up the application once we have the basic data from harvest
 void MainWindow::harvest_handler_ready()
@@ -191,18 +186,18 @@ void MainWindow::show_hide_triggered(bool checked)
 
 void MainWindow::add_task_triggered(bool checked)
 {
-//	bool was_hidden = !this->isVisible();
-//	if (was_hidden)
-//	{
-//		this->show();
-//	}
+	bool was_hidden = !this->isVisible();
+	if (was_hidden)
+	{
+		this->show();
+	}
 
 	this->on_new_task_button_clicked();
 
-//	if (was_hidden)
-//	{
-//		this->hide();
-//	}
+	if (was_hidden)
+	{
+		this->hide();
+	}
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)

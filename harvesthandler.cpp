@@ -220,7 +220,7 @@ void HarvestHandler::authentication_received(const QNetworkReply* reply)
 QJsonDocument HarvestHandler::read_reply(QNetworkReply* reply)
 {
 	QByteArray response_body{ static_cast<QString>(reply->readAll()).toUtf8() };
-	qDebug() << "Harvest response body:" << response_body;
+	// qDebug() << "Harvest response body:" << response_body;
 	reply->close();
 	return QJsonDocument::fromJson(response_body);
 }
@@ -405,7 +405,7 @@ void HarvestHandler::delete_task(const Task& task)
 QNetworkReply* HarvestHandler::do_request_with_auth(const QUrl& url, const bool sync_request, const QByteArray& verb,
 													const std::optional<QJsonDocument>& payload)
 {
-	qDebug() << "New request to: " << url;
+	// qDebug() << "New request to: " << url;
 
 	check_authenticate();
 
@@ -450,7 +450,7 @@ void HarvestHandler::tasks_list_ready()
 	for (const QJsonValueRef&& harvestTask: tasks_object.toArray())
 	{
 		const QJsonObject task_object{ harvestTask.toObject() };
-		qDebug() << "Task: " << harvestTask;
+		// qDebug() << "Task: " << harvestTask;
 
 		const long long int task_entry_id{ task_object["id"].toInteger() };
 		const long long int project_id{ task_object["project"]["id"].toInteger() };

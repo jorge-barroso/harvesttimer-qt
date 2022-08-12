@@ -1,17 +1,28 @@
 #include "favouritewidget.h"
 #include "ui_favouritewidget.h"
 
-FavouriteWidget::FavouriteWidget(const Favourite &favourite, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::FavouriteWidget)
+FavouriteWidget::FavouriteWidget(const Task* task, QWidget* parent) :
+		QWidget(parent),
+		ui(new Ui::FavouriteWidget),
+		task{ task }
 {
-    ui->setupUi(this);
-    ui->organization_label->setText(favourite.company);
-    ui->project_label->setText(favourite.project_name);
-    ui->task_label->setText(favourite.task_name);
+	ui->setupUi(this);
+	ui->project_label->setText(task->project_name);
+	ui->task_label->setText(task->task_name);
 }
 
 FavouriteWidget::~FavouriteWidget()
 {
-    delete ui;
+	delete ui;
+	delete task;
+}
+
+bool FavouriteWidget::operator==(const FavouriteWidget& rhs) const
+{
+	return task == rhs.task;
+}
+
+bool FavouriteWidget::operator!=(const FavouriteWidget& rhs) const
+{
+	return !(rhs == *this);
 }

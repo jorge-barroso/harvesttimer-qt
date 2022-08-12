@@ -40,7 +40,7 @@ add_executable(harvest
         tasksscrollarea.cpp
         tasksscrollarea.h
         maputils.cpp
-        maputils.h)
+        maputils.h favouritesscrollarea.cpp favouritesscrollarea.h customscrollarea.cpp customscrollarea.h)
 
 install(TARGETS harvest
         DESTINATION ${CMAKE_INSTALL_PREFIX}

@@ -10,6 +10,7 @@
 #include <QLayoutItem>
 #include "taskwidget.h"
 #include "harvesthandler.h"
+#include "customscrollarea.h"
 #include <QTimer>
 
 QT_BEGIN_NAMESPACE
@@ -19,7 +20,7 @@ namespace Ui
 }
 QT_END_NAMESPACE
 
-class TasksScrollArea : public QScrollArea
+	class TasksScrollArea : public CustomScrollArea
 {
 	Q_OBJECT
 
@@ -38,6 +39,12 @@ class TasksScrollArea : public QScrollArea
 
 		void set_lookup_date(const QDate& date);
 
+	signals:
+
+		void task_to_favourites(const Task* task);
+
+		void task_out_of_favourites(const Task* task);
+
 	public slots:
 
 		void add_task(Task* task);
@@ -52,7 +59,9 @@ class TasksScrollArea : public QScrollArea
 
 		void delete_task(const Task* task, TaskWidget* task_widget);
 
-		void favourite_task(const Task* task, TaskWidget* task_widget);
+		void favourite_task(const Task* task);
+
+		void unfavourite_task(const Task* task);
 
 	private:
 		QDate lookup_date;
@@ -66,12 +75,6 @@ class TasksScrollArea : public QScrollArea
 		const int timer_seconds{ 60 };
 
 		HarvestHandler* harvest_handler;
-
-		void clear_task_widgets() const;
-
-		void remove_task_widget(QLayoutItem* child) const;
-
-		void add_task_widget(TaskWidget*& task_widget) const;
 
 		void start_task_locally(const Task* task, TaskWidget* task_widget);
 

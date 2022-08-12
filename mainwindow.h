@@ -41,8 +41,6 @@ class MainWindow : public QMainWindow
 
 		void task_started(Task* task);
 
-		void task_to_favourites(Task* task);
-
 		void harvest_handler_ready();
 
 		void exit_triggered(bool checked = false);

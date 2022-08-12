@@ -6,29 +6,41 @@
 #include <QDir>
 #include <string>
 #include <vector>
+#include <QScrollArea>
 #include "favourite.h"
 #include "favouritewidget.h"
+#include "task.h"
 
-namespace Ui {
-class Favourites;
+namespace Ui
+{
+	class Favourites;
 }
 
 class Favourites : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    explicit Favourites(const QDir & config_dir, QWidget *parent = nullptr);
-    ~Favourites() override;
+	public:
+		explicit Favourites(const QDir& config_dir, QWidget* parent = nullptr);
 
-private:
-    Ui::Favourites *ui;
-    const QString favourites_file_name = "favourites.cfg";
-    QFile favourites_file;
-    std::vector<Favourite> favourites;
-    std::vector<const FavouriteWidget*> favourite_widgets;
-    void load_favourites();
-    void save_favourites();
+		~Favourites() override;
+
+
+	public slots:
+
+		void add_favourite_task(const Task* task);
+
+		void remove_favourite_task(const Task* task);
+
+	private:
+		Ui::Favourites* ui;
+		const QString favourites_file_name = "favourites.dat";
+		QFile favourites_file;
+		std::vector<const Task*> tasks;
+
+		void load_favourites();
+
+		void save_favourites();
 };
 
 #endif // FAVOURITES_H

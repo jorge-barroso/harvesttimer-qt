@@ -35,7 +35,9 @@ class TaskWidget : public QWidget
 
 		void task_deleted(const Task* task, TaskWidget* task_widget);
 
-		void task_favourited(const Task* task, TaskWidget* task_widget);
+		void task_favourited(const Task* task);
+
+		void task_unfavourited(const Task* task);
 
 	private slots:
 

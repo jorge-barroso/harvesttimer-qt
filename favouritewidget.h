@@ -2,22 +2,30 @@
 #define FAVOURITEWIDGET_H
 
 #include <QDialog>
-#include "favourite.h"
+#include "task.h"
 
-namespace Ui {
-class FavouriteWidget;
+namespace Ui
+{
+	class FavouriteWidget;
 }
 
-class FavouriteWidget : public QDialog
+class FavouriteWidget : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    explicit FavouriteWidget(const Favourite &favourite, QWidget *parent = nullptr);
-    ~FavouriteWidget();
+	public:
+		explicit FavouriteWidget(const Task* favourite, QWidget* parent = nullptr);
 
-private:
-    Ui::FavouriteWidget *ui;
+		~FavouriteWidget() override;
+
+		bool operator==(const FavouriteWidget& rhs) const;
+
+		bool operator!=(const FavouriteWidget& rhs) const;
+
+	private:
+		Ui::FavouriteWidget* ui;
+
+		const Task* task;
 };
 
 #endif // FAVOURITEWIDGET_H

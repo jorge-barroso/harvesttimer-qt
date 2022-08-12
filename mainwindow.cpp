@@ -168,7 +168,7 @@ void MainWindow::show_hide(const QSystemTrayIcon::ActivationReason& activation_r
 
 void MainWindow::create_tray_icon()
 {
-	tray_icon = new QSystemTrayIcon(QIcon(":/icons/resources/icons/hicolor/256x256.png"), this);
+	tray_icon = new QSystemTrayIcon(QIcon(":/icons/resources/icons/monochrome/32x32.png"), this);
 
 	connect(tray_icon, &QSystemTrayIcon::activated, this, &MainWindow::show_hide);
 

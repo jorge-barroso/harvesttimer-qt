@@ -41,14 +41,15 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 
 MainWindow::~MainWindow()
 {
-	delete ui;
-	HarvestHandler::reset_instance();
+	delete quit_action;
+	delete show_hide_action;
+	delete add_task_action;
 
 	delete tray_icon;
-	delete quit_action;
-	delete hide_action;
-	delete add_task_action;
 	delete tray_icon_menu;
+
+	delete ui;
+	HarvestHandler::reset_instance();
 }
 
 
@@ -135,27 +136,29 @@ void MainWindow::harvest_handler_ready()
 	show();
 }
 
-void MainWindow::closeEvent (QCloseEvent *event)
+void MainWindow::show_hide(const QSystemTrayIcon::ActivationReason& activation_reason)
 {
-	hide();
-}
-
-void MainWindow::systray_activated(const QSystemTrayIcon::ActivationReason& activation_reason) {
-	if( activation_reason )
+	switch(activation_reason)
 	{
-		if( activation_reason != QSystemTrayIcon::DoubleClick )
-			return;
-	}
-
-	if( isVisible() )
-	{
-		hide();
-	}
-	else
-	{
-		show();
-		raise();
-		setFocus();
+		case QSystemTrayIcon::Trigger: {
+//			TODO needs fixing
+//			this->tray_icon_menu->exec(QCursor::pos());
+			break;
+		}
+		case QSystemTrayIcon::Context: {
+			if (this->isVisible())
+			{
+				this->hide();
+			}
+			else
+			{
+				this->show();
+				this->raise();
+				this->setFocus();
+			}
+			break;
+		}
+		default: break;
 	}
 }
 
@@ -163,23 +166,49 @@ void MainWindow::create_tray_icon()
 {
 	tray_icon = new QSystemTrayIcon(QIcon(":/icons/resources/icons/hicolor/256x256.png"), this);
 
-	connect( tray_icon, &QSystemTrayIcon::activated, this, &MainWindow::systray_activated );
+	connect(tray_icon, &QSystemTrayIcon::activated, this, &MainWindow::show_hide);
 
-	quit_action = new QAction( "Exit", tray_icon );
-	connect( quit_action, SIGNAL(triggered()), this, SLOT(on_exit()) );
+	quit_action = new QAction("Exit", tray_icon);
+	connect(quit_action, &QAction::triggered, this, &MainWindow::exit_triggered);
 
-	hide_action = new QAction( "Show/Hide", tray_icon );
-	connect( hide_action, SIGNAL(triggered()), this, SLOT(on_show_hide()) );
+	show_hide_action = new QAction("Show/Hide", tray_icon);
+	connect(show_hide_action, &QAction::triggered, this, &MainWindow::show_hide_triggered);
 
-	add_task_action = new QAction( "Add Task", tray_icon );
-	connect( add_task_action, SIGNAL(triggered()), this, SLOT(on_show_hide()) );
+	add_task_action = new QAction("Add Task", tray_icon);
+	connect(add_task_action, &QAction::triggered, this, &MainWindow::add_task_triggered);
 
 	tray_icon_menu = new QMenu();
-	tray_icon_menu->addAction( hide_action );
-	tray_icon_menu->addAction( quit_action );
-	tray_icon_menu->addAction( add_task_action );
+	tray_icon_menu->addAction(show_hide_action);
+	tray_icon_menu->addAction(add_task_action);
+	tray_icon_menu->addAction(quit_action);
 
-	tray_icon->setContextMenu( tray_icon_menu );
+	tray_icon->setContextMenu(tray_icon_menu);
 
 	tray_icon->show();
+}
+
+void MainWindow::exit_triggered(bool checked)
+{
+	this->close();
+}
+
+void MainWindow::show_hide_triggered(bool checked)
+{
+	this->show_hide(QSystemTrayIcon::ActivationReason::Context);
+}
+
+void MainWindow::add_task_triggered(bool checked)
+{
+	bool was_hidden = !this->isVisible();
+	if(was_hidden)
+	{
+		this->show();
+	}
+
+	this->on_new_task_button_clicked();
+
+	if (was_hidden)
+	{
+		this->hide();
+	}
 }

@@ -46,7 +46,7 @@ MainWindow::~MainWindow()
 	delete add_task_action;
 
 	delete tray_icon;
-	delete tray_icon_menu;
+	delete tray_menu;
 
 	delete ui;
 	HarvestHandler::reset_instance();
@@ -141,8 +141,8 @@ void MainWindow::show_hide(const QSystemTrayIcon::ActivationReason& activation_r
 	switch(activation_reason)
 	{
 		case QSystemTrayIcon::Trigger: {
-//			TODO needs fixing
-//			this->tray_icon_menu->exec(QCursor::pos());
+			// TODO needs improving
+			this->tray_menu->popup(QCursor::pos());
 			break;
 		}
 		case QSystemTrayIcon::Context: {
@@ -177,12 +177,12 @@ void MainWindow::create_tray_icon()
 	add_task_action = new QAction("Add Task", tray_icon);
 	connect(add_task_action, &QAction::triggered, this, &MainWindow::add_task_triggered);
 
-	tray_icon_menu = new QMenu();
-	tray_icon_menu->addAction(show_hide_action);
-	tray_icon_menu->addAction(add_task_action);
-	tray_icon_menu->addAction(quit_action);
+	tray_menu = new QMenu();
+	tray_menu->addAction(show_hide_action);
+	tray_menu->addAction(add_task_action);
+	tray_menu->addAction(quit_action);
 
-	tray_icon->setContextMenu(tray_icon_menu);
+	tray_icon->setContextMenu(tray_menu);
 
 	tray_icon->show();
 }

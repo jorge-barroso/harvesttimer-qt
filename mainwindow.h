@@ -62,7 +62,7 @@ class MainWindow : public QMainWindow
 		QAction* quit_action;
 		QAction* show_hide_action;
 		QAction* add_task_action;
-		QMenu* tray_icon_menu;
+		QMenu* tray_menu;
 
 		void show_hide(const QSystemTrayIcon::ActivationReason& activation_reason);
 

@@ -12,4 +12,12 @@ Additionally, the following distros have the app in their repos:
 You can use your favourite installation method (yay, software centre, etc.) to install [harvest-timer-qt](https://aur.archlinux.org/packages/harvest-timer-qt)
 
 ## Dependencies
-The app has very few dependencies
+The app has very few dependencies, but you need to bear these in mind especially if you are going to build it from sources:
+
+### Build Dependencies
+- Modern C++ compiler (g++, clang)
+- CMake
+
+### Runtime Dependencies
+- Qt6 Base package, some namings for this, depending on distros, are
+  - Ubuntu: qt6-base

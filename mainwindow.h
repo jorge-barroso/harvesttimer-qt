@@ -58,20 +58,22 @@ class MainWindow : public QMainWindow
 		QDate app_date;
 		HarvestHandler* harvest_handler;
 
+		// Favourites
+		std::vector<const Task*> favourites;
+
 		// systray menu
 		QSystemTrayIcon tray_icon;
 		QAction quit_action;
 		QAction show_hide_action;
 		QAction add_task_action;
 		QMenu tray_menu;
+		bool exit_from_menu;
 
 		void show_hide(const QSystemTrayIcon::ActivationReason& activation_reason);
 
 		void create_tray_icon();
 
 		void closeEvent(QCloseEvent* event) override;
-
-		bool exit_from_menu;
 };
 
 #endif // MAINWINDOW_H

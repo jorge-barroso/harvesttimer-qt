@@ -50,9 +50,9 @@ void Favourites::load_favourites()
 void Favourites::save_favourites()
 {
 	favourites_file.open(QIODevice::WriteOnly | QIODevice::Truncate);
+	QDataStream stream(&favourites_file);
 	for (const Task* task : tasks)
 	{
-		QDataStream stream(&favourites_file);
 		stream << *task;
 	}
 

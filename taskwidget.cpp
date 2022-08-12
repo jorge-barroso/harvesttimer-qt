@@ -12,7 +12,6 @@ TaskWidget::TaskWidget(Task* task, QWidget* parent) :
 		task{ task }
 {
 	ui->setupUi(this);
-	ui->organization_label->setText("");
 	ui->project_name_label->setText(task->project_name);
 	ui->task_name_label->setText(task->task_name);
 	ui->time_label->setText(task->time_tracked.toString("hh:mm"));

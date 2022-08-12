@@ -19,6 +19,12 @@
      <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
        <widget class="FavouritesScrollArea" name="favourites_scroll_area">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="lineWidth">
+         <number>0</number>
+        </property>
         <property name="widgetResizable">
          <bool>true</bool>
         </property>
@@ -27,8 +33,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>362</width>
-           <height>262</height>
+           <width>364</width>
+           <height>264</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="favourites_scroll_area_widget_layout"/>

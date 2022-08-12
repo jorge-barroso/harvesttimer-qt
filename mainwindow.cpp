@@ -7,7 +7,8 @@
 
 MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 		: QMainWindow(parent), ui(new Ui::MainWindow), favouritesForm(config_dir, this),
-		  harvest_handler{ HarvestHandler::get_instance(config_dir) }
+		  harvest_handler{ HarvestHandler::get_instance(config_dir) },
+		  exit_from_menu{ false }
 {
 	ui->setupUi(this);
 	setWindowTitle("Harvest Timer");
@@ -138,14 +139,16 @@ void MainWindow::harvest_handler_ready()
 
 void MainWindow::show_hide(const QSystemTrayIcon::ActivationReason& activation_reason)
 {
-	switch(activation_reason)
+	switch (activation_reason)
 	{
-		case QSystemTrayIcon::Trigger: {
+		case QSystemTrayIcon::Trigger:
+		{
 			// TODO needs improving
 			this->tray_menu->popup(QCursor::pos());
 			break;
 		}
-		case QSystemTrayIcon::Context: {
+		case QSystemTrayIcon::Context:
+		{
 			if (this->isVisible())
 			{
 				this->hide();
@@ -158,7 +161,8 @@ void MainWindow::show_hide(const QSystemTrayIcon::ActivationReason& activation_r
 			}
 			break;
 		}
-		default: break;
+		default:
+			break;
 	}
 }
 
@@ -189,6 +193,7 @@ void MainWindow::create_tray_icon()
 
 void MainWindow::exit_triggered(bool checked)
 {
+	this->exit_from_menu = true;
 	this->close();
 }
 
@@ -200,7 +205,7 @@ void MainWindow::show_hide_triggered(bool checked)
 void MainWindow::add_task_triggered(bool checked)
 {
 	bool was_hidden = !this->isVisible();
-	if(was_hidden)
+	if (was_hidden)
 	{
 		this->show();
 	}
@@ -210,5 +215,18 @@ void MainWindow::add_task_triggered(bool checked)
 	if (was_hidden)
 	{
 		this->hide();
+	}
+}
+
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+	if(this->exit_from_menu)
+	{
+		event->accept();
+	}
+	else
+	{
+		this->hide();
+		event->ignore();
 	}
 }

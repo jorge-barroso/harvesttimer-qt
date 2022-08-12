@@ -5,6 +5,7 @@
 #include <QDate>
 #include <QSystemTrayIcon>
 #include <QMenu>
+#include <QCloseEvent>
 #include "addtaskform.h"
 #include "favourites.h"
 #include "harvesthandler.h"
@@ -68,6 +69,9 @@ class MainWindow : public QMainWindow
 
 		void create_tray_icon();
 
+		void closeEvent(QCloseEvent* event) override;
+
+		bool exit_from_menu;
 };
 
 #endif // MAINWINDOW_H

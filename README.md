@@ -19,7 +19,10 @@ Ideal for KDE desktops but 100% suitable for any other OS and DE!
 
 # Installation
 You can build the app for yourself, or simply grab the prebuilt binary in the [releases section](https://github.com/jorge-barroso/harvesttimer-qt/releases).
-Additionally, the following distros have the app in their repos:
+Additionally, the distros listed below have the app in their repos.
+
+## Binary File
+If you are happy with just grabbing the binary file, you can do so from the latest release in the [releases section](https://github.com/jorge-barroso/harvesttimer-qt/releases), download the binary pack and use it on your system as you prefer.
 
 ## Arch Linux (AUR-based distros)
 You can use your favourite installation method (yay, software centre, etc.) to install [harvest-timer-qt](https://aur.archlinux.org/packages/harvest-timer-qt)

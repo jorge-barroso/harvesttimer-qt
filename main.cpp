@@ -30,7 +30,6 @@ int main(int argc, char* argv[])
 
 	MainWindow w(config_dir);
 
-//	connect(w, &MainWindow::close, a, &QApplication::exit)
 	return a.exec();
 }
 

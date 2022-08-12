@@ -8,7 +8,12 @@
 MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 		: QMainWindow(parent), ui(new Ui::MainWindow), favouritesForm(config_dir, this),
 		  harvest_handler{ HarvestHandler::get_instance(config_dir) },
-		  exit_from_menu{ false }
+		  exit_from_menu{ false },
+		  tray_icon{QSystemTrayIcon(QIcon(":/icons/resources/icons/monochrome/32x32.png"), this)},
+		  tray_menu(),
+		  add_task_action{QAction("Add Task", &tray_icon)},
+		  quit_action{QAction("Exit", &tray_icon)},
+		  show_hide_action{QAction("Show/Hide", &tray_icon)}
 {
 	ui->setupUi(this);
 	setWindowTitle("Harvest Timer");
@@ -42,21 +47,12 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 
 MainWindow::~MainWindow()
 {
-	delete quit_action;
-	delete show_hide_action;
-	delete add_task_action;
-
-	delete tray_icon;
-	delete tray_menu;
-
 	delete ui;
 	HarvestHandler::reset_instance();
 }
 
 
 // Date operations
-// TODO update widgets on date change
-
 void MainWindow::on_date_forward_button_clicked()
 {
 	this->ui->date_label->moveForward();
@@ -144,7 +140,7 @@ void MainWindow::show_hide(const QSystemTrayIcon::ActivationReason& activation_r
 		case QSystemTrayIcon::Trigger:
 		{
 			// TODO needs improving
-			this->tray_menu->popup(QCursor::pos());
+			this->tray_menu.popup(QCursor::pos());
 			break;
 		}
 		case QSystemTrayIcon::Context:
@@ -168,27 +164,18 @@ void MainWindow::show_hide(const QSystemTrayIcon::ActivationReason& activation_r
 
 void MainWindow::create_tray_icon()
 {
-	tray_icon = new QSystemTrayIcon(QIcon(":/icons/resources/icons/monochrome/32x32.png"), this);
+	connect(&tray_icon, &QSystemTrayIcon::activated, this, &MainWindow::show_hide);
+	connect(&quit_action, &QAction::triggered, this, &MainWindow::exit_triggered);
+	connect(&show_hide_action, &QAction::triggered, this, &MainWindow::show_hide_triggered);
+	connect(&add_task_action, &QAction::triggered, this, &MainWindow::add_task_triggered);
 
-	connect(tray_icon, &QSystemTrayIcon::activated, this, &MainWindow::show_hide);
+	tray_menu.addAction(&show_hide_action);
+	tray_menu.addAction(&add_task_action);
+	tray_menu.addAction(&quit_action);
 
-	quit_action = new QAction("Exit", tray_icon);
-	connect(quit_action, &QAction::triggered, this, &MainWindow::exit_triggered);
+	tray_icon.setContextMenu(&tray_menu);
 
-	show_hide_action = new QAction("Show/Hide", tray_icon);
-	connect(show_hide_action, &QAction::triggered, this, &MainWindow::show_hide_triggered);
-
-	add_task_action = new QAction("Add Task", tray_icon);
-	connect(add_task_action, &QAction::triggered, this, &MainWindow::add_task_triggered);
-
-	tray_menu = new QMenu();
-	tray_menu->addAction(show_hide_action);
-	tray_menu->addAction(add_task_action);
-	tray_menu->addAction(quit_action);
-
-	tray_icon->setContextMenu(tray_menu);
-
-	tray_icon->show();
+	tray_icon.show();
 }
 
 void MainWindow::exit_triggered(bool checked)
@@ -204,18 +191,18 @@ void MainWindow::show_hide_triggered(bool checked)
 
 void MainWindow::add_task_triggered(bool checked)
 {
-	bool was_hidden = !this->isVisible();
-	if (was_hidden)
-	{
-		this->show();
-	}
+//	bool was_hidden = !this->isVisible();
+//	if (was_hidden)
+//	{
+//		this->show();
+//	}
 
 	this->on_new_task_button_clicked();
 
-	if (was_hidden)
-	{
-		this->hide();
-	}
+//	if (was_hidden)
+//	{
+//		this->hide();
+//	}
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)

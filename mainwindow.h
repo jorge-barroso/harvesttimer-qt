@@ -59,11 +59,11 @@ class MainWindow : public QMainWindow
 		HarvestHandler* harvest_handler;
 
 		// systray menu
-		QSystemTrayIcon* tray_icon;
-		QAction* quit_action;
-		QAction* show_hide_action;
-		QAction* add_task_action;
-		QMenu* tray_menu;
+		QSystemTrayIcon tray_icon;
+		QAction quit_action;
+		QAction show_hide_action;
+		QAction add_task_action;
+		QMenu tray_menu;
 
 		void show_hide(const QSystemTrayIcon::ActivationReason& activation_reason);
 

@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QDate>
+#include <QSystemTrayIcon>
+#include <QMenu>
 #include "addtaskform.h"
 #include "favourites.h"
 #include "harvesthandler.h"
@@ -43,5 +45,18 @@ private:
     Favourites favouritesForm;
     QDate app_date;
     HarvestHandler* harvest_handler;
+
+	// systray menu
+	QSystemTrayIcon* tray_icon;
+	QAction* quit_action;
+	QAction* hide_action;
+	QAction* add_task_action;
+	QMenu* tray_icon_menu;
+
+	void closeEvent(QCloseEvent* event) override;
+
+	void systray_activated(const QSystemTrayIcon::ActivationReason& activation_reason);
+
+	void create_tray_icon();
 };
 #endif // MAINWINDOW_H

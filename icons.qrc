@@ -7,5 +7,6 @@
         <file>resources/icons/stop.png</file>
         <file>resources/icons/today.png</file>
         <file>resources/icons/bin.png</file>
+        <file>resources/icons/hicolor/256x256.png</file>
     </qresource>
 </RCC>

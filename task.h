@@ -21,7 +21,6 @@ struct Task
 
 	friend QTextStream& operator<<(QTextStream& stream, const Task& task)
 	{
-		qDebug() << end_line_separator;
 		stream << task.project_id << values_separator << task.task_id << values_separator << task.time_entry_id
 			   << values_separator << task.project_name << values_separator
 			   << task.task_name << values_separator << task.time_tracked.toString() << values_separator << task.note

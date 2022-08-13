@@ -7,10 +7,6 @@
 TaskWidget::TaskWidget(Task* task, QWidget* parent) :
 		QWidget(parent),
 		ui(new Ui::TaskWidget),
-		stop_icon(),
-		start_icon(),
-		star_icon(),
-		black_star_icon(),
 		task{ task }
 {
 	ui->setupUi(this);
@@ -80,15 +76,14 @@ void TaskWidget::on_stop_resume_button_clicked()
 
 void TaskWidget::on_add_favourite_button_clicked()
 {
-	bool checked{ ui->add_favourite_button->isChecked() };
-	ui->add_favourite_button->setChecked(!checked);
-
-	if (checked)
+	if (ui->add_favourite_button->isChecked())
 	{
+		ui->add_favourite_button->setChecked(false);
 		emit task_favourited(task);
 	}
 	else
 	{
+		ui->add_favourite_button->setChecked(true);
 		emit task_unfavourited(task);
 	}
 

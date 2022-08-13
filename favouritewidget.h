@@ -26,9 +26,14 @@ class FavouriteWidget : public QWidget
 
 		void unfavourited_task(const FavouriteWidget* widget);
 
+		void favourite_chosen(const Task* task);
+
 	private slots:
 
 		void on_unfavourite_button_clicked();
+
+	protected:
+		void mouseReleaseEvent(QMouseEvent* event) override;
 
 	private:
 		Ui::FavouriteWidget* ui;

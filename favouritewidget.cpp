@@ -9,8 +9,6 @@ FavouriteWidget::FavouriteWidget(const Task* task, QWidget* parent) :
 	ui->setupUi(this);
 	ui->project_label->setText(task->project_name);
 	ui->task_label->setText(task->task_name);
-
-	setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
 }
 
 FavouriteWidget::~FavouriteWidget()
@@ -33,3 +31,9 @@ void FavouriteWidget::on_unfavourite_button_clicked()
 	emit unfavourited_task(this);
 }
 
+void FavouriteWidget::mouseReleaseEvent(QMouseEvent* event)
+{
+	QWidget::mouseReleaseEvent(event);
+
+	emit favourite_chosen(task);
+}

@@ -20,7 +20,7 @@ namespace Ui
 }
 QT_END_NAMESPACE
 
-	class TasksScrollArea : public CustomScrollArea
+class TasksScrollArea : public CustomScrollArea
 {
 	Q_OBJECT
 

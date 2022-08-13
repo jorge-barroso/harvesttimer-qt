@@ -9,7 +9,6 @@
 #include "addtaskform.h"
 #include "favourites.h"
 #include "harvesthandler.h"
-#include "taskwidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui

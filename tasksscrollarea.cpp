@@ -16,6 +16,19 @@ TasksScrollArea::TasksScrollArea(QWidget* widget)
 	timer.setInterval(timer_seconds * 1000);
 }
 
+TasksScrollArea::~TasksScrollArea()
+{
+	delete runningTaskWidget;
+	delete runningTask;
+	for (const auto& widgets: task_widgets)
+	{
+		for (auto* task_widget: widgets.second)
+		{
+			delete task_widget;
+		}
+	}
+}
+
 void TasksScrollArea::add_task(Task* task)
 {
 	task->date = lookup_date;
@@ -122,19 +135,6 @@ void TasksScrollArea::set_harvest_handler(HarvestHandler* handler)
 
 	// Set connections between harvest handler and our scroll area
 	connect(harvest_handler, &HarvestHandler::task_added, this, &TasksScrollArea::task_added);
-}
-
-TasksScrollArea::~TasksScrollArea()
-{
-	delete runningTaskWidget;
-	delete runningTask;
-	for (const auto& widgets: task_widgets)
-	{
-		for (auto* task_widget: widgets.second)
-		{
-			delete task_widget;
-		}
-	}
 }
 
 void TasksScrollArea::set_lookup_date(const QDate& date)

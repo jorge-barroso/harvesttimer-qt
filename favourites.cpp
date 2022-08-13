@@ -11,6 +11,8 @@ Favourites::Favourites(const QDir& config_dir, QWidget* parent)
 	ui->setupUi(this);
 
 	load_favourites();
+
+	connect(ui->favourites_scroll_area, &FavouritesScrollArea::new_task_selected, this, &Favourites::new_task_selected);
 }
 
 Favourites::~Favourites()
@@ -34,15 +36,15 @@ void Favourites::load_favourites()
 {
 	if (!favourites_file.open(QIODevice::ReadWrite))
 	{
-		QMessageBox::information(this, "Could not load favourites", favourites_file.errorString());
+		QMessageBox::warning(this, "Could not load favourites", favourites_file.errorString());
 	}
 
-	Task task;
 	QTextStream in(&favourites_file);
 	while (!in.atEnd())
 	{
-		in >> task;
-		ui->favourites_scroll_area->add_favourite(&task);
+		Task* task = new Task{};
+		in >> *task;
+		ui->favourites_scroll_area->add_favourite(task);
 	}
 	favourites_file.close();
 }
@@ -69,4 +71,10 @@ void Favourites::remove_favourite_task(const Task* task)
 {
 	std::remove(tasks.begin(), tasks.end(), task);
 	ui->favourites_scroll_area->remove_favourite_task(task);
+}
+
+void Favourites::new_task_selected(const Task* task)
+{
+	emit add_task(const_cast<Task*>(task));
+	this->close();
 }

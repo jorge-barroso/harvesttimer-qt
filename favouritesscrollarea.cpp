@@ -29,8 +29,8 @@ void FavouritesScrollArea::add_favourite(const Task* task)
 
 	favourite_widgets.emplace_back(favourite_widget);
 	this->widget()->layout()->addWidget(const_cast<FavouriteWidget*>(favourite_widget));
-	connect(favourite_widget, &FavouriteWidget::unfavourited_task, this,
-			&FavouritesScrollArea::remove_favourite_widget);
+	connect(favourite_widget, &FavouriteWidget::unfavourited_task, this, &FavouritesScrollArea::remove_favourite_widget);
+	connect(favourite_widget, &FavouriteWidget::favourite_chosen, this, &FavouritesScrollArea::favourite_chosen);
 }
 
 std::vector<const FavouriteWidget*>::iterator FavouritesScrollArea::find_widget_from_task(const Task* task)
@@ -89,4 +89,9 @@ void FavouritesScrollArea::update_favourite_widgets()
 	{
 		add_task_widget(const_cast<FavouriteWidget*>(favourite_widget));
 	}
+}
+
+void FavouritesScrollArea::favourite_chosen(const Task* task)
+{
+	emit new_task_selected(task);
 }

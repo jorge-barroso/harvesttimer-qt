@@ -42,6 +42,7 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 	connect(&task_form, &AddTaskForm::task_to_favourites, &favouritesForm, &Favourites::add_favourite_task);
 	connect(ui->scrollArea, &TasksScrollArea::task_to_favourites, &favouritesForm, &Favourites::add_favourite_task);
 	connect(ui->scrollArea, &TasksScrollArea::task_out_of_favourites, &favouritesForm, &Favourites::remove_favourite_task);
+	connect(&favouritesForm, &Favourites::add_task, &task_form, &AddTaskForm::add_task_from_favourites);
 
 	create_tray_icon();
 }

@@ -11,8 +11,17 @@
 #include "customscrollarea.h"
 #include "task.h"
 
+QT_BEGIN_NAMESPACE
+namespace Ui
+{
+	class FavouritesScrollArea;
+}
+QT_END_NAMESPACE
+
 class FavouritesScrollArea : public CustomScrollArea
 {
+	Q_OBJECT
+
 	public:
 		explicit FavouritesScrollArea(QWidget* parent);
 
@@ -22,9 +31,16 @@ class FavouritesScrollArea : public CustomScrollArea
 
 		void remove_favourite_task(const Task* task);
 
+	signals:
+
+		void new_task_selected(const Task* pTask);
+
 	private slots:
 
 		void remove_favourite_widget(const FavouriteWidget* favourite_widget);
+
+		void favourite_chosen(const Task* task);
+
 
 	private:
 		std::vector<const FavouriteWidget*> favourite_widgets;

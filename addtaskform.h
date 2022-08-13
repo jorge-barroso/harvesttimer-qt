@@ -27,6 +27,10 @@ class AddTaskForm : public QDialog
 
 		void task_to_favourites(Task* task);
 
+	public slots:
+
+		void add_task_from_favourites(const Task* task);
+
 	private slots:
 
 		void on_start_button_clicked();
@@ -35,9 +39,9 @@ class AddTaskForm : public QDialog
 
 		void on_cancel_button_clicked();
 
-        void on_project_dropdown_currentIndexChanged(int index);
+		void on_project_dropdown_currentIndexChanged(int index);
 
-private:
+	private:
 		Ui::AddTaskForm* ui;
 
 		Task* build_task();

@@ -9,8 +9,17 @@
 #include <QScrollArea>
 #include <QLayoutItem>
 
+QT_BEGIN_NAMESPACE
+namespace Ui
+{
+	class CustomScrollArea;
+}
+QT_END_NAMESPACE
+
 class CustomScrollArea : public QScrollArea
 {
+	Q_OBJECT
+
 	protected:
 		explicit CustomScrollArea(QWidget* parent);
 

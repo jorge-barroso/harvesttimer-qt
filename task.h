@@ -16,11 +16,14 @@ struct Task
 	QString note;
 	bool started{ false };
 	QDate date{ QDate::currentDate() };
+	static const QString values_separator;
 
 	friend QTextStream& operator<<(QTextStream& stream, const Task& task)
 	{
-		stream << task.project_id << "," << task.task_id << "," << task.time_entry_id << "," << task.project_name << ","
-			   << task.task_name << "," << task.time_tracked.toString() << "," << task.note << "," << task.started << ","
+		stream << task.project_id << values_separator << task.task_id << values_separator << task.time_entry_id
+			   << values_separator << task.project_name << values_separator
+			   << task.task_name << values_separator << task.time_tracked.toString() << values_separator << task.note
+			   << values_separator << task.started << values_separator
 			   << task.date.toString();
 
 		return stream;
@@ -29,7 +32,7 @@ struct Task
 	friend QTextStream& operator>>(QTextStream& stream, Task& task)
 	{
 		QString contents{ stream.readAll() };
-		QStringList values{ contents.split(",") };
+		QStringList values{ contents.split(values_separator) };
 
 		task.project_id = values[0].toLongLong();
 		task.task_id = values[1].toLongLong();

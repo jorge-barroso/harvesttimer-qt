@@ -7,14 +7,14 @@
 #include <string>
 #include <vector>
 #include <QScrollArea>
-#include "favourite.h"
-#include "favouritewidget.h"
 #include "task.h"
 
+QT_BEGIN_NAMESPACE
 namespace Ui
 {
 	class Favourites;
 }
+QT_END_NAMESPACE
 
 class Favourites : public QDialog
 {
@@ -25,12 +25,19 @@ class Favourites : public QDialog
 
 		~Favourites() override;
 
+	signals:
+
+		void add_task(Task* task);
 
 	public slots:
 
 		void add_favourite_task(const Task* task);
 
 		void remove_favourite_task(const Task* task);
+
+	private slots:
+
+		void new_task_selected(const Task* task);
 
 	private:
 		Ui::Favourites* ui;

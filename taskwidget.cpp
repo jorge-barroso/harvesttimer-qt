@@ -76,14 +76,14 @@ void TaskWidget::on_stop_resume_button_clicked()
 
 void TaskWidget::on_add_favourite_button_clicked()
 {
-	if (ui->add_favourite_button->isChecked())
+	if (!task->favourited)
 	{
-		ui->add_favourite_button->setChecked(false);
+		set_favourited();
 		emit task_favourited(task);
 	}
 	else
 	{
-		ui->add_favourite_button->setChecked(true);
+		set_unfavourited();
 		emit task_unfavourited(task);
 	}
 
@@ -93,6 +93,18 @@ void TaskWidget::on_add_favourite_button_clicked()
 void TaskWidget::on_edit_button_clicked()
 {
 	emit task_edited(task, this);
+}
+
+void TaskWidget::set_favourited()
+{
+	ui->add_favourite_button->setChecked(true);
+	task->favourited = true;
+}
+
+void TaskWidget::set_unfavourited()
+{
+	ui->add_favourite_button->setChecked(false);
+	task->favourited = false;
 }
 
 void TaskWidget::set_started()

@@ -38,7 +38,7 @@ void Favourites::load_favourites()
 	}
 
 	Task task;
-	QDataStream in(&favourites_file);
+	QTextStream in(&favourites_file);
 	while (!in.atEnd())
 	{
 		in >> task;
@@ -50,7 +50,7 @@ void Favourites::load_favourites()
 void Favourites::save_favourites()
 {
 	favourites_file.open(QIODevice::WriteOnly | QIODevice::Truncate);
-	QDataStream stream(&favourites_file);
+	QTextStream stream(&favourites_file);
 	for (const Task* task : tasks)
 	{
 		stream << *task;

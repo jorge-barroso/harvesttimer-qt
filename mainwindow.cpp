@@ -1,29 +1,25 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QSystemTrayIcon>
-#include "maputils.h"
 #include "tasksscrollarea.h"
 
 MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 		: QMainWindow(parent), ui(new Ui::MainWindow), favouritesForm(config_dir, this),
 		  harvest_handler{ HarvestHandler::get_instance(config_dir) },
 		  exit_from_menu{ false },
-		  tray_icon{QSystemTrayIcon(QIcon(":/icons/resources/icons/monochrome/32x32.png"), this)},
+		  tray_icon{ QSystemTrayIcon(QIcon(":/icons/resources/icons/monochrome/32x32.png"), this) },
 		  tray_menu(),
-		  add_task_action{QAction("Add Task", &tray_icon)},
-		  quit_action{QAction("Exit", &tray_icon)},
-		  show_hide_action{QAction("Show/Hide", &tray_icon)}
+		  add_task_action{ QAction("Add Task", &tray_icon) },
+		  quit_action{ QAction("Exit", &tray_icon) },
+		  show_hide_action{ QAction("Show/Hide", &tray_icon) }
 {
 	ui->setupUi(this);
-	setWindowTitle("Harvest Timer");
 
 
 	this->app_date = QDate::currentDate();
-	this->ui->date_label->setText(this->app_date.toString());
-	this->ui->scroll_area_widget_layout->setAlignment(Qt::AlignmentFlag::AlignTop); // TODO can be added on the UI file?
+	this->ui->date_label->resetDate();
+	this->ui->scroll_area_widget_layout->setAlignment(Qt::AlignmentFlag::AlignTop);
 	this->ui->scrollArea->set_harvest_handler(harvest_handler);
-
-	// TODO gather previous data and pass to task form
 
 	// Wait for our harvest handler to be ready before we show the main window
 	// Harvest will be ready automatically when we have user credentials already present
@@ -41,7 +37,8 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 	connect(&task_form, &AddTaskForm::task_started, ui->scrollArea, &TasksScrollArea::add_task);
 	connect(&task_form, &AddTaskForm::task_to_favourites, &favouritesForm, &Favourites::add_favourite_task);
 	connect(ui->scrollArea, &TasksScrollArea::task_to_favourites, &favouritesForm, &Favourites::add_favourite_task);
-	connect(ui->scrollArea, &TasksScrollArea::task_out_of_favourites, &favouritesForm, &Favourites::remove_favourite_task);
+	connect(ui->scrollArea, &TasksScrollArea::task_out_of_favourites, &favouritesForm,
+			&Favourites::remove_favourite_task);
 	connect(&favouritesForm, &Favourites::add_task, &task_form, &AddTaskForm::add_task_from_favourites);
 
 	create_tray_icon();
@@ -58,9 +55,9 @@ MainWindow::~MainWindow()
 void MainWindow::on_date_forward_button_clicked()
 {
 	this->ui->date_label->moveForward();
-	app_date = ui->date_label->getAppDate();
-
 	const QDate new_date{ ui->date_label->getAppDate() };
+	app_date = new_date;
+
 	ui->scrollArea->set_lookup_date(new_date);
 	ui->scrollArea->update_task_widgets();
 	harvest_handler->list_tasks(app_date.addDays(2), app_date.addDays(2));
@@ -69,17 +66,17 @@ void MainWindow::on_date_forward_button_clicked()
 
 void MainWindow::on_date_current_button_clicked()
 {
-	app_date = ui->date_label->getAppDate();
+	const QDate new_date{ ui->date_label->getAppDate() };
+	app_date = new_date;
+
 	// If we are already in the current date, there is no need to do anything else here
 	if (app_date == QDate::currentDate())
 		return;
 
 	this->ui->date_label->resetDate();
 
-	const QDate new_date{ ui->date_label->getAppDate() };
 	ui->scrollArea->set_lookup_date(new_date);
 	ui->scrollArea->update_task_widgets();
-//	harvest_handler->list_tasks(app_date.addDays(-2), app_date.addDays(2));
 }
 
 
@@ -202,7 +199,7 @@ void MainWindow::add_task_triggered(bool checked)
 
 void MainWindow::closeEvent(QCloseEvent* event)
 {
-	if(this->exit_from_menu)
+	if (this->exit_from_menu)
 	{
 		event->accept();
 	}

@@ -8,7 +8,6 @@ AddTaskForm::AddTaskForm(QWidget* parent) :
 		ui(new Ui::AddTaskForm)
 {
 	ui->setupUi(this);
-	setWindowTitle("Add new task");
 }
 
 AddTaskForm::~AddTaskForm()
@@ -99,8 +98,8 @@ void AddTaskForm::add_task_from_favourites(const Task* task)
 	if (index==-1)
 	{
 		QMessageBox::warning(this,
-							 "Could not find project",
-							 "The project this task is assigned to does not exist or has been renamed, please update your favourites to keep using them"
+							 QApplication::translate("AddTaskForm", "Could not find project"),
+							 QApplication::translate("AddTaskForm", "The project this task is assigned to does not exist or has been renamed, please update your favourites to keep using them")
 		);
 		return;
 	}
@@ -110,8 +109,8 @@ void AddTaskForm::add_task_from_favourites(const Task* task)
 	if (index==-1)
 	{
 		QMessageBox::warning(this,
-							 "Could not find task",
-							 "The task selected does not exist or has been renamed, please update your favourites to keep using them"
+							 QApplication::translate("AddTaskForm", "Could not find task"),
+							 QApplication::translate("AddTaskForm", "The task selected does not exist or has been renamed, please update your favourites to keep using them")
 		);
 		return;
 	}

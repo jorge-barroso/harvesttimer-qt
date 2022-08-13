@@ -98,8 +98,8 @@ void HarvestHandler::login()
 
 	if (!auth_server->listen(QHostAddress::Any, 23456))
 	{
-		const QString error_string{ "Error while waiting for Harvest authorization" };
-		QMessageBox::information(nullptr, "Error", error_string);
+		const QString error_string{ QApplication::translate("HarvestHandler", "Error while waiting for Harvest authorization") };
+		QMessageBox::information(nullptr, QApplication::translate("HarvestHandler", "Error"), error_string);
 		QApplication::quit();
 	}
 
@@ -165,9 +165,9 @@ void HarvestHandler::code_received()
 				std::map<QString, QString> query_map{ parse_query_string(token) };
 				if (!query_map.contains("code") || !query_map.contains("scope"))
 				{
-					const char* error_string{
-							"The details received from Harvest did not contain the minimum details required" };
-					QMessageBox::information(nullptr, "Incomplete Details", error_string);
+					QString error_string{
+							QApplication::translate("HarvestHandler", "The details received from Harvest did not contain the minimum details required") };
+					QMessageBox::information(nullptr, QApplication::translate("HarvestHandler", "Incomplete Details"), error_string);
 					QApplication::quit();
 				}
 				get_new_account_id(query_map["scope"]);
@@ -198,8 +198,8 @@ void HarvestHandler::authentication_received(const QNetworkReply* reply)
 {
 	if (reply->error() != QNetworkReply::NetworkError::NoError)
 	{
-		const QString error_string{ "Error while authenticating with Harvest services: " + reply->errorString() };
-		QMessageBox::information(nullptr, "Error authenticating", error_string);
+		const QString error_string{ QApplication::translate("HarvestHandler", "Error while authenticating with Harvest services: ") + reply->errorString() };
+		QMessageBox::information(nullptr, QApplication::translate("HarvestHandler", "Error authenticating"), error_string);
 		QApplication::quit();
 		return;
 	}
@@ -229,8 +229,9 @@ void HarvestHandler::save_authentication()
 {
 	if (!auth_file.open(QFile::WriteOnly | QFile::Text))
 	{
-		const char* error_text = "It was not possible to save your credentials, you will have to log in again the next time you open Harvest Timer";
-		QMessageBox::information(nullptr, "Error saving authentication", error_text);
+		QString error_text{ QApplication::translate("HarvestHandler",
+														"It was not possible to save your credentials, you will have to log in again the next time you open Harvest Timer") };
+		QMessageBox::information(nullptr, QApplication::translate("HarvestHandler", "Error saving authentication"), error_text);
 		return;
 	}
 
@@ -438,7 +439,7 @@ QNetworkReply* HarvestHandler::do_request_with_auth(const QUrl& url, const bool 
 void HarvestHandler::tasks_list_ready()
 {
 	QNetworkReply* reply{ dynamic_cast<QNetworkReply*>(sender()) };
-	if (default_error_check(reply, "Could not add your task: ", "Error Adding Task"))
+	if (default_error_check(reply, QApplication::translate("HarvestHandler", "Could not add your task: "), QApplication::translate("HarvestHandler", "Error Adding Task")))
 	{
 		return;
 	}
@@ -486,7 +487,7 @@ void HarvestHandler::tasks_list_ready()
 void HarvestHandler::add_task_checks()
 {
 	QNetworkReply* reply{ dynamic_cast<QNetworkReply*>(sender()) };
-	if (default_error_check(reply, "Could not add your task: ", "Error Adding Task"))
+	if (default_error_check(reply, QApplication::translate("HarvestHandler", "Could not add your task: "), QApplication::translate("HarvestHandler", "Error Adding Task")))
 	{
 		return;
 	}
@@ -515,21 +516,21 @@ void HarvestHandler::add_task_checks()
 void HarvestHandler::start_task_checks()
 {
 	auto* reply{ dynamic_cast<QNetworkReply*>(sender()) };
-	default_error_check(reply, "Could not start this task: ", "Error Starting Task");
+	default_error_check(reply, QApplication::translate("HarvestHandler", "Error Starting Task"), QApplication::translate("HarvestHandler", "Could not start this task: "));
 	reply->deleteLater();
 }
 
 void HarvestHandler::stop_task_checks()
 {
 	auto* reply{ dynamic_cast<QNetworkReply*>(sender()) };
-	default_error_check(reply, "Could not set_stopped this task: ", "Error Stopping Task");
+	default_error_check(reply, QApplication::translate("HarvestHandler", "Error Stopping Task"), QApplication::translate("HarvestHandler", "Could not stop this task: "));
 	reply->deleteLater();
 }
 
 void HarvestHandler::delete_task_checks()
 {
 	auto* reply{ dynamic_cast<QNetworkReply*>(sender()) };
-	default_error_check(reply, "Could not delete this task: ", "Error Deleting Task");
+	default_error_check(reply, QApplication::translate("HarvestHandler", "Error Deleting Task"), QApplication::translate("HarvestHandler", "Could not delete this task: "));
 	reply->deleteLater();
 }
 

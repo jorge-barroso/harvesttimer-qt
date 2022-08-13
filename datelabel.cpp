@@ -2,10 +2,10 @@
 
 DateLabel::DateLabel(QWidget *parent)
     : QLabel{parent},
-      daysStep{1}
+      daysStep{1},
+	  locale()
 {
     this->appDate = QDate::currentDate();
-    this->updateDisplay();
 }
 
 
@@ -29,5 +29,6 @@ QDate DateLabel::getAppDate() {
 }
 
 void DateLabel::updateDisplay() {
-    this->setText(this->appDate.toString());
+	QString localisedDate{locale.toString(this->appDate)};
+    this->setText(localisedDate);
 }

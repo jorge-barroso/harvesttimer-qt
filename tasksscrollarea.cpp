@@ -4,16 +4,13 @@
 
 #include "maputils.h"
 #include "tasksscrollarea.h"
+#include <QApplication>
 #include <QLayout>
 #include <QMessageBox>
 
 TasksScrollArea::TasksScrollArea(QWidget* widget)
-		: CustomScrollArea(widget)
-		, timer{ QTimer(this) }
-		, runningTask{}
-		, runningTaskWidget{ nullptr }
-		, lookup_date{ QDate::currentDate() }
-		, harvest_handler{}
+		: CustomScrollArea(widget), timer{ QTimer(this) }, runningTask{ }, runningTaskWidget{ nullptr },
+		  lookup_date{ QDate::currentDate() }, harvest_handler{ }
 {
 	timer.setInterval(timer_seconds * 1000);
 }
@@ -85,7 +82,9 @@ void TasksScrollArea::start_task_locally(const Task* task, TaskWidget* task_widg
 void TasksScrollArea::edit_task(const Task* task, TaskWidget* task_widget)
 {
 	// TODO gather the task details, show a pop-up window for the user to edit the details, and then on confirmation send an update request
-	QMessageBox::information(this, "Coming soon!", "This functionality has not been added yet, but it will come very soon!");
+	QMessageBox::information(this, QApplication::translate("TasksScrollArea", "Coming soon!"),
+							 QApplication::translate("HarvestHandler",
+													 "This functionality has not been added yet, but it will come very soon!"));
 }
 
 void TasksScrollArea::delete_task(const Task* task, TaskWidget* task_widget)
@@ -100,7 +99,8 @@ void TasksScrollArea::delete_task(const Task* task, TaskWidget* task_widget)
 	}
 
 	std::vector<TaskWidget*>* stored_tasks{ &task_widgets.at(lookup_date) };
-	std::vector<TaskWidget*>::iterator task_to_erase{ std::find(stored_tasks->begin(), stored_tasks->end(), task_widget) };
+	std::vector<TaskWidget*>::iterator task_to_erase{
+			std::find(stored_tasks->begin(), stored_tasks->end(), task_widget) };
 	if (task_to_erase != stored_tasks->end())
 	{
 		delete task_widget;
@@ -153,12 +153,13 @@ void TasksScrollArea::task_added(const Task* task)
 	connect(task_widget, &TaskWidget::task_favourited, this, &TasksScrollArea::favourite_task);
 	connect(task_widget, &TaskWidget::task_unfavourited, this, &TasksScrollArea::unfavourite_task);
 	MapUtils::map_insert_or_create_vector(task_widgets, task->date, task_widget);
-	if(task->date == lookup_date)
+	if (task->date == lookup_date)
 	{
 		this->widget()->layout()->addWidget(task_widget);
 	}
 
-	if (!task->started) {
+	if (!task->started)
+	{
 		return;
 	}
 

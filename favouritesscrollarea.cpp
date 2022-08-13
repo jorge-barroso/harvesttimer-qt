@@ -53,11 +53,13 @@ std::vector<const FavouriteWidget*>::iterator FavouritesScrollArea::find_from_wi
 	return std::find_if(favourite_widgets.begin(), favourite_widgets.end(), find_predicate);
 }
 
-void FavouritesScrollArea::remove_favourite_widget(const FavouriteWidget* favourite_widget)
+void FavouritesScrollArea::remove_favourite_widget(const FavouriteWidget* favourite_widget, const Task* task)
 {
-	auto favourite_widgets_iter{ std::remove(favourite_widgets.begin(), favourite_widgets.end(), favourite_widget) };
+	auto favourite_widgets_iter{ std::find(favourite_widgets.begin(), favourite_widgets.end(), favourite_widget) };
 
 	this->remove_and_update(favourite_widgets_iter);
+
+	emit task_removed(task);
 }
 
 void FavouritesScrollArea::remove_favourite_task(const Task* task)
@@ -73,19 +75,19 @@ void FavouritesScrollArea::remove_and_update(const std::vector<const FavouriteWi
 	{
 		return;
 	}
+
+	delete *favourite_widgets_iter;
+
 	favourite_widgets.erase(favourite_widgets_iter);
 
 	update_favourite_widgets();
-
-	const FavouriteWidget* deleted_widget{ *favourite_widgets_iter };
-	delete deleted_widget;
 }
 
 void FavouritesScrollArea::update_favourite_widgets()
 {
 	clear_task_widgets();
 
-	for (auto& favourite_widget: favourite_widgets)
+	for (auto favourite_widget: favourite_widgets)
 	{
 		add_task_widget(const_cast<FavouriteWidget*>(favourite_widget));
 	}

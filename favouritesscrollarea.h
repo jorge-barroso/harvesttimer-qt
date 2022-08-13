@@ -28,9 +28,11 @@ class FavouritesScrollArea : public CustomScrollArea
 
 		void new_task_selected(const Task* pTask);
 
+		void task_removed(const Task* task);
+
 	private slots:
 
-		void remove_favourite_widget(const FavouriteWidget* favourite_widget);
+		void remove_favourite_widget(const FavouriteWidget* favourite_widget, const Task* task);
 
 		void favourite_chosen(const Task* task);
 

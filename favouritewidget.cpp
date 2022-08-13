@@ -29,7 +29,7 @@ bool FavouriteWidget::operator!=(const FavouriteWidget& rhs) const
 
 void FavouriteWidget::on_unfavourite_button_clicked()
 {
-	emit unfavourited_task(this);
+	emit unfavourited_task(this, task);
 }
 
 void FavouriteWidget::mouseReleaseEvent(QMouseEvent* event)

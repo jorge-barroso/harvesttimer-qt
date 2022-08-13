@@ -53,11 +53,13 @@ std::vector<const FavouriteWidget*>::iterator FavouritesScrollArea::find_from_wi
 	return std::find_if(favourite_widgets.begin(), favourite_widgets.end(), find_predicate);
 }
 
-void FavouritesScrollArea::remove_favourite_widget(const FavouriteWidget* favourite_widget)
+void FavouritesScrollArea::remove_favourite_widget(const FavouriteWidget* favourite_widget, const Task* task)
 {
 	auto favourite_widgets_iter{ std::find(favourite_widgets.begin(), favourite_widgets.end(), favourite_widget) };
 
 	this->remove_and_update(favourite_widgets_iter);
+
+	emit task_removed(task);
 }
 
 void FavouritesScrollArea::remove_favourite_task(const Task* task)

@@ -24,7 +24,7 @@ class FavouriteWidget : public QWidget
 
 	signals:
 
-		void unfavourited_task(const FavouriteWidget* widget);
+		void unfavourited_task(const FavouriteWidget* widget, const Task* task);
 
 		void favourite_chosen(const Task* task);
 

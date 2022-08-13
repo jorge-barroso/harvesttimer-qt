@@ -20,7 +20,7 @@
       <item>
        <widget class="FavouritesScrollArea" name="favourites_scroll_area">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -40,7 +40,7 @@
            <x>0</x>
            <y>0</y>
            <width>360</width>
-           <height>68</height>
+           <height>260</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="favourites_scroll_area_widget_layout"/>

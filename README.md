@@ -45,7 +45,7 @@ The app has very few dependencies, but you need to bear these in mind especially
 
 #### Runtime Dependencies
 - Qt6 Base package, some namings for this, depending on distros, are
-    - Ubuntu: qt6-base-dev
-    - Fedora: qt6-qtbase
-    - Arch: qt6-base
+    - Ubuntu: [qt6-base-dev](https://packages.ubuntu.com/search?keywords=qt6-base-dev&searchon=names&suite=all&section=all)
+    - Fedora: [qt6-qtbase](https://src.fedoraproject.org/rpms/qt6-qtbase)
+    - Arch: [qt6-base](https://archlinux.org/packages/extra/x86_64/qt6-base/)
 

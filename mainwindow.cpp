@@ -175,7 +175,7 @@ void MainWindow::create_tray_icon()
 void MainWindow::exit_triggered(bool checked)
 {
 	this->exit_from_menu = true;
-	this->show();  // This will just change the status internally so that we can close it for real
+	this->show(); // this will just change some internal flags so that we can actually close it
 	this->close();
 }
 

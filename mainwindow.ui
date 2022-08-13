@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>450</width>
+    <width>485</width>
     <height>500</height>
    </rect>
   </property>
@@ -75,6 +75,7 @@
        <widget class="DateLabel" name="date_label">
         <property name="font">
          <font>
+          <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
@@ -104,7 +105,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>432</width>
+         <width>468</width>
          <height>326</height>
         </rect>
        </property>
@@ -160,7 +161,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>450</width>
+     <width>486</width>
      <height>24</height>
     </rect>
    </property>

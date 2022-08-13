@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true">Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout" columnstretch="4,0,0,0,0,0">
    <item row="0" column="3" rowspan="3">
     <widget class="QLabel" name="time_label">
      <property name="text">
-      <string>00:00</string>
+      <string notr="true">00:00</string>
      </property>
     </widget>
    </item>
@@ -26,12 +26,13 @@
      <property name="font">
       <font>
        <pointsize>11</pointsize>
+       <weight>75</weight>
        <bold>true</bold>
        <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
-      <string>TextLabel</string>
+      <string notr="true">TextLabel</string>
      </property>
     </widget>
    </item>
@@ -40,11 +41,12 @@
      <property name="font">
       <font>
        <pointsize>9</pointsize>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
      <property name="text">
-      <string>TextLabel</string>
+      <string notr="true">TextLabel</string>
      </property>
     </widget>
    </item>

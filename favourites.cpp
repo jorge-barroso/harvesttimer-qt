@@ -9,7 +9,6 @@ Favourites::Favourites(const QDir& config_dir, QWidget* parent)
 		, favourites_file(config_dir.absolutePath() + "/" + this->favourites_file_name)
 {
 	ui->setupUi(this);
-	setWindowTitle("Favourites");
 
 	load_favourites();
 
@@ -38,7 +37,7 @@ void Favourites::load_favourites()
 {
 	if (!favourites_file.open(QIODevice::ReadWrite))
 	{
-		QMessageBox::warning(this, "Could not load favourites", favourites_file.errorString());
+		QMessageBox::warning(this, QApplication::translate("Favourites", "Could not load favourites"), favourites_file.errorString());
 	}
 
 	QTextStream in(&favourites_file);

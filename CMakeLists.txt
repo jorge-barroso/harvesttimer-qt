@@ -40,7 +40,14 @@ add_executable(harvest
         tasksscrollarea.cpp
         tasksscrollarea.h
         maputils.cpp
-        maputils.h favouritesscrollarea.cpp favouritesscrollarea.h customscrollarea.cpp customscrollarea.h task.cpp)
+        maputils.h
+        favouritesscrollarea.cpp
+        favouritesscrollarea.h
+        customscrollarea.cpp
+        customscrollarea.h
+        task.cpp)
+
+#
 
 install(TARGETS harvest
         DESTINATION ${CMAKE_INSTALL_PREFIX}
@@ -52,6 +59,9 @@ find_package(Qt6 REQUIRED
         Gui
         Widgets
         Network
+        LinguistTools
         )
 
 target_link_libraries(harvest Qt6::Core Qt6::Widgets Qt6::Gui Qt6::Network)
+
+qt6_add_translations(harvest TS_FILES harvesttimer-qt_es_ES.ts)

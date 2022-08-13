@@ -9,6 +9,7 @@ Favourites::Favourites(const QDir& config_dir, QWidget* parent)
 		, favourites_file(config_dir.absolutePath() + "/" + this->favourites_file_name)
 {
 	ui->setupUi(this);
+	setWindowTitle("Favourites");
 
 	load_favourites();
 

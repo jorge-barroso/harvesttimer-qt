@@ -3,7 +3,6 @@
 //
 
 #include "maputils.h"
-#include "ui_mainwindow.h"
 #include "tasksscrollarea.h"
 #include <QLayout>
 #include <QMessageBox>

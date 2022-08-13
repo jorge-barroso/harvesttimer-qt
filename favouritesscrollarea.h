@@ -20,12 +20,18 @@ class FavouritesScrollArea : public CustomScrollArea
 
 		void add_favourite(const Task* task);
 
-		void remove_favourite(const Task* task);
+		void remove_favourite_task(const Task* task);
+
+	private slots:
+
+		void remove_favourite_widget(const FavouriteWidget* favourite_widget);
 
 	private:
 		std::vector<const FavouriteWidget*> favourite_widgets;
 
 		void update_favourite_widgets();
+
+		void remove_and_update(std::vector<const FavouriteWidget*>::iterator& favourite_widgets_iter);
 };
 
 

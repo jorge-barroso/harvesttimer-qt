@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <iostream>
 #include <QSystemTrayIcon>
 #include "maputils.h"
 #include "tasksscrollarea.h"

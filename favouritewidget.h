@@ -22,6 +22,14 @@ class FavouriteWidget : public QWidget
 
 		bool operator!=(const FavouriteWidget& rhs) const;
 
+	signals:
+
+		void unfavourited_task(const FavouriteWidget* widget);
+
+	private slots:
+
+		void on_unfavourite_button_clicked();
+
 	private:
 		Ui::FavouriteWidget* ui;
 

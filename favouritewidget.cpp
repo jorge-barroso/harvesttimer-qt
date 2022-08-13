@@ -9,6 +9,8 @@ FavouriteWidget::FavouriteWidget(const Task* task, QWidget* parent) :
 	ui->setupUi(this);
 	ui->project_label->setText(task->project_name);
 	ui->task_label->setText(task->task_name);
+
+	setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
 }
 
 FavouriteWidget::~FavouriteWidget()
@@ -19,10 +21,16 @@ FavouriteWidget::~FavouriteWidget()
 
 bool FavouriteWidget::operator==(const FavouriteWidget& rhs) const
 {
-	return task == rhs.task;
+	return *task == *rhs.task;
 }
 
 bool FavouriteWidget::operator!=(const FavouriteWidget& rhs) const
 {
 	return !(rhs == *this);
 }
+
+void FavouriteWidget::on_unfavourite_button_clicked()
+{
+	emit unfavourited_task(this);
+}
+

@@ -22,6 +22,7 @@ struct Task
 		stream << task.project_id << " " << task.task_id << " " << task.time_entry_id << " " << task.project_name << " "
 			   << task.task_name << " " << task.time_tracked << " " << task.note << " " << task.started << " "
 			   << task.date;
+
 		return stream;
 	}
 

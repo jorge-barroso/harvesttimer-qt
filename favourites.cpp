@@ -68,5 +68,5 @@ void Favourites::add_favourite_task(const Task* task)
 void Favourites::remove_favourite_task(const Task* task)
 {
 	std::remove(tasks.begin(), tasks.end(), task);
-	ui->favourites_scroll_area->remove_favourite(task);
+	ui->favourites_scroll_area->remove_favourite_task(task);
 }

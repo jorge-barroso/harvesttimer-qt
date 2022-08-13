@@ -2,9 +2,9 @@
 [![liberapay](https://img.shields.io/liberapay/receives/jorge-barroso.svg?logo=liberapay)](https://liberapay.com/jorge-barroso/donate)
 
 # Harvest Timer Qt
-A Qt app that integrates with [Harvest](https://www.getharvest.com) to keep track of the time invested in your projects.
+A [Qt](https://www.qt.io/) app that integrates with [Harvest](https://www.getharvest.com) to keep track of the time invested in your projects.
 
-Ideal for KDE desktops but 100% suitable for any other OS and DE!
+Ideal for [KDE](https://kde.org/) desktops but 100% suitable for any other OS and DE!
 
 ## First Run
 You will need to log in the first time you use the application.
@@ -40,9 +40,12 @@ You can use your favourite installation method (yay, software centre, etc.) to i
 The app has very few dependencies, but you need to bear these in mind especially if you are going to build it from sources:
 
 #### Build Dependencies
-- Modern C++ compiler (g++, clang)
-- CMake
+- Modern C++ compiler ([g++](https://gcc.gnu.org/), [clang](http://clang.org/))
+- [CMake](https://cmake.org/)
 
 #### Runtime Dependencies
-- Qt6 Base package, usually named qt6-base
+- Qt6 Base package, some namings for this, depending on distros, are
+    - Ubuntu: qt6-base-dev
+    - Fedora: qt6-qtbase
+    - Arch: qt6-base
 

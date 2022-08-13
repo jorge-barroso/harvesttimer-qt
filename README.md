@@ -30,6 +30,9 @@ Additionally, the distros listed below have the app in their repos.
 ### Binary File
 If you are happy with just grabbing the binary file, you can do so from the latest release in the [releases section](https://github.com/jorge-barroso/harvesttimer-qt/releases), download the binary pack and use it on your system as you prefer.
 
+### DEB File
+You can install the deb package attached on every [release](https://github.com/jorge-barroso/harvesttimer-qt/releases).
+
 ### Arch Linux (AUR-based distros)
 You can use your favourite installation method (yay, software centre, etc.) to install [harvest-timer-qt](https://aur.archlinux.org/packages/harvest-timer-qt)
 

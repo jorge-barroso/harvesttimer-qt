@@ -31,7 +31,11 @@ class FavouritesScrollArea : public CustomScrollArea
 
 		void update_favourite_widgets();
 
-		void remove_and_update(std::vector<const FavouriteWidget*>::iterator& favourite_widgets_iter);
+		void remove_and_update(const std::vector<const FavouriteWidget*>::iterator& favourite_widgets_iter);
+
+		std::vector<const FavouriteWidget*>::iterator find_widget_from_task(const Task* task);
+
+		std::vector<const FavouriteWidget*>::iterator find_from_widget_ptr(const FavouriteWidget* favourite_widget);
 };
 
 

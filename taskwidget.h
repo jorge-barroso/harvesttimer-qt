@@ -21,8 +21,6 @@ class TaskWidget : public QWidget
 
 		void set_stopped();
 
-		void set_started();
-
 		void addMinute();
 
 	signals:
@@ -52,11 +50,14 @@ class TaskWidget : public QWidget
 	private:
 		Ui::TaskWidget* ui;
 
-		QIcon stop_icon;
-
-		QIcon start_icon;
-
 		Task* task;
+
+
+		void set_started();
+
+		void set_favourited();
+
+		void set_unfavourited();
 };
 
 #endif // TASKWIDGET_H

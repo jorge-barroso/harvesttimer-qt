@@ -7,17 +7,12 @@
 TaskWidget::TaskWidget(Task* task, QWidget* parent) :
 		QWidget(parent),
 		ui(new Ui::TaskWidget),
-		stop_icon(),
-		start_icon(),
 		task{ task }
 {
 	ui->setupUi(this);
 	ui->project_name_label->setText(task->project_name);
 	ui->task_name_label->setText(task->task_name);
 	ui->time_label->setText(task->time_tracked.toString("hh:mm"));
-
-	stop_icon.addFile(QString::fromUtf8(":/icons/resources/icons/stop.png"), QSize(), QIcon::Normal, QIcon::Off);
-	start_icon.addFile(QString::fromUtf8(":/icons/resources/icons/play.png"), QSize(), QIcon::Normal, QIcon::Off);
 
 	setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
 
@@ -81,17 +76,17 @@ void TaskWidget::on_stop_resume_button_clicked()
 
 void TaskWidget::on_add_favourite_button_clicked()
 {
-	bool checked{ ui->add_favourite_button->isChecked() };
-	if (checked)
+	if (!task->favourited)
 	{
+		set_favourited();
 		emit task_favourited(task);
 	}
 	else
 	{
+		set_unfavourited();
 		emit task_unfavourited(task);
 	}
 
-	ui->add_favourite_button->setChecked(!checked);
 }
 
 
@@ -100,16 +95,26 @@ void TaskWidget::on_edit_button_clicked()
 	emit task_edited(task, this);
 }
 
+void TaskWidget::set_favourited()
+{
+	ui->add_favourite_button->setChecked(true);
+	task->favourited = true;
+}
+
+void TaskWidget::set_unfavourited()
+{
+	ui->add_favourite_button->setChecked(false);
+	task->favourited = false;
+}
+
 void TaskWidget::set_started()
 {
-	ui->stop_resume_button->setIcon(QIcon(stop_icon));
 	ui->stop_resume_button->setChecked(true);
 	task->started = true;
 }
 
 void TaskWidget::set_stopped()
 {
-	ui->stop_resume_button->setIcon(QIcon(start_icon));
 	ui->stop_resume_button->setChecked(false);
 	task->started = false;
 }

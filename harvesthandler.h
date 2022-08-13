@@ -125,7 +125,7 @@ class HarvestHandler : public QObject
 
 		void load_account_id();
 
-		QNetworkReply* do_request_with_auth(const QUrl& url, const bool sync_request, const QByteArray& verb,
+		QNetworkReply* do_request_with_auth(const QUrl& url, bool sync_request, const QByteArray& verb,
 											const std::optional<QJsonDocument>& payload = std::nullopt);
 
 		static void get_projects_data(const QJsonDocument& json_payload, std::vector<HarvestProject>& projects_vector);
@@ -146,8 +146,6 @@ class HarvestHandler : public QObject
 		void check_authenticate();
 
 		std::unordered_map<size_t, Task*> tasks_queue;
-
-		void process_added_task(const QJsonObject& add_task_response);
 };
 
 #endif // HARVESTHANDLER_H

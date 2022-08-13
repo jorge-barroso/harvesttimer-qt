@@ -313,7 +313,7 @@ void HarvestHandler::get_projects_data(const QJsonDocument& json_payload, std::v
 		{
 			const QJsonValue json_task_details{ json_task["task"] };
 			const HarvestTask task = HarvestTask{
-					json_task["id"].toInteger(),
+//					json_task["id"].toInteger(),
 					json_task_details["id"].toInteger(),
 					json_task_details["name"].toString()
 			};

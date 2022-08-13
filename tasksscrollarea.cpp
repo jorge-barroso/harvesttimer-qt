@@ -10,8 +10,10 @@
 TasksScrollArea::TasksScrollArea(QWidget* widget)
 		: CustomScrollArea(widget)
 		, timer{ QTimer(this) }
+		, runningTask{}
 		, runningTaskWidget{ nullptr }
 		, lookup_date{ QDate::currentDate() }
+		, harvest_handler{}
 {
 	timer.setInterval(timer_seconds * 1000);
 }

@@ -10,7 +10,7 @@
 
 struct HarvestTask
 {
-	qint64 harvest_id;
+//	qint64 harvest_id;
 	qint64 task_id;
 	QString task_name;
 };

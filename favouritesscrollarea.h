@@ -11,13 +11,6 @@
 #include "customscrollarea.h"
 #include "task.h"
 
-QT_BEGIN_NAMESPACE
-namespace Ui
-{
-	class FavouritesScrollArea;
-}
-QT_END_NAMESPACE
-
 class FavouritesScrollArea : public CustomScrollArea
 {
 	Q_OBJECT

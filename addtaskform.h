@@ -17,7 +17,7 @@ class AddTaskForm : public QDialog
 	public:
 		explicit AddTaskForm(QWidget* parent = nullptr);
 
-		~AddTaskForm();
+		~AddTaskForm() override;
 
 		void add_projects(const std::vector<HarvestProject>& projects);
 

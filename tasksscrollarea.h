@@ -13,13 +13,6 @@
 #include "customscrollarea.h"
 #include <QTimer>
 
-QT_BEGIN_NAMESPACE
-namespace Ui
-{
-	class TasksScrollArea;
-}
-QT_END_NAMESPACE
-
 class TasksScrollArea : public CustomScrollArea
 {
 	Q_OBJECT

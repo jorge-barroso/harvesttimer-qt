@@ -26,7 +26,6 @@
      <property name="font">
       <font>
        <pointsize>11</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
        <kerning>true</kerning>
       </font>
@@ -41,7 +40,6 @@
      <property name="font">
       <font>
        <pointsize>9</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -78,7 +76,8 @@
        </property>
        <property name="icon">
         <iconset resource="icons.qrc">
-         <normaloff>:/icons/resources/icons/stop.png</normaloff>:/icons/resources/icons/stop.png</iconset>
+         <normaloff>:/icons/resources/icons/play.png</normaloff>
+         <normalon>:/icons/resources/icons/stop.png</normalon>:/icons/resources/icons/play.png</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -95,7 +94,8 @@
        </property>
        <property name="icon">
         <iconset resource="icons.qrc">
-         <normaloff>:/icons/resources/icons/star.png</normaloff>:/icons/resources/icons/star.png</iconset>
+         <normaloff>:/icons/resources/icons/star.png</normaloff>
+         <normalon>:/icons/resources/icons/star-black.png</normalon>:/icons/resources/icons/star.png</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>

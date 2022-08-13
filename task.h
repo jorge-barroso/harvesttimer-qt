@@ -24,14 +24,14 @@ struct Task
 			   << values_separator << task.project_name << values_separator
 			   << task.task_name << values_separator << task.time_tracked.toString() << values_separator << task.note
 			   << values_separator << task.started << values_separator
-			   << task.date.toString();
+			   << task.date.toString() << "\n";
 
 		return stream;
 	}
 
 	friend QTextStream& operator>>(QTextStream& stream, Task& task)
 	{
-		QString contents{ stream.readAll() };
+		QString contents{ stream.readLine() };
 		QStringList values{ contents.split(values_separator) };
 
 		task.project_id = values[0].toLongLong();

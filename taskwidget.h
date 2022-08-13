@@ -56,6 +56,10 @@ class TaskWidget : public QWidget
 
 		QIcon start_icon;
 
+		QIcon star_icon;
+
+		QIcon black_star_icon;
+
 		Task* task;
 };
 

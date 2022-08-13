@@ -9,6 +9,8 @@ TaskWidget::TaskWidget(Task* task, QWidget* parent) :
 		ui(new Ui::TaskWidget),
 		stop_icon(),
 		start_icon(),
+		star_icon(),
+		black_star_icon(),
 		task{ task }
 {
 	ui->setupUi(this);
@@ -18,6 +20,10 @@ TaskWidget::TaskWidget(Task* task, QWidget* parent) :
 
 	stop_icon.addFile(QString::fromUtf8(":/icons/resources/icons/stop.png"), QSize(), QIcon::Normal, QIcon::Off);
 	start_icon.addFile(QString::fromUtf8(":/icons/resources/icons/play.png"), QSize(), QIcon::Normal, QIcon::Off);
+
+	star_icon.addFile(QString::fromUtf8(":/icons/resources/icons/star.png"), QSize(), QIcon::Normal, QIcon::Off);
+	black_star_icon.addFile(QString::fromUtf8(":/icons/resources/icons/star-black.png"), QSize(), QIcon::Normal, QIcon::Off);
+	ui->add_favourite_button->setIcon(star_icon);
 
 	setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
 
@@ -85,10 +91,12 @@ void TaskWidget::on_add_favourite_button_clicked()
 	if (checked)
 	{
 		emit task_favourited(task);
+		ui->add_favourite_button->setIcon(black_star_icon);
 	}
 	else
 	{
 		emit task_unfavourited(task);
+		ui->add_favourite_button->setIcon(star_icon);
 	}
 
 	ui->add_favourite_button->setChecked(!checked);

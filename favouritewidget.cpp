@@ -16,7 +16,6 @@ FavouriteWidget::FavouriteWidget(const Task* task, QWidget* parent) :
 FavouriteWidget::~FavouriteWidget()
 {
 	delete ui;
-	delete task;
 }
 
 bool FavouriteWidget::operator==(const FavouriteWidget& rhs) const

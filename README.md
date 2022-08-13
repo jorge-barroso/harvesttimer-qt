@@ -2,7 +2,7 @@
 [![liberapay](https://img.shields.io/liberapay/receives/jorge-barroso.svg?logo=liberapay)](https://liberapay.com/jorge-barroso/donate)
 
 # Harvest Timer Qt
-A Qt app that integrates with Harvest (https://www.getharvest.com) to keep track of the time invested in your projects.
+A Qt app that integrates with [Harvest](https://www.getharvest.com) to keep track of the time invested in your projects.
 
 Ideal for KDE desktops but 100% suitable for any other OS and DE!
 

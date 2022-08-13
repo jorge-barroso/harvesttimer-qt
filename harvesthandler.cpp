@@ -512,13 +512,6 @@ void HarvestHandler::add_task_checks()
 	emit task_added(task);
 }
 
-void HarvestHandler::process_added_task(const QJsonObject& add_task_response)
-{
-	qDebug() << "Task: " << add_task_response;
-	// Find the task we've just received response from
-
-}
-
 void HarvestHandler::start_task_checks()
 {
 	auto* reply{ dynamic_cast<QNetworkReply*>(sender()) };

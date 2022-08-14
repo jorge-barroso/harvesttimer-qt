@@ -32,6 +32,8 @@ class TasksScrollArea : public CustomScrollArea
 
 		void set_lookup_date(const QDate& date);
 
+		void task_added(const Task* task);
+
 	signals:
 
 		void task_to_favourites(const Task* task);
@@ -43,8 +45,6 @@ class TasksScrollArea : public CustomScrollArea
 		void add_task(Task* task);
 
 	private slots:
-
-		void task_added(const Task* task);
 
 		void edit_task(const Task* task, TaskWidget* task_widget);
 

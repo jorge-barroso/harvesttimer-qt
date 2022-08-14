@@ -25,6 +25,8 @@ class Favourites : public QDialog
 
 		~Favourites() override;
 
+		bool contains(const Task* task) const;
+
 	signals:
 
 		void add_task(Task* task);

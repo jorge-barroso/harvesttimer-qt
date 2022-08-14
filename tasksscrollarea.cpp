@@ -134,9 +134,6 @@ void TasksScrollArea::stop_task_locally()
 void TasksScrollArea::set_harvest_handler(HarvestHandler* handler)
 {
 	this->harvest_handler = handler;
-
-	// Set connections between harvest handler and our scroll area
-	connect(harvest_handler, &HarvestHandler::task_added, this, &TasksScrollArea::task_added);
 }
 
 void TasksScrollArea::set_lookup_date(const QDate& date)

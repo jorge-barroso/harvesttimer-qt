@@ -27,7 +27,7 @@ Favourites::~Favourites()
 		favourites_file.close();
 	}
 
-	for(const Task* task : tasks)
+	for (const Task* task: tasks)
 	{
 		delete task;
 	}
@@ -43,9 +43,9 @@ void Favourites::load_favourites()
 	QTextStream in(&favourites_file);
 	while (!in.atEnd())
 	{
-		Task* task = new Task{};
+		Task* task = new Task{ };
 		in >> *task;
-		ui->favourites_list->add_favourite(task);
+		add_favourite_task(task);
 	}
 	favourites_file.close();
 }
@@ -54,12 +54,24 @@ void Favourites::save_favourites()
 {
 	favourites_file.open(QIODevice::WriteOnly | QIODevice::Truncate);
 	QTextStream stream(&favourites_file);
-	for (const Task* task : tasks)
+	for (const Task* task: tasks)
 	{
 		stream << *task;
 	}
 
 	favourites_file.close();
+}
+
+bool Favourites::contains(const Task* task) const
+{
+	const auto find_predicate{
+			[task](const Task* vector_task)
+			{
+				return task->project_name == vector_task->project_name &&
+					   task->task_name == vector_task->task_name;
+			}
+	};
+	return std::find_if(tasks.begin(), tasks.end(), find_predicate) != tasks.end();
 }
 
 void Favourites::add_favourite_task(const Task* task)

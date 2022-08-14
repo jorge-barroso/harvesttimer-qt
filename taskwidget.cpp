@@ -24,6 +24,15 @@ TaskWidget::TaskWidget(Task* task, QWidget* parent) :
 		// It's not running
 		set_stopped();
 	}
+
+	if(task->favourited)
+	{
+		set_favourited();
+	}
+	else
+	{
+		set_unfavourited();
+	}
 }
 
 TaskWidget::~TaskWidget()

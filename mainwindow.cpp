@@ -36,6 +36,7 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 	connect(ui->scrollArea, &TasksScrollArea::task_to_favourites, &favouritesForm, &Favourites::add_favourite_task);
 	connect(ui->scrollArea, &TasksScrollArea::task_out_of_favourites, &favouritesForm, &Favourites::remove_favourite_task);
 	connect(&favouritesForm, &Favourites::add_task, &task_form, &AddTaskForm::add_task_from_favourites);
+	connect(harvest_handler, &HarvestHandler::task_added, this, &MainWindow::task_added);
 }
 
 MainWindow::~MainWindow()
@@ -122,4 +123,10 @@ void MainWindow::closeEvent(QCloseEvent* event)
 {
 	this->hide();
 	event->ignore();
+}
+
+void MainWindow::task_added(Task* task)
+{
+	task->favourited = favouritesForm.contains(task);
+	ui->scrollArea->task_added(task);
 }

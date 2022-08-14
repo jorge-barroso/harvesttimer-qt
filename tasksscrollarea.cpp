@@ -172,3 +172,31 @@ void TasksScrollArea::unfavourite_task(const Task* task)
 {
 	emit task_out_of_favourites(task);
 }
+
+void TasksScrollArea::uncheck_task_favourite(const Task* task)
+{
+	for(const auto& map_entry : task_widgets)
+	{
+		for(auto* task_widget : map_entry.second)
+		{
+			if(task_widget->is_task(task))
+			{
+				task_widget->set_unfavourited();
+			}
+		}
+	}
+}
+
+void TasksScrollArea::check_task_favourite(const Task* task)
+{
+	for(const auto& map_entry : task_widgets)
+	{
+		for(auto* task_widget : map_entry.second)
+		{
+			if(task_widget->is_task(task))
+			{
+				task_widget->set_favourited();
+			}
+		}
+	}
+}

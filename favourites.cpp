@@ -77,7 +77,10 @@ bool Favourites::contains(const Task* task) const
 void Favourites::add_favourite_task(const Task* task)
 {
 	tasks.emplace_back(task);
+
 	ui->favourites_list->add_favourite(task);
+
+	emit task_added_to_favourites(task);
 }
 
 void Favourites::remove_favourite_task(const Task* task)
@@ -85,6 +88,8 @@ void Favourites::remove_favourite_task(const Task* task)
 	erase_task(task);
 
 	ui->favourites_list->remove_favourite_task(task);
+
+	emit task_removed_from_favourites(task);
 }
 
 void Favourites::erase_task(const Task* task)

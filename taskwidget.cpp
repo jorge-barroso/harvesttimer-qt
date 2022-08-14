@@ -125,3 +125,9 @@ void TaskWidget::set_stopped()
 	ui->stop_resume_button->setChecked(false);
 	task->started = false;
 }
+
+bool TaskWidget::is_task(const Task* task) const
+{
+	return task->project_id==this->task->project_id &&
+			task->task_id==this->task->task_id;
+}

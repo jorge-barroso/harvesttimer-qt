@@ -31,6 +31,10 @@ class Favourites : public QDialog
 
 		void add_task(Task* task);
 
+		void task_added_to_favourites(const Task* task);
+
+		void task_removed_from_favourites(const Task* task);
+
 	public slots:
 
 		void add_favourite_task(const Task* task);

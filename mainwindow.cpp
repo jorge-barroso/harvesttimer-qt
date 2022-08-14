@@ -31,12 +31,14 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 	}
 
 	// connect to signals from modal forms
+	connect(harvest_handler, &HarvestHandler::task_added, this, &MainWindow::task_added);
 	connect(&task_form, &AddTaskForm::task_started, ui->scrollArea, &TasksScrollArea::add_task);
 	connect(&task_form, &AddTaskForm::task_to_favourites, &favouritesForm, &Favourites::add_favourite_task);
 	connect(ui->scrollArea, &TasksScrollArea::task_to_favourites, &favouritesForm, &Favourites::add_favourite_task);
 	connect(ui->scrollArea, &TasksScrollArea::task_out_of_favourites, &favouritesForm, &Favourites::remove_favourite_task);
 	connect(&favouritesForm, &Favourites::add_task, &task_form, &AddTaskForm::add_task_from_favourites);
-	connect(harvest_handler, &HarvestHandler::task_added, this, &MainWindow::task_added);
+	connect(&favouritesForm, &Favourites::task_removed_from_favourites, ui->scrollArea, &TasksScrollArea::uncheck_task_favourite);
+	connect(&favouritesForm, &Favourites::task_added_to_favourites, ui->scrollArea, &TasksScrollArea::check_task_favourite);
 }
 
 MainWindow::~MainWindow()

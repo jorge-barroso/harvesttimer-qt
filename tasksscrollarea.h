@@ -44,6 +44,10 @@ class TasksScrollArea : public CustomScrollArea
 
 		void add_task(Task* task);
 
+		void uncheck_task_favourite(const Task* task);
+
+		void check_task_favourite(const Task* task);
+
 	private slots:
 
 		void edit_task(const Task* task, TaskWidget* task_widget);

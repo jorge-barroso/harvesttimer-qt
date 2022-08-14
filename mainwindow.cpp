@@ -1,17 +1,14 @@
+#include <QSystemTrayIcon>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QSystemTrayIcon>
 #include "tasksscrollarea.h"
 
 MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
-		: QMainWindow(parent), ui(new Ui::MainWindow), favouritesForm(config_dir, this),
-		  harvest_handler{ HarvestHandler::get_instance(config_dir) },
-		  exit_from_menu{ false },
-		  tray_icon{ QSystemTrayIcon(QIcon(":/icons/resources/icons/monochrome/32x32.png"), this) },
-		  tray_menu(),
-		  add_task_action{ QAction("Add Task", &tray_icon) },
-		  quit_action{ QAction("Exit", &tray_icon) },
-		  show_hide_action{ QAction("Show/Hide", &tray_icon) }
+		: QMainWindow(parent)
+		, ui(new Ui::MainWindow)
+		, favouritesForm(config_dir, this)
+		, harvest_handler{ HarvestHandler::get_instance(config_dir) }
+		, tray_icon(this)
 {
 	ui->setupUi(this);
 
@@ -37,11 +34,8 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 	connect(&task_form, &AddTaskForm::task_started, ui->scrollArea, &TasksScrollArea::add_task);
 	connect(&task_form, &AddTaskForm::task_to_favourites, &favouritesForm, &Favourites::add_favourite_task);
 	connect(ui->scrollArea, &TasksScrollArea::task_to_favourites, &favouritesForm, &Favourites::add_favourite_task);
-	connect(ui->scrollArea, &TasksScrollArea::task_out_of_favourites, &favouritesForm,
-			&Favourites::remove_favourite_task);
+	connect(ui->scrollArea, &TasksScrollArea::task_out_of_favourites, &favouritesForm, &Favourites::remove_favourite_task);
 	connect(&favouritesForm, &Favourites::add_task, &task_form, &AddTaskForm::add_task_from_favourites);
-
-	create_tray_icon();
 }
 
 MainWindow::~MainWindow()
@@ -124,88 +118,8 @@ void MainWindow::harvest_handler_ready()
 	show();
 }
 
-void MainWindow::show_hide(const QSystemTrayIcon::ActivationReason& activation_reason)
-{
-	switch (activation_reason)
-	{
-		case QSystemTrayIcon::Trigger:
-		{
-			// TODO needs improving
-			this->tray_menu.popup(QCursor::pos());
-			break;
-		}
-		case QSystemTrayIcon::Context:
-		{
-			if (this->isVisible())
-			{
-				this->hide();
-			}
-			else
-			{
-				this->show();
-				this->raise();
-				this->setFocus();
-			}
-			break;
-		}
-		default:
-			break;
-	}
-}
-
-void MainWindow::create_tray_icon()
-{
-	connect(&tray_icon, &QSystemTrayIcon::activated, this, &MainWindow::show_hide);
-	connect(&quit_action, &QAction::triggered, this, &MainWindow::exit_triggered);
-	connect(&show_hide_action, &QAction::triggered, this, &MainWindow::show_hide_triggered);
-	connect(&add_task_action, &QAction::triggered, this, &MainWindow::add_task_triggered);
-
-	tray_menu.addAction(&show_hide_action);
-	tray_menu.addAction(&add_task_action);
-	tray_menu.addAction(&quit_action);
-
-	tray_icon.setContextMenu(&tray_menu);
-
-	tray_icon.show();
-}
-
-void MainWindow::exit_triggered(bool checked)
-{
-	this->exit_from_menu = true;
-	this->show(); // this will just change some internal flags so that we can actually close it
-	this->close();
-}
-
-void MainWindow::show_hide_triggered(bool checked)
-{
-	this->show_hide(QSystemTrayIcon::ActivationReason::Context);
-}
-
-void MainWindow::add_task_triggered(bool checked)
-{
-	bool was_hidden = !this->isVisible();
-	if (was_hidden)
-	{
-		this->show();
-	}
-
-	this->on_new_task_button_clicked();
-
-	if (was_hidden)
-	{
-		this->hide();
-	}
-}
-
 void MainWindow::closeEvent(QCloseEvent* event)
 {
-	if (this->exit_from_menu)
-	{
-		event->accept();
-	}
-	else
-	{
-		this->hide();
-		event->ignore();
-	}
+	this->hide();
+	event->ignore();
 }

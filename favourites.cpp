@@ -80,6 +80,7 @@ void Favourites::erase_task(const Task* task)
 	auto task_it{ std::find(tasks.begin(), tasks.end(), task) };
 	if (task_it != tasks.end())
 	{
+		// We don't delete the task here, it might still be in use in the scroll area
 		tasks.erase(task_it);
 	}
 }

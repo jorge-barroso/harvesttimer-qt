@@ -53,7 +53,7 @@ add_executable(harvest
 
 install(TARGETS harvest
         DESTINATION ${CMAKE_INSTALL_PREFIX}
-)
+        )
 
 
 find_package(Qt6 REQUIRED
@@ -66,4 +66,7 @@ find_package(Qt6 REQUIRED
 
 target_link_libraries(harvest Qt6::Core Qt6::Widgets Qt6::Gui Qt6::Network)
 
-qt6_add_translations(harvest TS_FILES harvesttimer-qt_es_ES.ts)
+qt6_add_translations(harvest TS_FILES
+        harvesttimer-qt_es_ES.ts
+        harvesttimer-qt_en_US.ts
+        )

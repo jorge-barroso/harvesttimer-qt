@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="es_ES">
+<TS version="2.1" language="en_US">
 <context>
     <name>AddTaskForm</name>
     <message>
         <location filename="addtaskform.ui" line="14"/>
         <source>Tasks</source>
-        <translation>Tareas</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="addtaskform.ui" line="31"/>
         <source>Start</source>
-        <translation>Iniciar</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="addtaskform.ui" line="38"/>
         <source>Favourite</source>
-        <translation>A Favoritos</translation>
+        <translation>Favorite</translation>
     </message>
     <message>
         <location filename="addtaskform.ui" line="45"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="addtaskform.cpp" line="101"/>
         <source>Could not find project</source>
-        <translation>Proyecto No Encontrado</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="addtaskform.cpp" line="102"/>
         <source>The project this task is assigned to does not exist or has been renamed, please update your favourites to keep using them</source>
-        <translation>El proyecto de esta tarea no existe o ha sido renombrado, por favor, actualice sus favoritos para seguir usándolos</translation>
+        <translation>The project this task is assigned to does not exist or has been renamed, please update your favorites to keep using them</translation>
     </message>
     <message>
         <location filename="addtaskform.cpp" line="112"/>
         <source>Could not find task</source>
-        <translation>Tarea No Encontrada</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="addtaskform.cpp" line="113"/>
         <source>The task selected does not exist or has been renamed, please update your favourites to keep using them</source>
-        <translation>La tarea seleccionada no existe o ha sido renombrada, por favor, actualice sus favoritos para seguir usándolos</translation>
+        <translation>The task selected does not exist or has been renamed, please update your favorites to keep using them</translation>
     </message>
 </context>
 <context>
@@ -49,12 +49,12 @@
     <message>
         <location filename="favourites.ui" line="14"/>
         <source>Favourites</source>
-        <translation>Favoritos</translation>
+        <translation>Favorites</translation>
     </message>
     <message>
         <location filename="favourites.cpp" line="40"/>
         <source>Could not load favourites</source>
-        <translation>Error Cargando Favoritos</translation>
+        <translation>Could not load favorites</translation>
     </message>
 </context>
 <context>
@@ -62,84 +62,84 @@
     <message>
         <location filename="harvesthandler.cpp" line="102"/>
         <source>Error while waiting for Harvest authorization</source>
-        <translation>Error esperando autorización de Harvest</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="harvesthandler.cpp" line="103"/>
         <source>Error</source>
-        <translation>Error</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="harvesthandler.cpp" line="170"/>
         <source>The details received from Harvest did not contain the minimum details required</source>
-        <translation>Los datos recibidos de Harvest no contenían los detalles mínimos requeridos</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="harvesthandler.cpp" line="172"/>
         <source>Incomplete Details</source>
-        <translation>Detalles Incompletos</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="harvesthandler.cpp" line="205"/>
         <source>Error while authenticating with Harvest services: </source>
-        <translation>Error de autenticación con los servicios de Harvest: </translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="harvesthandler.cpp" line="207"/>
         <source>Error authenticating</source>
-        <translation>Error de Autenticación</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="harvesthandler.cpp" line="237"/>
         <source>It was not possible to save your credentials, you will have to log in again the next time you open Harvest Timer</source>
-        <translation>No fue posible guardar sus credenciales, tendrá que volver a iniciar sesión la próxima vez que abra Harvest Timer</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="harvesthandler.cpp" line="239"/>
         <source>Error saving authentication</source>
-        <translation>Error Guardando Autenticación</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="harvesthandler.cpp" line="446"/>
         <location filename="harvesthandler.cpp" line="493"/>
         <source>Could not add your task: </source>
-        <translation>No se pudo añadir la tarea: </translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="harvesthandler.cpp" line="447"/>
         <location filename="harvesthandler.cpp" line="494"/>
         <source>Error Adding Task</source>
-        <translation>Error Añadiendo Tarea</translation>
-    </message>
-    <message>
-        <location filename="harvesthandler.cpp" line="524"/>
-        <source>Could not start this task: </source>
-        <translation>No se pudo iniciar la tarea: </translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="harvesthandler.cpp" line="523"/>
         <source>Error Starting Task</source>
-        <translation>Error Iniciando Tarea</translation>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="harvesthandler.cpp" line="524"/>
+        <source>Could not start this task: </source>
+        <translation></translation>
     </message>
     <message>
         <location filename="harvesthandler.cpp" line="531"/>
         <source>Error Stopping Task</source>
-        <translation>Error Deteniendo Tarea</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="harvesthandler.cpp" line="532"/>
         <source>Could not stop this task: </source>
-        <translation>No se pudo parar esta tarea: </translation>
-    </message>
-    <message>
-        <location filename="harvesthandler.cpp" line="540"/>
-        <source>Could not delete this task: </source>
-        <translation>No se pudo eliminar esta tarea: </translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="harvesthandler.cpp" line="539"/>
         <source>Error Deleting Task</source>
-        <translation>Error Eliminando Tarea</translation>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="harvesthandler.cpp" line="540"/>
+        <source>Could not delete this task: </source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -155,17 +155,17 @@
     <message>
         <location filename="customtrayicon.cpp" line="13"/>
         <source>Add Task</source>
-        <translation>Añadir Tarea</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="customtrayicon.cpp" line="14"/>
         <source>Exit</source>
-        <translation>Salir</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="customtrayicon.cpp" line="15"/>
         <source>Show/Hide</source>
-        <translation>Mostrar/Ocultar</translation>
+        <translation></translation>
     </message>
 </context>
 </TS>

@@ -101,18 +101,7 @@ void FavouritesList::remove_and_update(const QListWidgetItem* list_item)
 	{
 		favourite_widgets.erase(favourite_widget_it);
 	}
-	//	update_favourite_widgets();
 }
-
-//void FavouritesList::update_favourite_widgets()
-//{
-//	clear_task_widgets();
-//
-//	for (auto favourite_widget: favourite_widgets)
-//	{
-//		add_task_widget(const_cast<FavouriteWidget*>(favourite_widget));
-//	}
-//}
 
 void FavouritesList::favourite_chosen(const Task* task)
 {

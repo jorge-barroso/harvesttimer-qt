@@ -38,6 +38,7 @@ class Favourites : public QDialog
 	private slots:
 
 		void new_task_selected(const Task* task);
+
 	private:
 		Ui::Favourites* ui;
 		const QString favourites_file_name = "favourites.dat";

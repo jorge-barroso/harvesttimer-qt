@@ -41,8 +41,8 @@ add_executable(harvest
         tasksscrollarea.h
         maputils.cpp
         maputils.h
-        favouritesscrollarea.cpp
-        favouritesscrollarea.h
+        favouriteslist.cpp
+        favouriteslist.h
         customscrollarea.cpp
         customscrollarea.h
         task.cpp

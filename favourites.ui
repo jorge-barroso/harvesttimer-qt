@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>415</width>
     <height>300</height>
    </rect>
   </property>
@@ -18,49 +18,19 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QWidget" name="favourites_widget" native="true">
-     <layout class="QVBoxLayout" name="verticalLayout_4">
-      <item>
-       <widget class="FavouritesScrollArea" name="favourites_scroll_area">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-        <property name="lineWidth">
-         <number>1</number>
-        </property>
-        <property name="widgetResizable">
-         <bool>true</bool>
-        </property>
-        <widget class="QWidget" name="scroll_area_contents">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>360</width>
-           <height>260</height>
-          </rect>
-         </property>
-         <layout class="QVBoxLayout" name="favourites_scroll_area_widget_layout"/>
-        </widget>
-       </widget>
-      </item>
-     </layout>
+    <widget class="FavouritesList" name="favourites_list">
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>FavouritesScrollArea</class>
-   <extends>QScrollArea</extends>
-   <header>favouritesscrollarea.h</header>
-   <container>1</container>
+   <class>FavouritesList</class>
+   <extends>QListWidget</extends>
+   <header>favouriteslist.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

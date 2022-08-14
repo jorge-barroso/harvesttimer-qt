@@ -4,7 +4,7 @@
 FavouriteWidget::FavouriteWidget(const Task* task, QWidget* parent) :
 		QWidget(parent),
 		ui(new Ui::FavouriteWidget),
-		task{ task }
+		internal_task{ task }
 {
 	ui->setupUi(this);
 	ui->project_label->setText(task->project_name);
@@ -19,7 +19,7 @@ FavouriteWidget::~FavouriteWidget()
 
 bool FavouriteWidget::operator==(const FavouriteWidget& rhs) const
 {
-	return *task == *rhs.task;
+	return *internal_task == *rhs.internal_task;
 }
 
 bool FavouriteWidget::operator!=(const FavouriteWidget& rhs) const
@@ -29,12 +29,17 @@ bool FavouriteWidget::operator!=(const FavouriteWidget& rhs) const
 
 void FavouriteWidget::on_unfavourite_button_clicked()
 {
-	emit unfavourited_task(this, task);
+	emit unfavourited_task(this, internal_task);
 }
 
 void FavouriteWidget::mouseReleaseEvent(QMouseEvent* event)
 {
 	QWidget::mouseReleaseEvent(event);
 
-	emit favourite_chosen(task);
+	emit favourite_chosen(internal_task);
+}
+
+const Task* FavouriteWidget::task() const
+{
+	return this->internal_task;
 }

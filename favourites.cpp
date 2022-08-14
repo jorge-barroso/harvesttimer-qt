@@ -12,8 +12,8 @@ Favourites::Favourites(const QDir& config_dir, QWidget* parent)
 
 	load_favourites();
 
-	connect(ui->favourites_scroll_area, &FavouritesScrollArea::new_task_selected, this, &Favourites::new_task_selected);
-	connect(ui->favourites_scroll_area, &FavouritesScrollArea::task_removed, this, &Favourites::erase_task);
+	connect(ui->favourites_list, &FavouritesList::new_task_selected, this, &Favourites::new_task_selected);
+	connect(ui->favourites_list, &FavouritesList::task_removed, this, &Favourites::erase_task);
 }
 
 Favourites::~Favourites()
@@ -45,7 +45,7 @@ void Favourites::load_favourites()
 	{
 		Task* task = new Task{};
 		in >> *task;
-		ui->favourites_scroll_area->add_favourite(task);
+		ui->favourites_list->add_favourite(task);
 	}
 	favourites_file.close();
 }
@@ -65,14 +65,14 @@ void Favourites::save_favourites()
 void Favourites::add_favourite_task(const Task* task)
 {
 	tasks.emplace_back(task);
-	ui->favourites_scroll_area->add_favourite(task);
+	ui->favourites_list->add_favourite(task);
 }
 
 void Favourites::remove_favourite_task(const Task* task)
 {
 	erase_task(task);
 
-	ui->favourites_scroll_area->remove_favourite_task(task);
+	ui->favourites_list->remove_favourite_task(task);
 }
 
 void Favourites::erase_task(const Task* task)

@@ -47,6 +47,8 @@ class Favourites : public QDialog
 		void load_favourites();
 
 		void save_favourites();
+
+		void erase_task(const Task* task);
 };
 
 #endif // FAVOURITES_H

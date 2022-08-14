@@ -45,7 +45,9 @@ add_executable(harvest
         favouritesscrollarea.h
         customscrollarea.cpp
         customscrollarea.h
-        task.cpp)
+        task.cpp
+        customtrayicon.cpp
+        customtrayicon.h)
 
 #
 

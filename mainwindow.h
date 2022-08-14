@@ -2,13 +2,16 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDir>
 #include <QDate>
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QCloseEvent>
-#include "addtaskform.h"
+#include "task.h"
 #include "favourites.h"
+#include "addtaskform.h"
 #include "harvesthandler.h"
+#include "customtrayicon.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -26,6 +29,10 @@ class MainWindow : public QMainWindow
 
 		~MainWindow() override;
 
+	public slots:
+
+		void on_new_task_button_clicked();
+
 	private slots:
 
 		void on_date_forward_button_clicked();
@@ -34,19 +41,11 @@ class MainWindow : public QMainWindow
 
 		void on_date_back_button_clicked();
 
-		void on_new_task_button_clicked();
-
 		void on_favourites_button_clicked();
 
 		void task_started(Task* task);
 
 		void harvest_handler_ready();
-
-		void exit_triggered(bool checked = false);
-
-		void show_hide_triggered(bool checked = false);
-
-		void add_task_triggered(bool checked = false);
 
 	private:
 		Ui::MainWindow* ui;
@@ -59,16 +58,7 @@ class MainWindow : public QMainWindow
 		std::vector<const Task*> favourites;
 
 		// systray menu
-		QSystemTrayIcon tray_icon;
-		QAction quit_action;
-		QAction show_hide_action;
-		QAction add_task_action;
-		QMenu tray_menu;
-		bool exit_from_menu;
-
-		void show_hide(const QSystemTrayIcon::ActivationReason& activation_reason);
-
-		void create_tray_icon();
+		CustomTrayIcon tray_icon;
 
 		void closeEvent(QCloseEvent* event) override;
 };

@@ -23,6 +23,12 @@ class TaskWidget : public QWidget
 
 		void addMinute();
 
+		bool is_task(const Task* task) const;
+
+		void set_favourited();
+
+		void set_unfavourited();
+
 	signals:
 
 		void task_stopped();
@@ -54,10 +60,6 @@ class TaskWidget : public QWidget
 
 
 		void set_started();
-
-		void set_favourited();
-
-		void set_unfavourited();
 };
 
 #endif // TASKWIDGET_H

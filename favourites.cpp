@@ -12,8 +12,8 @@ Favourites::Favourites(const QDir& config_dir, QWidget* parent)
 
 	load_favourites();
 
-	connect(ui->favourites_scroll_area, &FavouritesScrollArea::new_task_selected, this, &Favourites::new_task_selected);
-	connect(ui->favourites_scroll_area, &FavouritesScrollArea::task_removed, this, &Favourites::erase_task);
+	connect(ui->favourites_list, &FavouritesList::new_task_selected, this, &Favourites::new_task_selected);
+	connect(ui->favourites_list, &FavouritesList::task_removed, this, &Favourites::erase_task);
 }
 
 Favourites::~Favourites()
@@ -27,7 +27,7 @@ Favourites::~Favourites()
 		favourites_file.close();
 	}
 
-	for(const Task* task : tasks)
+	for (const Task* task: tasks)
 	{
 		delete task;
 	}
@@ -43,9 +43,9 @@ void Favourites::load_favourites()
 	QTextStream in(&favourites_file);
 	while (!in.atEnd())
 	{
-		Task* task = new Task{};
+		Task* task = new Task{ };
 		in >> *task;
-		ui->favourites_scroll_area->add_favourite(task);
+		add_favourite_task(task);
 	}
 	favourites_file.close();
 }
@@ -54,7 +54,7 @@ void Favourites::save_favourites()
 {
 	favourites_file.open(QIODevice::WriteOnly | QIODevice::Truncate);
 	QTextStream stream(&favourites_file);
-	for (const Task* task : tasks)
+	for (const Task* task: tasks)
 	{
 		stream << *task;
 	}
@@ -62,17 +62,38 @@ void Favourites::save_favourites()
 	favourites_file.close();
 }
 
+bool Favourites::contains(const Task* task) const
+{
+	const auto find_predicate{
+			[task](const Task* vector_task)
+			{
+				return task->project_name == vector_task->project_name &&
+					   task->task_name == vector_task->task_name;
+			}
+	};
+	return std::find_if(tasks.begin(), tasks.end(), find_predicate) != tasks.end();
+}
+
 void Favourites::add_favourite_task(const Task* task)
 {
+	// if we could already find this task, stop it
+	if(this->contains(task))
+	{
+		return;
+	}
+
 	tasks.emplace_back(task);
-	ui->favourites_scroll_area->add_favourite(task);
+
+	ui->favourites_list->add_favourite(task);
+
+	emit task_added_to_favourites(task);
 }
 
 void Favourites::remove_favourite_task(const Task* task)
 {
 	erase_task(task);
 
-	ui->favourites_scroll_area->remove_favourite_task(task);
+	ui->favourites_list->remove_favourite_task(task);
 }
 
 void Favourites::erase_task(const Task* task)
@@ -83,6 +104,8 @@ void Favourites::erase_task(const Task* task)
 		// We don't delete the task here, it might still be in use in the scroll area
 		tasks.erase(task_it);
 	}
+
+	emit task_removed_from_favourites(task);
 }
 
 void Favourites::new_task_selected(const Task* task)

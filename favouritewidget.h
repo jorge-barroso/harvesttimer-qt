@@ -18,6 +18,8 @@ class FavouriteWidget : public QWidget
 
 		~FavouriteWidget() override;
 
+		[[nodiscard]] const Task* task() const;
+
 		bool operator==(const FavouriteWidget& rhs) const;
 
 		bool operator!=(const FavouriteWidget& rhs) const;
@@ -38,7 +40,7 @@ class FavouriteWidget : public QWidget
 	private:
 		Ui::FavouriteWidget* ui;
 
-		const Task* task;
+		const Task* internal_task;
 };
 
 #endif // FAVOURITEWIDGET_H

@@ -14,8 +14,6 @@ TaskWidget::TaskWidget(Task* task, QWidget* parent) :
 	ui->task_name_label->setText(task->task_name);
 	ui->time_label->setText(task->time_tracked.toString("hh:mm"));
 
-	setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
-
 	if (task->started)
 	{
 		// It's running
@@ -25,6 +23,15 @@ TaskWidget::TaskWidget(Task* task, QWidget* parent) :
 	{
 		// It's not running
 		set_stopped();
+	}
+
+	if(task->favourited)
+	{
+		set_favourited();
+	}
+	else
+	{
+		set_unfavourited();
 	}
 }
 
@@ -117,4 +124,10 @@ void TaskWidget::set_stopped()
 {
 	ui->stop_resume_button->setChecked(false);
 	task->started = false;
+}
+
+bool TaskWidget::is_task(const Task* task) const
+{
+	return task->project_id==this->task->project_id &&
+			task->task_id==this->task->task_id;
 }

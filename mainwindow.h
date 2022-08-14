@@ -47,15 +47,14 @@ class MainWindow : public QMainWindow
 
 		void harvest_handler_ready();
 
+		void task_added(Task* task);
+
 	private:
 		Ui::MainWindow* ui;
 		AddTaskForm task_form;
 		Favourites favouritesForm;
 		QDate app_date;
 		HarvestHandler* harvest_handler;
-
-		// Favourites
-		std::vector<const Task*> favourites;
 
 		// systray menu
 		CustomTrayIcon tray_icon;

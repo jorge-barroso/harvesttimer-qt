@@ -47,7 +47,7 @@ class HarvestHandler : public QObject
 
 		void data_ready(std::vector<HarvestProject>);
 
-		void task_added(const Task*);
+		void task_added(Task*);
 
 	private slots:
 

@@ -25,9 +25,15 @@ class Favourites : public QDialog
 
 		~Favourites() override;
 
+		bool contains(const Task* task) const;
+
 	signals:
 
 		void add_task(Task* task);
+
+		void task_added_to_favourites(const Task* task);
+
+		void task_removed_from_favourites(const Task* task);
 
 	public slots:
 
@@ -38,6 +44,7 @@ class Favourites : public QDialog
 	private slots:
 
 		void new_task_selected(const Task* task);
+
 	private:
 		Ui::Favourites* ui;
 		const QString favourites_file_name = "favourites.dat";

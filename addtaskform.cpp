@@ -116,5 +116,7 @@ void AddTaskForm::add_task_from_favourites(const Task* task)
 	}
 	ui->task_dropdown->setCurrentIndex(index);
 
+	ui->notes_text_edit->setText(task->note);
+
 	this->exec();
 }

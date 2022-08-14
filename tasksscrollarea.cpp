@@ -134,9 +134,6 @@ void TasksScrollArea::stop_task_locally()
 void TasksScrollArea::set_harvest_handler(HarvestHandler* handler)
 {
 	this->harvest_handler = handler;
-
-	// Set connections between harvest handler and our scroll area
-	connect(harvest_handler, &HarvestHandler::task_added, this, &TasksScrollArea::task_added);
 }
 
 void TasksScrollArea::set_lookup_date(const QDate& date)
@@ -174,4 +171,32 @@ void TasksScrollArea::favourite_task(const Task* task)
 void TasksScrollArea::unfavourite_task(const Task* task)
 {
 	emit task_out_of_favourites(task);
+}
+
+void TasksScrollArea::uncheck_task_favourite(const Task* task)
+{
+	for(const auto& map_entry : task_widgets)
+	{
+		for(auto* task_widget : map_entry.second)
+		{
+			if(task_widget->is_task(task))
+			{
+				task_widget->set_unfavourited();
+			}
+		}
+	}
+}
+
+void TasksScrollArea::check_task_favourite(const Task* task)
+{
+	for(const auto& map_entry : task_widgets)
+	{
+		for(auto* task_widget : map_entry.second)
+		{
+			if(task_widget->is_task(task))
+			{
+				task_widget->set_favourited();
+			}
+		}
+	}
 }

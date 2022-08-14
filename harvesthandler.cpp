@@ -471,7 +471,7 @@ void HarvestHandler::tasks_list_ready()
 		const bool started{ !task_object["started_time"].toString().isNull() };
 		const QDate task_date{ QDate::fromString(task_object["spent_date"].toString(), Qt::DateFormat::ISODate) };
 
-		const Task* task = new Task{
+		Task* task = new Task{
 				project_id,
 				task_id,
 				task_entry_id,

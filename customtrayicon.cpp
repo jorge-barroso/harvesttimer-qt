@@ -33,8 +33,6 @@ CustomTrayIcon::~CustomTrayIcon()= default;
 void CustomTrayIcon::exit_triggered(bool checked)
 {
 	QApplication::quit();
-//	this->parent->show(); // this will just change some internal flags so that we can actually close it
-//	this->parent->close();
 }
 
 void CustomTrayIcon::show_hide_triggered(bool checked)

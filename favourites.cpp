@@ -88,8 +88,6 @@ void Favourites::remove_favourite_task(const Task* task)
 	erase_task(task);
 
 	ui->favourites_list->remove_favourite_task(task);
-
-	emit task_removed_from_favourites(task);
 }
 
 void Favourites::erase_task(const Task* task)
@@ -100,6 +98,8 @@ void Favourites::erase_task(const Task* task)
 		// We don't delete the task here, it might still be in use in the scroll area
 		tasks.erase(task_it);
 	}
+
+	emit task_removed_from_favourites(task);
 }
 
 void Favourites::new_task_selected(const Task* task)

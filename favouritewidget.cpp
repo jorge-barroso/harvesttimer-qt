@@ -9,7 +9,6 @@ FavouriteWidget::FavouriteWidget(const Task* task, QWidget* parent) :
 	ui->setupUi(this);
 	ui->project_label->setText(task->project_name);
 	ui->task_label->setText(task->task_name);
-	setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
 }
 
 FavouriteWidget::~FavouriteWidget()

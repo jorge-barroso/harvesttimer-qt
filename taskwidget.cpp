@@ -14,8 +14,6 @@ TaskWidget::TaskWidget(Task* task, QWidget* parent) :
 	ui->task_name_label->setText(task->task_name);
 	ui->time_label->setText(task->time_tracked.toString("hh:mm"));
 
-	setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
-
 	if (task->started)
 	{
 		// It's running

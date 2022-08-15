@@ -9,6 +9,7 @@
 #include <QNetworkAccessManager>
 #include <QJsonDocument>
 #include <QEventLoop>
+#include <QNetworkInformation>
 #include "settingsmanager.h"
 #include "harvestproject.h"
 #include "task.h"
@@ -16,7 +17,6 @@
 class HarvestHandler : public QObject
 {
 	Q_OBJECT
-
 
 	public slots:
 
@@ -41,6 +41,8 @@ class HarvestHandler : public QObject
 
 		void list_tasks(const QDate& from_date, const QDate& to_date);
 
+		void set_network_reachability(const QNetworkInformation::Reachability& reachability);
+
 	signals:
 
 		void ready();
@@ -49,6 +51,11 @@ class HarvestHandler : public QObject
 
 		void task_added(Task*);
 
+	protected:
+		// We're taking a singleton approach here so the constructor will remain protected
+		explicit HarvestHandler(const QDir& config_dir); // Prevent construction
+		~HarvestHandler() override; // Prevent unwanted destruction
+
 	private slots:
 
 		void code_received();
@@ -56,11 +63,6 @@ class HarvestHandler : public QObject
 		void authentication_received(const QNetworkReply* reply);
 
 		void tasks_list_ready();
-
-	protected:
-		// We're taking a singleton approach here so the constructor will remain protected
-		explicit HarvestHandler(const QDir& config_dir); // Prevent construction
-		~HarvestHandler() override; // Prevent unwanted destruction
 
 	private:
 		static HarvestHandler* harvest_handler;
@@ -146,6 +148,10 @@ class HarvestHandler : public QObject
 		void check_authenticate();
 
 		std::unordered_map<size_t, Task*> tasks_queue;
+
+		static const int request_timeout_constant;
+
+		bool is_network_reachable;
 };
 
 #endif // HARVESTHANDLER_H

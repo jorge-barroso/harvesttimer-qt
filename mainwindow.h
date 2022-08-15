@@ -49,12 +49,16 @@ class MainWindow : public QMainWindow
 
 		void task_added(Task* task);
 
+		void reachability_changed(const QNetworkInformation::Reachability& reachability);
+
 	private:
 		Ui::MainWindow* ui;
 		AddTaskForm task_form;
 		Favourites favouritesForm;
 		QDate app_date;
+
 		HarvestHandler* harvest_handler;
+		const QNetworkInformation* network_information;
 
 		// systray menu
 		CustomTrayIcon tray_icon;

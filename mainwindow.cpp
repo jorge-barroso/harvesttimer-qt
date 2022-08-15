@@ -1,4 +1,5 @@
 #include <QSystemTrayIcon>
+#include <QMessageBox>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "tasksscrollarea.h"
@@ -12,6 +13,11 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 {
 	ui->setupUi(this);
 
+	network_information = QNetworkInformation::instance();
+	if(network_information!=nullptr)
+	{
+		connect(network_information, &QNetworkInformation::reachabilityChanged, this, &MainWindow::reachability_changed);
+	}
 
 	this->app_date = QDate::currentDate();
 	this->ui->date_label->resetDate();
@@ -111,9 +117,12 @@ void MainWindow::task_started(Task* task)
 // Ready up the application once we have the basic data from harvest
 void MainWindow::harvest_handler_ready()
 {
-	const std::vector<HarvestProject> projects(harvest_handler->update_user_data());
+	const std::vector<HarvestProject> projects{ harvest_handler->update_user_data() };
 
-	task_form.add_projects(projects);
+	if(!projects.empty())
+	{
+		task_form.add_projects(projects);
+	}
 
 	// we want to load 5 days, two behind and two in advance, to make the day switching experience more fluid
 	harvest_handler->list_tasks(app_date.addDays(-2), app_date.addDays(2));
@@ -131,4 +140,14 @@ void MainWindow::task_added(Task* task)
 {
 	task->favourited = favouritesForm.contains(task);
 	ui->scrollArea->task_added(task);
+}
+
+void MainWindow::reachability_changed(const QNetworkInformation::Reachability& reachability)
+{
+	// if the reachability has changed, and we are now online, reload the application
+	if(network_information->reachability() == QNetworkInformation::Reachability::Online)
+	{
+		harvest_handler->set_network_reachability(reachability);
+		this->harvest_handler_ready();
+	}
 }

@@ -60,85 +60,131 @@
 <context>
     <name>HarvestHandler</name>
     <message>
-        <location filename="harvesthandler.cpp" line="102"/>
+        <location filename="harvesthandler.cpp" line="115"/>
         <source>Error while waiting for Harvest authorization</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="harvesthandler.cpp" line="103"/>
+        <location filename="harvesthandler.cpp" line="116"/>
         <source>Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="harvesthandler.cpp" line="170"/>
+        <location filename="harvesthandler.cpp" line="183"/>
         <source>The details received from Harvest did not contain the minimum details required</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="harvesthandler.cpp" line="172"/>
+        <location filename="harvesthandler.cpp" line="185"/>
         <source>Incomplete Details</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="harvesthandler.cpp" line="205"/>
+        <location filename="harvesthandler.cpp" line="218"/>
         <source>Error while authenticating with Harvest services: </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="harvesthandler.cpp" line="207"/>
+        <location filename="harvesthandler.cpp" line="220"/>
         <source>Error authenticating</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="harvesthandler.cpp" line="237"/>
+        <location filename="harvesthandler.cpp" line="250"/>
         <source>It was not possible to save your credentials, you will have to log in again the next time you open Harvest Timer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="harvesthandler.cpp" line="239"/>
+        <location filename="harvesthandler.cpp" line="252"/>
         <source>Error saving authentication</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="harvesthandler.cpp" line="446"/>
-        <location filename="harvesthandler.cpp" line="493"/>
+        <location filename="harvesthandler.cpp" line="265"/>
+        <location filename="harvesthandler.cpp" line="307"/>
+        <location filename="harvesthandler.cpp" line="389"/>
+        <location filename="harvesthandler.cpp" line="408"/>
+        <location filename="harvesthandler.cpp" line="436"/>
+        <location filename="harvesthandler.cpp" line="450"/>
+        <location filename="harvesthandler.cpp" line="464"/>
+        <source>Network Unreachable</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="harvesthandler.cpp" line="266"/>
+        <location filename="harvesthandler.cpp" line="308"/>
+        <location filename="harvesthandler.cpp" line="390"/>
+        <location filename="harvesthandler.cpp" line="409"/>
+        <location filename="harvesthandler.cpp" line="437"/>
+        <location filename="harvesthandler.cpp" line="451"/>
+        <location filename="harvesthandler.cpp" line="465"/>
+        <source>You are currently not connected to the internet, please reconnect and try again</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="harvesthandler.cpp" line="509"/>
+        <source>Error Loading Tasks</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="harvesthandler.cpp" line="510"/>
+        <source>Could not load your tasks: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="harvesthandler.cpp" line="557"/>
         <source>Could not add your task: </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="harvesthandler.cpp" line="447"/>
-        <location filename="harvesthandler.cpp" line="494"/>
+        <location filename="harvesthandler.cpp" line="612"/>
+        <source>the request timed out.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="harvesthandler.cpp" line="556"/>
         <source>Error Adding Task</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="harvesthandler.cpp" line="523"/>
+        <location filename="harvesthandler.cpp" line="586"/>
         <source>Error Starting Task</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="harvesthandler.cpp" line="524"/>
+        <location filename="harvesthandler.cpp" line="587"/>
         <source>Could not start this task: </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="harvesthandler.cpp" line="531"/>
+        <location filename="harvesthandler.cpp" line="594"/>
         <source>Error Stopping Task</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="harvesthandler.cpp" line="532"/>
+        <location filename="harvesthandler.cpp" line="595"/>
         <source>Could not stop this task: </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="harvesthandler.cpp" line="539"/>
+        <location filename="harvesthandler.cpp" line="602"/>
         <source>Error Deleting Task</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="harvesthandler.cpp" line="540"/>
+        <location filename="harvesthandler.cpp" line="603"/>
         <source>Could not delete this task: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="main.cpp" line="35"/>
+        <source>Error Loading Network Information</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="main.cpp" line="36"/>
+        <source>There was an error loading the system network information manager, the application will not be aware of changes in the network status</source>
+        <oldsource>There was an error loading the system network manager information, the application will not be aware of changes in the network status</oldsource>
         <translation></translation>
     </message>
 </context>

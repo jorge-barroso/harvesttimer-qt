@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 	{
 		QMessageBox::warning(nullptr,
 							 QApplication::translate("HarvestHandler", "Error Loading Network Information"),
-							 QApplication::translate("HarvestHandler", "There was an error loading the system network manager information, the application will not be aware of changes in the network status"));
+							 QApplication::translate("HarvestHandler", "There was an error loading the system network information manager, the application will not be aware of changes in the network status"));
 	}
 
 	MainWindow w(config_dir);

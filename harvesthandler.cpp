@@ -17,10 +17,12 @@
 #include <QJsonArray>
 #include <QMessageBox>
 #include <QDebug>
+#include <QNetworkInformation>
 
 HarvestHandler* HarvestHandler::harvest_handler{ nullptr };
 const QString HarvestHandler::default_grant_type{ "authorization_code" };
 const QString HarvestHandler::refresh_grant_type{ "refresh_token" };
+const int HarvestHandler::request_timeout_constant{ 10 * 1000 };
 
 HarvestHandler* HarvestHandler::get_instance(const QDir& config_dir)
 {
@@ -39,10 +41,21 @@ void HarvestHandler::reset_instance()
 }
 
 HarvestHandler::HarvestHandler(const QDir& config_dir)
-		: auth_server{ nullptr }, auth_socket{ nullptr }, auth_file(config_dir.absolutePath() + "/" + auth_file_name),
-		  settings_manager{ SettingsManager::get_instance(config_dir) }, network_manager(this), loop()
+		: auth_server{ nullptr }
+		, auth_socket{ nullptr }
+		, auth_file(config_dir.absolutePath() + "/" + auth_file_name)
+		, settings_manager{ SettingsManager::get_instance(config_dir) }
+		, network_manager(this)
+		, loop()
+		, is_network_reachable{ true }
 {
+	if(QNetworkInformation::instance() != nullptr)
+	{
+		this->set_network_reachability(QNetworkInformation::instance()->reachability());
+	}
+
 	network_manager.setAutoDeleteReplies(true);
+
 	// try and load the authentication details stored in the user configuration directories
 	this->json_auth = get_authentication();
 	// this auth is considered found not only if we read it, but we also need to make sure all the necessary fields are present
@@ -247,6 +260,13 @@ void HarvestHandler::save_authentication()
 
 void HarvestHandler::authenticate_request(QString* auth_code, QString* refresh_token)
 {
+	if(!is_network_reachable)
+	{
+		QMessageBox::warning(nullptr, QApplication::translate("HarvestHandler", "Network Unreachable"),
+							 QApplication::translate("HarvestHandler", "You are currently not connected to the internet, please reconnect and try again"));
+		return;
+	}
+
 	QUrl request_url(auth_url);
 	QNetworkRequest request(request_url);
 	request.setHeader(QNetworkRequest::UserAgentHeader, "Harvest Timer Qt (jorge_barroso_11@hotmail.com)");
@@ -282,6 +302,13 @@ void HarvestHandler::authenticate_request(QString* auth_code, QString* refresh_t
 
 std::vector<HarvestProject> HarvestHandler::update_user_data()
 {
+	if(!is_network_reachable)
+	{
+		QMessageBox::warning(nullptr, QApplication::translate("HarvestHandler", "Network Unreachable"),
+							 QApplication::translate("HarvestHandler", "You are currently not connected to the internet, please reconnect and try again"));
+		return projects;
+	}
+
 	QUrl request_url(assignments_url);
 
 	int total_pages = -1;
@@ -319,7 +346,6 @@ void HarvestHandler::get_projects_data(const QJsonDocument& json_payload, std::v
 		{
 			const QJsonValue json_task_details{ json_task["task"] };
 			const HarvestTask task = HarvestTask{
-//					json_task["id"].toInteger(),
 					json_task_details["id"].toInteger(),
 					json_task_details["name"].toString()
 			};
@@ -354,8 +380,17 @@ bool HarvestHandler::is_ready() const
 	return auth_found;
 }
 
+// This method preloads a list of tasks from the harvest system based on the dates provided
+// It is used to preload our TaskScrollArea with the tasks the user had previously added
 void HarvestHandler::list_tasks(const QDate& from_date, const QDate& to_date)
 {
+	if(!is_network_reachable)
+	{
+		QMessageBox::warning(nullptr, QApplication::translate("HarvestHandler", "Network Unreachable"),
+							 QApplication::translate("HarvestHandler", "You are currently not connected to the internet, please reconnect and try again"));
+		return;
+	}
+
 	QUrl request_url(time_entries_url);
 	QUrlQuery url_query;
 	url_query.addQueryItem("from", from_date.toString(Qt::ISODate));
@@ -368,6 +403,13 @@ void HarvestHandler::list_tasks(const QDate& from_date, const QDate& to_date)
 
 void HarvestHandler::add_task(Task* task)
 {
+	if(!is_network_reachable)
+	{
+		QMessageBox::warning(nullptr, QApplication::translate("HarvestHandler", "Network Unreachable"),
+							 QApplication::translate("HarvestHandler", "You are currently not connected to the internet, please reconnect and try again"));
+		return;
+	}
+
 	const QString spent_date{ task->date.toString(Qt::ISODate) };
 	const float seconds{ static_cast<float>(QTime(0, 0).secsTo(task->time_tracked)) };
 
@@ -389,6 +431,13 @@ void HarvestHandler::add_task(Task* task)
 
 void HarvestHandler::start_task(const Task& task)
 {
+	if(!is_network_reachable)
+	{
+		QMessageBox::warning(nullptr, QApplication::translate("HarvestHandler", "Network Unreachable"),
+							 QApplication::translate("HarvestHandler", "You are currently not connected to the internet, please reconnect and try again"));
+		return;
+	}
+
 	const QUrl url{ time_entries_url + "/" + QString::number(task.time_entry_id) + "/restart" };
 	QNetworkReply* reply{ do_request_with_auth(url, false, "PATCH") };
 	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::start_task_checks);
@@ -396,6 +445,13 @@ void HarvestHandler::start_task(const Task& task)
 
 void HarvestHandler::stop_task(const Task& task)
 {
+	if(!is_network_reachable)
+	{
+		QMessageBox::warning(nullptr, QApplication::translate("HarvestHandler", "Network Unreachable"),
+							 QApplication::translate("HarvestHandler", "You are currently not connected to the internet, please reconnect and try again"));
+		return;
+	}
+
 	const QUrl url{ time_entries_url + "/" + QString::number(task.time_entry_id) + "/stop" };
 	QNetworkReply* reply{ do_request_with_auth(url, false, "PATCH") };
 	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::stop_task_checks);
@@ -403,6 +459,13 @@ void HarvestHandler::stop_task(const Task& task)
 
 void HarvestHandler::delete_task(const Task& task)
 {
+	if(!is_network_reachable)
+	{
+		QMessageBox::warning(nullptr, QApplication::translate("HarvestHandler", "Network Unreachable"),
+							 QApplication::translate("HarvestHandler", "You are currently not connected to the internet, please reconnect and try again"));
+		return;
+	}
+
 	const QUrl url{ time_entries_url + "/" + QString::number(task.time_entry_id) };
 	QNetworkReply* reply{ do_request_with_auth(url, false, "DELETE") };
 	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::delete_task_checks);
@@ -411,10 +474,10 @@ void HarvestHandler::delete_task(const Task& task)
 QNetworkReply* HarvestHandler::do_request_with_auth(const QUrl& url, const bool sync_request, const QByteArray& verb,
 													const std::optional<QJsonDocument>& payload)
 {
-
 	check_authenticate();
 
 	QNetworkRequest request(url);
+	request.setTransferTimeout(HarvestHandler::request_timeout_constant);
 	request.setRawHeader("Authorization", "Bearer " + json_auth["access_token"].toString().toUtf8());
 	request.setRawHeader("Harvest-Account-Id", account_id.toUtf8());
 
@@ -443,8 +506,8 @@ QNetworkReply* HarvestHandler::do_request_with_auth(const QUrl& url, const bool 
 void HarvestHandler::tasks_list_ready()
 {
 	QNetworkReply* reply{ dynamic_cast<QNetworkReply*>(sender()) };
-	if (default_error_check(reply, QApplication::translate("HarvestHandler", "Could not add your task: "),
-							QApplication::translate("HarvestHandler", "Error Adding Task")))
+	if (default_error_check(reply, QApplication::translate("HarvestHandler", "Error Loading Tasks"),
+							QApplication::translate("HarvestHandler", "Could not load your tasks: ")))
 	{
 		return;
 	}
@@ -490,8 +553,8 @@ void HarvestHandler::tasks_list_ready()
 void HarvestHandler::add_task_checks()
 {
 	QNetworkReply* reply{ dynamic_cast<QNetworkReply*>(sender()) };
-	if (default_error_check(reply, QApplication::translate("HarvestHandler", "Could not add your task: "),
-							QApplication::translate("HarvestHandler", "Error Adding Task")))
+	if (default_error_check(reply, QApplication::translate("HarvestHandler", "Error Adding Task"),
+							QApplication::translate("HarvestHandler", "Could not add your task: ")))
 	{
 		return;
 	}
@@ -544,6 +607,12 @@ void HarvestHandler::delete_task_checks()
 bool HarvestHandler::default_error_check(QNetworkReply* reply, const QString& base_error_title,
 										 const QString& base_error_body)
 {
+	if (reply->error() == QNetworkReply::NetworkError::TimeoutError)
+	{
+		const QString error_string{ base_error_body + QApplication::translate("HarvestHandler", "the request timed out.") };
+		QMessageBox::information(nullptr, base_error_title, error_string);
+
+	}
 	if (reply->error() != QNetworkReply::NetworkError::NoError)
 	{
 		const QJsonDocument error_report{ read_reply(const_cast<QNetworkReply*>(reply)) };
@@ -552,4 +621,9 @@ bool HarvestHandler::default_error_check(QNetworkReply* reply, const QString& ba
 		return true;
 	}
 	return false;
+}
+
+void HarvestHandler::set_network_reachability(const QNetworkInformation::Reachability& reachability)
+{
+	is_network_reachable = reachability == QNetworkInformation::Reachability::Online;
 }

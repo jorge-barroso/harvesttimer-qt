@@ -6,6 +6,7 @@
 #include <QString>
 #include <QTranslator>
 #include <QStandardPaths>
+#include <QMessageBox>
 
 QDir get_config_directory(const QString&);
 
@@ -27,6 +28,13 @@ int main(int argc, char* argv[])
 
 	const QString conf_dir_name{ "Harvest Timer Qt" };
 	const QDir config_dir = get_config_directory(conf_dir_name);
+
+	if(!QNetworkInformation::loadDefaultBackend())
+	{
+		QMessageBox::warning(nullptr,
+							 QApplication::translate("HarvestHandler", "Error Loading Network Information"),
+							 QApplication::translate("HarvestHandler", "There was an error loading the system network manager information, the application will not be aware of changes in the network status"));
+	}
 
 	MainWindow w(config_dir);
 

@@ -76,6 +76,12 @@ bool Favourites::contains(const Task* task) const
 
 void Favourites::add_favourite_task(const Task* task)
 {
+	// if we could already find this task, stop it
+	if(this->contains(task))
+	{
+		return;
+	}
+
 	tasks.emplace_back(task);
 
 	ui->favourites_list->add_favourite(task);

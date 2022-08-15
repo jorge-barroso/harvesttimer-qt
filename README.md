@@ -20,7 +20,7 @@ If that seems to fail, you can just reopen the app, and you will see how everyth
 ![Adding a Task](/assets/add_task_window.png?raw=true "the form to add a new task from the applications")
 
 ### Favourites
-![Favourites Window](/assets/favourites_window.png, "the application with a separate dialog to quickly choose one of your saved tasks for quick access")
+![Favourites Window](/assets/favourites_window.png?raw=true "the application with a separate dialog to quickly choose one of your saved tasks for quick access")
 
 ### System Tray Icon
 ![System Tray](/assets/systray_icon.png?raw=true "the app giving you quick access ")

@@ -1,16 +1,16 @@
 #ifndef ADDTASKFORM_H
 #define ADDTASKFORM_H
 
-#include <QDialog>
 #include "task.h"
 #include "harvestproject.h"
+#include "customtaskdialog.h"
 
 namespace Ui
 {
 	class AddTaskForm;
 }
 
-class AddTaskForm : public QDialog
+class AddTaskForm : public CustomTaskDialog
 {
 	Q_OBJECT
 
@@ -37,8 +37,6 @@ class AddTaskForm : public QDialog
 
 		void on_favourite_button_clicked();
 
-		void on_cancel_button_clicked();
-
 		void on_project_dropdown_currentIndexChanged(int index);
 
 	private:
@@ -46,13 +44,9 @@ class AddTaskForm : public QDialog
 
 		Task* build_task();
 
-		std::vector<HarvestProject> projects;
-
 		QTime zero_time{ QTime(0, 0) };
 
-		void reset_and_close();
-
-		void reset_inputs();
+		void reset_inputs() override;
 };
 
 #endif // ADDTASKFORM_H

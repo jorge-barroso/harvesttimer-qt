@@ -429,6 +429,33 @@ void HarvestHandler::add_task(Task* task)
 	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::add_task_checks);
 }
 
+void HarvestHandler::update_task(const Task* updated_task)
+{
+	if(!is_network_reachable)
+	{
+		QMessageBox::warning(nullptr, QApplication::translate("HarvestHandler", "Network Unreachable"),
+							 QApplication::translate("HarvestHandler", "You are currently not connected to the internet, please reconnect and try again"));
+		return;
+	}
+
+	const float seconds{ static_cast<float>(QTime(0, 0).secsTo(updated_task->time_tracked)) };
+
+	QJsonObject request_payload;
+	request_payload.insert("project_id", updated_task->project_id);
+	request_payload.insert("task_id", updated_task->task_id);
+	request_payload.insert("notes", updated_task->note);
+	request_payload.insert("hours", seconds / 60 / 60);
+
+	// We save our task in a map so that we can retrieve it later when the response comes
+	size_t key{ qHash(QString::number(updated_task->project_id).append(QString::number(updated_task->task_id))) };
+	tasks_queue.insert({ key, const_cast<Task*>(updated_task) });
+
+	QString update_url{ time_entries_url+"/"+QString::number(updated_task->time_entry_id) };
+	QNetworkReply* reply{ do_request_with_auth(update_url, false, "PATCH", QJsonDocument(request_payload)) };
+	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::update_task_checks);
+}
+
+
 void HarvestHandler::start_task(const Task& task)
 {
 	if(!is_network_reachable)
@@ -578,6 +605,14 @@ void HarvestHandler::add_task_checks()
 	task->time_entry_id = add_task_response["id"].toInteger();
 
 	emit task_added(task);
+}
+
+void HarvestHandler::update_task_checks()
+{
+	auto* reply{ dynamic_cast<QNetworkReply*>(sender()) };
+	default_error_check(reply, QApplication::translate("HarvestHandler", "Error Updating Task"),
+						QApplication::translate("HarvestHandler", "Could not update this task: "));
+	reply->deleteLater();
 }
 
 void HarvestHandler::start_task_checks()

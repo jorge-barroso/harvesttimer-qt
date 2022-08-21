@@ -12,6 +12,7 @@
 #include "addtaskform.h"
 #include "harvesthandler.h"
 #include "customtrayicon.h"
+#include "edittaskform.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -53,8 +54,9 @@ class MainWindow : public QMainWindow
 
 	private:
 		Ui::MainWindow* ui;
-		AddTaskForm task_form;
-		Favourites favouritesForm;
+		AddTaskForm add_task_form;
+		EditTaskForm edit_task_form;
+		Favourites favourites_form;
 		QDate app_date;
 
 		HarvestHandler* harvest_handler;

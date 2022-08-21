@@ -29,6 +29,8 @@ class TaskWidget : public QWidget
 
 		void set_unfavourited();
 
+		void update_task(Task* new_task);
+
 	signals:
 
 		void task_stopped();
@@ -58,8 +60,9 @@ class TaskWidget : public QWidget
 
 		Task* task;
 
-
 		void set_started();
+
+		void update_internal_widgets();
 };
 
 #endif // TASKWIDGET_H

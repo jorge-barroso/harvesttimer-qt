@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QTime>
+#include <QTextStream>
 #include <ostream>
 
 struct Task

@@ -7,7 +7,7 @@
 MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 		: QMainWindow(parent)
 		, ui(new Ui::MainWindow)
-		, favouritesForm(config_dir, this)
+		, favourites_form(config_dir, this)
 		, harvest_handler{ HarvestHandler::get_instance(config_dir) }
 		, tray_icon(this)
 {
@@ -38,13 +38,15 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 
 	// connect to signals from modal forms
 	connect(harvest_handler, &HarvestHandler::task_added, this, &MainWindow::task_added);
-	connect(&task_form, &AddTaskForm::task_started, ui->scrollArea, &TasksScrollArea::add_task);
-	connect(&task_form, &AddTaskForm::task_to_favourites, &favouritesForm, &Favourites::add_favourite_task);
-	connect(ui->scrollArea, &TasksScrollArea::task_to_favourites, &favouritesForm, &Favourites::add_favourite_task);
-	connect(ui->scrollArea, &TasksScrollArea::task_out_of_favourites, &favouritesForm, &Favourites::remove_favourite_task);
-	connect(&favouritesForm, &Favourites::add_task, &task_form, &AddTaskForm::add_task_from_favourites);
-	connect(&favouritesForm, &Favourites::task_removed_from_favourites, ui->scrollArea, &TasksScrollArea::uncheck_task_favourite);
-	connect(&favouritesForm, &Favourites::task_added_to_favourites, ui->scrollArea, &TasksScrollArea::check_task_favourite);
+	connect(&add_task_form, &AddTaskForm::task_started, ui->scrollArea, &TasksScrollArea::add_task);
+	connect(&add_task_form, &AddTaskForm::task_to_favourites, &favourites_form, &Favourites::add_favourite_task);
+	connect(&edit_task_form, &EditTaskForm::task_edited, ui->scrollArea, &TasksScrollArea::task_edited);
+	connect(ui->scrollArea, &TasksScrollArea::task_to_favourites, &favourites_form, &Favourites::add_favourite_task);
+	connect(ui->scrollArea, &TasksScrollArea::task_out_of_favourites, &favourites_form, &Favourites::remove_favourite_task);
+	connect(ui->scrollArea, &TasksScrollArea::task_to_edit, &edit_task_form, &EditTaskForm::edit_task);
+	connect(&favourites_form, &Favourites::add_task, &add_task_form, &AddTaskForm::add_task_from_favourites);
+	connect(&favourites_form, &Favourites::task_removed_from_favourites, ui->scrollArea, &TasksScrollArea::uncheck_task_favourite);
+	connect(&favourites_form, &Favourites::task_added_to_favourites, ui->scrollArea, &TasksScrollArea::check_task_favourite);
 }
 
 MainWindow::~MainWindow()
@@ -98,13 +100,13 @@ void MainWindow::on_date_back_button_clicked()
 
 void MainWindow::on_new_task_button_clicked()
 {
-	task_form.exec();
+	add_task_form.exec();
 }
 
 
 void MainWindow::on_favourites_button_clicked()
 {
-	favouritesForm.exec();
+	favourites_form.exec();
 }
 
 // Task widget operations
@@ -121,7 +123,8 @@ void MainWindow::harvest_handler_ready()
 
 	if(!projects.empty())
 	{
-		task_form.add_projects(projects);
+		add_task_form.add_projects(projects);
+		edit_task_form.add_projects(projects);
 	}
 
 	// we want to load 5 days, two behind and two in advance, to make the day switching experience more fluid
@@ -138,7 +141,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
 
 void MainWindow::task_added(Task* task)
 {
-	task->favourited = favouritesForm.contains(task);
+	task->favourited = favourites_form.contains(task);
 	ui->scrollArea->task_added(task);
 }
 

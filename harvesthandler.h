@@ -33,6 +33,8 @@ class HarvestHandler : public QObject
 
 		void add_task(Task* task);
 
+		void update_task(const Task* updated_task);
+
 		void start_task(const Task& task);
 
 		void stop_task(const Task& task);
@@ -63,6 +65,16 @@ class HarvestHandler : public QObject
 		void authentication_received(const QNetworkReply* reply);
 
 		void tasks_list_ready();
+
+		void update_task_checks();
+
+		void add_task_checks();
+
+		void start_task_checks();
+
+		void stop_task_checks();
+
+		void delete_task_checks();
 
 	private:
 		static HarvestHandler* harvest_handler;
@@ -107,8 +119,6 @@ class HarvestHandler : public QObject
 
 		QJsonDocument get_auth_details();
 
-//		QJsonDocument refresh_token();
-
 		void login();
 
 		bool json_auth_is_complete();
@@ -116,8 +126,6 @@ class HarvestHandler : public QObject
 		[[maybe_unused]] bool json_auth_is_safely_active();
 
 		static std::map<QString, QString> parse_query_string(QString& query_string);
-
-//		void authenticate(QString& auth_code);
 
 		void save_authentication();
 
@@ -136,14 +144,6 @@ class HarvestHandler : public QObject
 
 		static bool default_error_check(QNetworkReply* reply, const QString& base_error_title,
 										const QString& base_error_body);
-
-		void add_task_checks();
-
-		void start_task_checks();
-
-		void stop_task_checks();
-
-		void delete_task_checks();
 
 		void check_authenticate();
 

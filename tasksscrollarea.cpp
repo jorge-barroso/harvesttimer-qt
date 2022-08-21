@@ -81,10 +81,7 @@ void TasksScrollArea::start_task_locally(const Task* task, TaskWidget* task_widg
 
 void TasksScrollArea::edit_task(const Task* task, TaskWidget* task_widget)
 {
-	// TODO gather the task details, show a pop-up window for the user to edit the details, and then on confirmation send an update request
-	QMessageBox::information(this, QApplication::translate("TasksScrollArea", "Coming soon!"),
-							 QApplication::translate("HarvestHandler",
-													 "This functionality has not been added yet, but it will come very soon!"));
+	emit task_to_edit(task, task_widget);
 }
 
 void TasksScrollArea::delete_task(const Task* task, TaskWidget* task_widget)
@@ -199,4 +196,10 @@ void TasksScrollArea::check_task_favourite(const Task* task)
 			}
 		}
 	}
+}
+
+void TasksScrollArea::task_edited(Task* task, TaskWidget* task_widget)
+{
+	harvest_handler->update_task(task);
+	task_widget->update_task(task);
 }

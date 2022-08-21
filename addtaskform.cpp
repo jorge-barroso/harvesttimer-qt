@@ -4,7 +4,7 @@
 #include <QMessageBox>
 
 AddTaskForm::AddTaskForm(QWidget* parent) :
-		QDialog(parent),
+		CustomTaskDialog(parent),
 		ui(new Ui::AddTaskForm)
 {
 	ui->setupUi(this);
@@ -52,36 +52,15 @@ void AddTaskForm::on_favourite_button_clicked()
 	this->reset_and_close();
 }
 
-
-void AddTaskForm::on_cancel_button_clicked()
-{
-	this->reset_and_close();
-}
-
 void AddTaskForm::add_projects(const std::vector<HarvestProject>& new_projects)
 {
-	projects = new_projects;
-	for (const HarvestProject& project: projects)
-	{
-		ui->project_dropdown->addItem(project.project_name);
-	}
-
-	on_project_dropdown_currentIndexChanged(0);
+	CustomTaskDialog::add_projects(new_projects, ui->project_dropdown, ui->task_dropdown);
 }
+
 
 void AddTaskForm::on_project_dropdown_currentIndexChanged(int index)
 {
-	ui->task_dropdown->clear();
-	for (const HarvestTask& task: projects[index].task)
-	{
-		ui->task_dropdown->addItem(task.task_name);
-	}
-}
-
-void AddTaskForm::reset_and_close()
-{
-	this->close();
-	this->reset_inputs();
+	CustomTaskDialog::new_project_chosen(index, ui->task_dropdown);
 }
 
 void AddTaskForm::reset_inputs()
@@ -98,8 +77,8 @@ void AddTaskForm::add_task_from_favourites(const Task* task)
 	if (index==-1)
 	{
 		QMessageBox::warning(this,
-							 QApplication::translate("AddTaskForm", "Could not find project"),
-							 QApplication::translate("AddTaskForm", "The project this task is assigned to does not exist or has been renamed, please update your favourites to keep using them")
+							 QApplication::translate("TaskForm", "Could not find project"),
+							 QApplication::translate("TaskForm", "The project this task is assigned to does not exist or has been renamed, please update your favourites to keep using them")
 		);
 		return;
 	}
@@ -109,8 +88,8 @@ void AddTaskForm::add_task_from_favourites(const Task* task)
 	if (index==-1)
 	{
 		QMessageBox::warning(this,
-							 QApplication::translate("AddTaskForm", "Could not find task"),
-							 QApplication::translate("AddTaskForm", "The task selected does not exist or has been renamed, please update your favourites to keep using them")
+							 QApplication::translate("TaskForm", "Could not find task"),
+							 QApplication::translate("TaskForm", "The task selected does not exist or has been renamed, please update your favourites to keep using them")
 		);
 		return;
 	}

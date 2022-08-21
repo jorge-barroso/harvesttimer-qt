@@ -2,6 +2,8 @@
 #include "ui_taskwidget.h"
 #include "task.h"
 #include <QSizePolicy>
+#include <QtWidgets>
+#include <QMessageBox>
 
 // TODO edit to allow changing all task details, both in widget and on the system
 TaskWidget::TaskWidget(Task* task, QWidget* parent) :
@@ -10,6 +12,18 @@ TaskWidget::TaskWidget(Task* task, QWidget* parent) :
 		task{ task }
 {
 	ui->setupUi(this);
+
+	this->update_internal_widgets();
+}
+
+
+TaskWidget::~TaskWidget()
+{
+	delete ui;
+}
+
+void TaskWidget::update_internal_widgets()
+{
 	ui->project_name_label->setText(task->project_name);
 	ui->task_name_label->setText(task->task_name);
 	ui->time_label->setText(task->time_tracked.toString("hh:mm"));
@@ -35,9 +49,18 @@ TaskWidget::TaskWidget(Task* task, QWidget* parent) :
 	}
 }
 
-TaskWidget::~TaskWidget()
+void TaskWidget::update_task(Task* new_task)
 {
-	delete ui;
+	task->project_id = new_task->project_id;
+	task->project_name = new_task->project_name;
+	task->task_id = new_task->task_id;
+	task->note = new_task->note;
+	task->time_tracked = new_task->time_tracked;
+
+	delete new_task;
+
+	update_internal_widgets();
+
 }
 
 void TaskWidget::addMinute()
@@ -62,7 +85,14 @@ void TaskWidget::addMinute()
 
 void TaskWidget::on_delete_button_clicked()
 {
-	emit task_deleted(task, this);
+	QMessageBox::StandardButton reply;
+	reply = QMessageBox::question(this,
+								  QApplication::translate("DeleteTask", "Delete Task"),
+								  QApplication::translate("DeleteTask", "Are you sure about deleting this task? This action can't be undone."),
+								  QMessageBox::Yes|QMessageBox::No);
+	if (reply == QMessageBox::Yes) {
+		emit task_deleted(task, this);
+	}
 }
 
 

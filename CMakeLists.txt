@@ -47,7 +47,12 @@ add_executable(harvest
         customscrollarea.h
         task.cpp
         customtrayicon.cpp
-        customtrayicon.h)
+        customtrayicon.h
+        edittaskform.cpp
+        edittaskform.h
+        edittaskform.ui
+        customtaskdialog.cpp
+        customtaskdialog.h)
 
 #
 

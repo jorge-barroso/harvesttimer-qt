@@ -40,6 +40,8 @@ class TasksScrollArea : public CustomScrollArea
 
 		void task_out_of_favourites(const Task* task);
 
+		void task_to_edit(const Task* task, TaskWidget* widget);
+
 	public slots:
 
 		void add_task(Task* task);
@@ -47,6 +49,8 @@ class TasksScrollArea : public CustomScrollArea
 		void uncheck_task_favourite(const Task* task);
 
 		void check_task_favourite(const Task* task);
+
+		void task_edited(Task* task, TaskWidget* task_widget);
 
 	private slots:
 

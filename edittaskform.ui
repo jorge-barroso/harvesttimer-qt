@@ -34,6 +34,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="delete_button">
+       <property name="styleSheet">
+        <string notr="true">background-color: red</string>
+       </property>
        <property name="text">
         <string>Delete</string>
        </property>

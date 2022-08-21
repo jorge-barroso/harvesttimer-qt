@@ -44,13 +44,13 @@
     <name>DeleteTask</name>
     <message>
         <location filename="edittaskform.cpp" line="115"/>
-        <location filename="taskwidget.cpp" line="89"/>
+        <location filename="taskwidget.cpp" line="90"/>
         <source>Delete Task</source>
         <translation>Eliminar Tarea</translation>
     </message>
     <message>
         <location filename="edittaskform.cpp" line="116"/>
-        <location filename="taskwidget.cpp" line="90"/>
+        <location filename="taskwidget.cpp" line="91"/>
         <source>Are you sure about deleting this task? This action can&apos;t be undone.</source>
         <translation>¿Seguro que quieres eliminar esta tarea? Esta acción no se puede deshacer.</translation>
     </message>
@@ -68,12 +68,12 @@
         <translation>Confirmar</translation>
     </message>
     <message>
-        <location filename="edittaskform.ui" line="38"/>
+        <location filename="edittaskform.ui" line="41"/>
         <source>Delete</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="edittaskform.ui" line="45"/>
+        <location filename="edittaskform.ui" line="48"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>

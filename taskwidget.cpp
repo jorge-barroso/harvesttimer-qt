@@ -5,7 +5,6 @@
 #include <QtWidgets>
 #include <QMessageBox>
 
-// TODO edit to allow changing all task details, both in widget and on the system
 TaskWidget::TaskWidget(Task* task, QWidget* parent) :
 		QWidget(parent),
 		ui(new Ui::TaskWidget),

@@ -53,6 +53,7 @@ void TaskWidget::update_task(Task* new_task)
 	task->project_id = new_task->project_id;
 	task->project_name = new_task->project_name;
 	task->task_id = new_task->task_id;
+	task->task_name = new_task->task_name;
 	task->note = new_task->note;
 	task->time_tracked = new_task->time_tracked;
 

@@ -140,12 +140,14 @@ class HarvestHandler : public QObject
 
 		static void get_projects_data(const QJsonDocument& json_payload, std::vector<HarvestProject>& projects_vector);
 
-		static QJsonDocument read_reply(QNetworkReply* reply);
+		static QJsonDocument read_close_reply(QNetworkReply* reply);
 
 		static bool default_error_check(QNetworkReply* reply, const QString& base_error_title,
 										const QString& base_error_body);
 
 		void check_authenticate();
+
+        static QString get_http_message(const QString& message);
 
 		std::unordered_map<size_t, Task*> tasks_queue;
 

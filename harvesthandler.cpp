@@ -158,7 +158,6 @@ void HarvestHandler::new_connection()
     auth_socket = auth_server->nextPendingConnection();
 
     connect(auth_socket, &QTcpSocket::readyRead, this, &HarvestHandler::code_received);
-    code_received();
 }
 
 void HarvestHandler::code_received()

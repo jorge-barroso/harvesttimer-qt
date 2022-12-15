@@ -9,11 +9,11 @@
     </message>
     <message>
         <source>The project this task is assigned to does not exist or has been renamed, please update your favourites to keep using them</source>
-        <translation type="vanished">The project this task is assigned to does not exist or has been renamed, please update your favorites to keep using them</translation>
+        <translation>The project this task is assigned to does not exist or has been renamed, please update your favorites to keep using them</translation>
     </message>
     <message>
         <source>The task selected does not exist or has been renamed, please update your favourites to keep using them</source>
-        <translation type="vanished">The task selected does not exist or has been renamed, please update your favorites to keep using them</translation>
+        <translation>The task selected does not exist or has been renamed, please update your favorites to keep using them</translation>
     </message>
     <message>
         <source>Tasks</source>
@@ -27,6 +27,14 @@
         <source>Cancel</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Could not find project</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Could not find task</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>DeleteTask</name>
@@ -36,6 +44,10 @@
     </message>
     <message>
         <source>Are you sure about deleting this task? This action cannot be undone.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Are you sure about deleting this task? This action can&apos;t be undone.</source>
         <translation></translation>
     </message>
 </context>

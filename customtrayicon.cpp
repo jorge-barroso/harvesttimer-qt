@@ -6,7 +6,7 @@
 #include "mainwindow.h"
 #include <QApplication>
 
-CustomTrayIcon::CustomTrayIcon(QObject* parent)
+CustomTrayIcon::CustomTrayIcon(QWidget* parent)
 	: QSystemTrayIcon(parent)
 	, tray_icon{ QSystemTrayIcon(QIcon(":/icons/resources/icons/monochrome/32x32.png"), this) }
 	, tray_menu()
@@ -62,12 +62,6 @@ void CustomTrayIcon::show_hide(const QSystemTrayIcon::ActivationReason& activati
 	auto parent{ dynamic_cast<MainWindow*>(this->parent()) };
 	switch (activation_reason)
 	{
-		case QSystemTrayIcon::Trigger:
-		{
-			// TODO needs improving
-			this->tray_menu.popup(QCursor::pos());
-			break;
-		}
 		case QSystemTrayIcon::Context:
 		{
 			if (parent->isVisible())

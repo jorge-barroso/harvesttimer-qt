@@ -155,9 +155,10 @@ bool HarvestHandler::json_auth_is_safely_active()
 
 void HarvestHandler::new_connection()
 {
-	auth_socket = auth_server->nextPendingConnection();
-	auth_server->close();
-	connect(auth_socket, &QTcpSocket::readyRead, this, &HarvestHandler::code_received);
+    auth_socket = auth_server->nextPendingConnection();
+
+    connect(auth_socket, &QTcpSocket::readyRead, this, &HarvestHandler::code_received);
+    code_received();
 }
 
 void HarvestHandler::code_received()
@@ -166,11 +167,15 @@ void HarvestHandler::code_received()
 	{
 		QStringList tokens = QString(auth_socket->readLine()).split(QRegularExpression("[ \r\n][ \r\n]*"));
 
-		auth_socket->write("Authentication successful, you may now close this tab");
-		auth_socket->flush();
-		auth_socket->close();
-		delete auth_socket;
-		delete auth_server;
+        const QString message_string{QApplication::translate("HarvestHandler",
+                                                       "Authentication successful, you may now close this tab")};
+        const QString final_message = get_http_message(message_string);
+        auth_socket->write(final_message.toUtf8());
+        auth_socket->flush();
+        auth_socket->close();
+        auth_server->close();
+        auth_socket->deleteLater();
+        auth_server->deleteLater();
 
 		for (QString& token: tokens)
 		{
@@ -225,7 +230,7 @@ void HarvestHandler::authentication_received(const QNetworkReply* reply)
 
 	// reply is originally non-const so this cast should be safe while allowing to use it
 	// as const in the previous error handling
-	json_auth = read_reply(const_cast<QNetworkReply*>(reply));
+	json_auth = read_close_reply(const_cast<QNetworkReply *>(reply));
 	QJsonObject json_object{ json_auth.object() };
 	qint64 seconds{ json_object["expires_in"].toInteger() };
 	json_object.insert("expires_on", QDateTime::currentDateTime().addSecs(seconds).toMSecsSinceEpoch());
@@ -236,10 +241,10 @@ void HarvestHandler::authentication_received(const QNetworkReply* reply)
 	emit ready();
 }
 
-QJsonDocument HarvestHandler::read_reply(QNetworkReply* reply)
+QJsonDocument HarvestHandler::read_close_reply(QNetworkReply* reply)
 {
 	QByteArray response_body{ static_cast<QString>(reply->readAll()).toUtf8() };
-	reply->close();
+    reply->deleteLater();
 	return QJsonDocument::fromJson(response_body);
 }
 
@@ -296,7 +301,6 @@ void HarvestHandler::authenticate_request(QString* auth_code, QString* refresh_t
 	loop.exec();
 
 	authentication_received(reply);
-	reply->deleteLater();
 }
 
 
@@ -304,7 +308,8 @@ std::vector<HarvestProject> HarvestHandler::update_user_data()
 {
 	if(!is_network_reachable)
 	{
-		QMessageBox::warning(nullptr, QApplication::translate("HarvestHandler", "Network Unreachable"),
+		QMessageBox::warning(nullptr,
+                             QApplication::translate("HarvestHandler", "Network Unreachable"),
 							 QApplication::translate("HarvestHandler", "You are currently not connected to the internet, please reconnect and try again"));
 		return projects;
 	}
@@ -325,7 +330,7 @@ std::vector<HarvestProject> HarvestHandler::update_user_data()
 			qDebug() << reply->error();
 		}
 
-		const QJsonDocument json_payload{ read_reply(reply) };
+		const QJsonDocument json_payload{ read_close_reply(reply) };
 		get_projects_data(json_payload, projects);
 
 		if (total_pages == -1)
@@ -540,7 +545,7 @@ void HarvestHandler::tasks_list_ready()
 	}
 
 	// Get response from the reply object
-	const QJsonDocument list_tasks_response{ read_reply(reply) };
+	const QJsonDocument list_tasks_response{ read_close_reply(reply) };
 	const QJsonValue tasks_object{ list_tasks_response.object().value("time_entries") };
 
 	for (const QJsonValueRef&& harvestTask: tasks_object.toArray())
@@ -587,7 +592,7 @@ void HarvestHandler::add_task_checks()
 	}
 
 	// Get response from the reply object
-	const QJsonDocument add_task_response{ read_reply(reply) };
+	const QJsonDocument add_task_response{ read_close_reply(reply) };
 
 	const long long int project_id{ add_task_response["project"]["id"].toInteger() };
 	const long long int task_id{ add_task_response["task"]["id"].toInteger() };
@@ -650,7 +655,7 @@ bool HarvestHandler::default_error_check(QNetworkReply* reply, const QString& ba
 	}
 	if (reply->error() != QNetworkReply::NetworkError::NoError)
 	{
-		const QJsonDocument error_report{ read_reply(const_cast<QNetworkReply*>(reply)) };
+		const QJsonDocument error_report{ read_close_reply(const_cast<QNetworkReply *>(reply)) };
 		const QString error_string{ base_error_body + error_report["error"].toString() };
 		QMessageBox::information(nullptr, base_error_title, error_string);
 		return true;
@@ -661,4 +666,16 @@ bool HarvestHandler::default_error_check(QNetworkReply* reply, const QString& ba
 void HarvestHandler::set_network_reachability(const QNetworkInformation::Reachability& reachability)
 {
 	is_network_reachable = reachability == QNetworkInformation::Reachability::Online;
+}
+
+QString HarvestHandler::get_http_message(const QString& message) {
+    QString final_message;
+    final_message.append("HTTP/1.0 200 OK\r\n");
+    final_message.append("Content-Type: text/html; charset=utf-8\r\n\r\n");
+    final_message.append("<html>");
+    final_message.append("<body>");
+    final_message.append(message);
+    final_message.append("</body>");
+    final_message.append("</html>");
+    return final_message;
 }

@@ -49,9 +49,11 @@
         <translation>Eliminar Tarea</translation>
     </message>
     <message>
-        <location filename="edittaskform.cpp" line="116"/>
-        <location filename="taskwidget.cpp" line="91"/>
         <source>Are you sure about deleting this task? This action can&apos;t be undone.</source>
+        <translation type="vanished">¿Seguro que quieres eliminar esta tarea? Esta acción no se puede deshacer.</translation>
+    </message>
+    <message>
+        <source>Are you sure about deleting this task? This action cannot be undone.</source>
         <translation>¿Seguro que quieres eliminar esta tarea? Esta acción no se puede deshacer.</translation>
     </message>
 </context>
@@ -232,6 +234,10 @@
         <source>There was an error loading the system network information manager, the application will not be aware of changes in the network status</source>
         <oldsource>There was an error loading the system network manager information, the application will not be aware of changes in the network status</oldsource>
         <translation>Hubo un error cargando el sistema de información de red, la aplicación no desconocerá posibles cambios en el estado de red</translation>
+    </message>
+    <message>
+        <source>Authentication successful, you may now close this tab</source>
+        <translation>Inicio de sesión completado, puedes cerrar esta pestaña</translation>
     </message>
 </context>
 <context>

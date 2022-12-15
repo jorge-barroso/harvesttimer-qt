@@ -88,7 +88,7 @@ void TaskWidget::on_delete_button_clicked()
 	QMessageBox::StandardButton reply;
 	reply = QMessageBox::question(this,
 								  QApplication::translate("DeleteTask", "Delete Task"),
-								  QApplication::translate("DeleteTask", "Are you sure about deleting this task? This action can't be undone."),
+								  QApplication::translate("DeleteTask", "Are you sure about deleting this task? This action cannot be undone."),
 								  QMessageBox::Yes|QMessageBox::No);
 	if (reply == QMessageBox::Yes) {
 		emit task_deleted(task, this);

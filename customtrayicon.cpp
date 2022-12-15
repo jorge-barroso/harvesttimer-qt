@@ -6,7 +6,7 @@
 #include "mainwindow.h"
 #include <QApplication>
 
-CustomTrayIcon::CustomTrayIcon(QWidget* parent)
+CustomTrayIcon::CustomTrayIcon(QObject* parent)
 	: QSystemTrayIcon(parent)
 	, tray_icon{ QSystemTrayIcon(QIcon(":/icons/resources/icons/monochrome/32x32.png"), this) }
 	, tray_menu()

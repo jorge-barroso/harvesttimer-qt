@@ -52,7 +52,7 @@ add_executable(harvest
         edittaskform.h
         edittaskform.ui
         customtaskdialog.cpp
-        customtaskdialog.h)
+        customtaskdialog.h addtaskaction.cpp addtaskaction.h quitaction.cpp quitaction.h showorhideaction.cpp showorhideaction.h)
 
 #
 

@@ -10,9 +10,9 @@ CustomTrayIcon::CustomTrayIcon(QObject* parent)
 	: QSystemTrayIcon(parent)
 	, tray_icon{ QSystemTrayIcon(QIcon(":/icons/resources/icons/monochrome/32x32.png"), this) }
 	, tray_menu()
-	, add_task_action{ QAction(QApplication::translate("Tray Icon", "Add Task"), &tray_icon) }
-	, quit_action{ QAction(QApplication::translate("Tray Icon", "Exit"), &tray_icon) }
-	, show_hide_action{ QAction(QApplication::translate("Tray Icon", "Show/Hide"), &tray_icon) }
+	, add_task_action{ AddTaskAction(&tray_icon) }
+	, quit_action{ QuitAction(&tray_icon) }
+	, show_hide_action{ ShowOrHideAction(&tray_icon) }
 {
 	connect(&tray_icon, &QSystemTrayIcon::activated, this, &CustomTrayIcon::show_hide);
 	connect(&quit_action, &QAction::triggered, this, &CustomTrayIcon::exit_triggered);

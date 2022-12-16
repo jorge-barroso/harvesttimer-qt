@@ -9,6 +9,9 @@
 #include <QSystemTrayIcon>
 #include <QAction>
 #include <QMenu>
+#include "addtaskaction.h"
+#include "quitaction.h"
+#include "showorhideaction.h"
 
 class CustomTrayIcon : public QSystemTrayIcon
 {
@@ -31,11 +34,11 @@ class CustomTrayIcon : public QSystemTrayIcon
 	private:
 		QSystemTrayIcon tray_icon;
 
-		QAction quit_action;
+		QuitAction quit_action;
 
-		QAction show_hide_action;
+        ShowOrHideAction show_hide_action;
 
-		QAction add_task_action;
+		AddTaskAction add_task_action;
 
 		QMenu tray_menu;
 };

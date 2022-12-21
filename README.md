@@ -1,5 +1,7 @@
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U6U6ECJZ8)
 [![liberapay](https://img.shields.io/liberapay/receives/jorge-barroso.svg?logo=liberapay)](https://liberapay.com/jorge-barroso/donate)
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/jorgebaam)
+
 
 # Harvest Timer Qt
 A [Qt](https://www.qt.io/) app that integrates with [Harvest](https://www.getharvest.com) to keep track of the time invested in your projects.

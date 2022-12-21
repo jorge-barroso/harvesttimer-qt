@@ -11,8 +11,8 @@ Ideal for [KDE](https://kde.org/) desktops but 100% suitable for any other OS an
 ## First Run
 You will need to log in the first time you use the application.
 
-The first run system needs some work, but still, you should be able to use it to log in and come back to the app once you're done.
-If that seems to fail, you can just reopen the app, and you will see how everything has been done: you are logged in and ready to go.
+On the first run, the app will open the Harvest login page in a browser for you to log in and provide access to the app.
+Once you have logged in and see the message "Authentication successful, you may now close this tab" (depending on your system language) the app will load your data and open up ready to use
 
 ## App Screenshots
 ### Main Window
@@ -29,11 +29,14 @@ If that seems to fail, you can just reopen the app, and you will see how everyth
 
 
 ## Installation
-You can build the app for yourself, or simply grab the prebuilt binary in the [releases section](https://github.com/jorge-barroso/harvesttimer-qt/releases).
+You can build the app for yourself, 
+or simply grab the prebuilt binary in the [releases section](https://github.com/jorge-barroso/harvesttimer-qt/releases).
 Additionally, the distros listed below have the app in their repos.
 
 ### Binary File
-If you are happy with just grabbing the binary file, you can do so from the latest release in the [releases section](https://github.com/jorge-barroso/harvesttimer-qt/releases), download the binary pack and use it on your system as you prefer.
+If you are happy with just grabbing the binary file,
+you can do so from the latest release in the [releases section](https://github.com/jorge-barroso/harvesttimer-qt/releases),
+download the binary pack and use it on your system as you prefer.
 
 ### DEB File
 You can install the deb package attached on every [release](https://github.com/jorge-barroso/harvesttimer-qt/releases).

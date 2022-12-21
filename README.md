@@ -60,3 +60,9 @@ The app has very few dependencies, but you need to bear these in mind especially
     - Ubuntu: [qt6-base-dev](https://packages.ubuntu.com/search?keywords=qt6-base-dev&searchon=names&suite=all&section=all)
     - Fedora: [qt6-qtbase](https://src.fedoraproject.org/rpms/qt6-qtbase)
     - Arch: [qt6-base](https://archlinux.org/packages/extra/x86_64/qt6-base/)
+
+## Troubleshoot
+### No Data
+If you have logged in and no data is showing, login to the web portal and verify that you have projects and tasks assigned to you.
+
+If that fails, you can try re-running the login process by deleting all files under "~/.config/Harvest Timer Qt": ```rm ~/.config/Harvest\ Timer\ Qt/*```

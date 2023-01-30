@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 4, 0))
     if (!QNetworkInformation::loadDefaultBackend())
 # else
-    if (!QNetworkInformation::load(QNetworkInformation::availableBackends().at(0)))
+    if (!QNetworkInformation::load(QNetworkInformation::availableBackends().first()))
 #endif
     {
         QMessageBox::warning(nullptr,

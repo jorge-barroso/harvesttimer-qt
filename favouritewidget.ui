@@ -24,6 +24,7 @@
     <widget class="QLabel" name="project_label">
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -36,6 +37,7 @@
     <widget class="QLabel" name="task_label">
      <property name="font">
       <font>
+       <weight>50</weight>
        <bold>false</bold>
       </font>
      </property>
@@ -50,8 +52,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset resource="icons.qrc">
-       <normaloff>:/icons/resources/icons/bin.png</normaloff>:/icons/resources/icons/bin.png</iconset>
+      <iconset theme="list-remove"/>
      </property>
     </widget>
    </item>

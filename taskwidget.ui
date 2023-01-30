@@ -32,6 +32,7 @@
      <property name="font">
       <font>
        <pointsize>11</pointsize>
+       <weight>75</weight>
        <bold>true</bold>
        <kerning>true</kerning>
       </font>
@@ -46,6 +47,7 @@
      <property name="font">
       <font>
        <pointsize>9</pointsize>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -81,9 +83,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="icons.qrc">
-         <normaloff>:/icons/resources/icons/play.png</normaloff>
-         <normalon>:/icons/resources/icons/stop.png</normalon>:/icons/resources/icons/play.png</iconset>
+        <iconset theme="media-playback-stop"/>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -99,9 +99,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="icons.qrc">
-         <normaloff>:/icons/resources/icons/star.png</normaloff>
-         <normalon>:/icons/resources/icons/star-black.png</normalon>:/icons/resources/icons/star.png</iconset>
+        <iconset theme="bookmark-new"/>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -117,8 +115,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="icons.qrc">
-         <normaloff>:/icons/resources/icons/edit.png</normaloff>:/icons/resources/icons/edit.png</iconset>
+        <iconset theme="document-edit"/>
        </property>
       </widget>
      </item>
@@ -128,8 +125,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="icons.qrc">
-         <normaloff>:/icons/resources/icons/bin.png</normaloff>:/icons/resources/icons/bin.png</iconset>
+        <iconset theme="list-remove"/>
        </property>
       </widget>
      </item>

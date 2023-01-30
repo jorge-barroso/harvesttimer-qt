@@ -6,6 +6,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 23)
+set(QT6_MIN_VERSION 6.2)
 
 include_directories(.)
 
@@ -67,7 +68,7 @@ install(TARGETS harvest
         )
 
 
-find_package(Qt6 REQUIRED
+find_package(Qt6 ${QT6_MIN_VERSION} REQUIRED
         Core
         Gui
         Widgets

@@ -117,7 +117,8 @@ jobs:
           ls -lart
           mkdir -p .debpkg/DEBIAN
           
-          install -Dm755 ./usr "${{github.workspace}}/.debpkg/"
+          ls -lartR ./usr
+          find ./usr -type f -exec install -Dm755 '{}' "${{github.workspace}}/.debpkg/{}" \;
           install -Dm644 "./resources/desktop/harvest.svg" "${{github.workspace}}/.debpkg/usr/share/icons/hicolor/scalable/apps/harvest.svg"
           install -Dm755 "./resources/desktop/harvest.desktop" "${{github.workspace}}/.debpkg/usr/share/applications/harvest.desktop"
           install -Dm644 "./debian/copyright" "${{github.workspace}}/.debpkg/DEBIAN/copyright";

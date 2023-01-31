@@ -53,7 +53,7 @@ jobs:
       - name: Install to DEB
         run: |
           echo "Adding to deb package directory"
-          ls -lart cd ${{github.workspace}}
+          ls -lart ${{github.workspace}}
           ls -lart ..
           cd ${{github.workspace}}/build
           mkdir -p ${{github.workspace}}/build/.debpkg/usr/bin

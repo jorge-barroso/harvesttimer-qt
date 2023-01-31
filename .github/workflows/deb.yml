@@ -20,12 +20,15 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Configure CMake
+    - name: Install Dependencies
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: |
-        sudo apt install qt6-base-dev qt6-l10n-tools qt6-tools-dev qt6-tools-dev-tools libqt6svg6
-        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=/usr/bin
+      run: sudo apt install build-essential libgl1-mesa-dev qt6-base-dev qt6-l10n-tools qt6-tools-dev qt6-tools-dev-tools libqt6svg6
+
+    - name: Configure CMak
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=/usr/bin
 
     - name: Build
       # Build your program with the given configuration

@@ -58,6 +58,7 @@ jobs:
         mkdir -p "${dist_dir}"
         cd "${{github.workspace}}/build"
         make DESTDIR="${dist_dir}" install
+        cd "${{github.workspace}}"
         cp -r resources "${dist_dir}"
         cp -r debian "${dist_dir}"
         cp -r LICENSE "${dist_dir}"

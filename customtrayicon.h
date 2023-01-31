@@ -21,6 +21,8 @@ class CustomTrayIcon : public QSystemTrayIcon
 
 		~CustomTrayIcon() override;
 
+        void reset_icon(bool is_dark);
+
 	private slots:
 
 		static void exit_triggered(bool checked = false);

@@ -44,6 +44,8 @@ class MainWindow : public QMainWindow
 
 		void on_favourites_button_clicked();
 
+        void changeEvent(QEvent * event) override;
+
 		void task_started(Task* task);
 
 		void harvest_handler_ready();

@@ -160,7 +160,15 @@ void MainWindow::reachability_changed(const QNetworkInformation::Reachability& r
 
 // We can just grab any widget and check whether the text is darker/lighter than the base
 bool MainWindow::isDarkTheme() {
-    auto textColor{this->ui->date_label->palette().windowText().color()};
-    auto bgColor{this->ui->date_label->palette().base().color()};
+    auto textColor{this->palette().windowText().color()};
+    auto bgColor{this->palette().base().color()};
     return textColor.rgb() > bgColor.rgb();
+}
+
+void MainWindow::changeEvent(QEvent * event) {
+    QWidget::changeEvent(event);
+    if (event->type() == QEvent::PaletteChange)
+    {
+        tray_icon->reset_icon(this->isDarkTheme());
+    }
 }

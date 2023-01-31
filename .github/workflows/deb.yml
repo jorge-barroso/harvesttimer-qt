@@ -53,9 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+      - uses: build
       - name: Building Archives
         run: |
           assets="${{ env.APP_NAME }}_$(echo "${{ runner.os }}" | tr '[:upper:]' '[:lower:]')"
@@ -80,9 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+      - uses: build
       - name: Install to DEB
         run: |
           echo "Adding to deb package directory"

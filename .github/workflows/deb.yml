@@ -56,40 +56,10 @@ jobs:
 
         install -Dm755 "${{github.workspace}}/resources/desktop/harvest.desktop" "${{github.workspace}}/build/.debpkg/usr/share/applications/harvest.desktop"
 
+        install -Dm644 "${{github.workspace}}/debian/*" "${{github.workspace}}/build/.debpkg/DEBIAN/"
+        sed -i "s/\${copyright_year}/$(date '+%Y')/g" ${{github.workspace}}/build/.debpkg/DEBIAN/copyright
+
         ls -lart ${{github.workspace}}/build/.debpkg
-    - name: Add copyright
-      run: |
-        echo "Adding Copyright"
-        pwd
-        ls -lart ${{github.workspace}}/build/.debpkg
-        copyright_path="${{github.workspace}}/build/.debpkg/DEBIAN/copyright"
-        echo -e 'Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/' > "$copyright_path"
-        echo -e 'Upstream-Name: harvesttimer-qt' >> "$copyright_path"
-        echo -e 'Upstream-Contact: Jorge Barroso <jorge_barroso_11@hotmail.com>' >> "$copyright_path"
-        echo -e 'Source: https://github.com/jorge-barroso/harvesttimer-qt\n' >> "$copyright_path"
-        echo -e 'Files: *' >> "$copyright_path"
-        echo -e 'Copyright: 2022 Jorge Barroso <jorge_barroso_11@hotmail.com>\n' >> "$copyright_path"
-        echo -e 'License: GPL-3.0+\n' >> "$copyright_path"
-        echo -e 'Files: debian/*' >> "$copyright_path"
-        echo -e 'Copyright: 2022 Jorge Barroso <jorge_barroso_11@hotmail.com>' >> "$copyright_path"
-        echo -e 'License: GPL-3.0+\n' >> "$copyright_path"
-        echo -e 'License: GPL-3.0+' >> "$copyright_path"
-        echo -e ' This program is free software: you can redistribute it and/or modify' >> "$copyright_path"
-        echo -e ' it under the terms of the GNU General Public License as published by' >> "$copyright_path"
-        echo -e ' the Free Software Foundation, either version 3 of the License, or' >> "$copyright_path"
-        echo -e ' (at your option) any later version.' >> "$copyright_path"
-        echo -e ' .' >> "$copyright_path"
-        echo -e ' This package is distributed in the hope that it will be useful,' >> "$copyright_path"
-        echo -e ' but WITHOUT ANY WARRANTY; without even the implied warranty of' >> "$copyright_path"
-        echo -e ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the' >> "$copyright_path"
-        echo -e ' GNU General Public License for more details.' >> "$copyright_path"
-        echo -e ' .' >> "$copyright_path"
-        echo -e ' You should have received a copy of the GNU General Public License' >> "$copyright_path"
-        echo -e ' along with this program. If not, see <https://www.gnu.org/licenses/>.' >> "$copyright_path"
-        echo -e ' .' >> "$copyright_path"
-        echo -e ' On Debian systems, the complete text of the GNU General' >> "$copyright_path"
-        echo -e ' Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".' >> "$copyright_path"
-        ls -lart .debpkg
     - uses: jiro4989/build-deb-action@v2
       with:
         package: harvesttimer-qt

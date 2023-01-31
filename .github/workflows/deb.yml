@@ -1,10 +1,15 @@
-name: Create DEB
+name: Create Release
 
 on:
   push:
     tags:
       - 'v*.*.*'
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to manually tag the release'
+        required: true
+        type: string
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -48,7 +53,7 @@ jobs:
       - name: Install to DEB
         run: |
           echo "Adding to deb package directory"
-          ls -lart
+          ls -lart ..
           cd ${{github.workspace}}/build
           mkdir -p ${{github.workspace}}/build/.debpkg/usr/bin
           mkdir -p ${{github.workspace}}/build/.debpkg/DEBIAN
@@ -71,7 +76,7 @@ jobs:
           package: harvesttimer-qt
           package_root: ${{github.workspace}}/build/.debpkg
           maintainer: Jorge Barroso <jorge_barroso_11@hotmail.com>
-          version: 1.0.3
+          version: ${{ inputs.logLevel }} || ${{ github.ref }}
           arch: 'amd64'
           depends: 'qt6-base-dev, libqt6svg6'
           desc: 'Desktop app for Harvest, a simple time tracker and reporting tool for businesses with billing and expenses tracking.'

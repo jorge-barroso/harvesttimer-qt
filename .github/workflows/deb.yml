@@ -1,0 +1,91 @@
+name: CMake
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
+    # You can convert this to a matrix build if you need cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install Dependencies
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: apt install qt6-base-dev qt6-l10n-tools qt6-tools-dev qt6-tools-dev-tools libqt6svg6
+
+    - name: Configure CMake
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=/usr/bin
+
+    - name: Build
+      # Build your program with the given configuration
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+    -name: Install to DEB
+    run: |
+      pkgdir=".debpkg"
+      mkdir -p ${pkgdir}/usr/bin
+      mkdir -p ${pkgdir}/DEBIAN
+      make DESTDIR=".debpkg/" install || echo "'make install' failed" ; return 1
+      for _size in 16 24 32 48 64 96 128 256 512; do
+        install -Dm644 "${{github.workspace}}/resources/icons/hicolor/${_size}x${_size}.png" "$pkgdir/usr/share/icons/hicolor/${_size}x${_size}/apps/harvest.png"
+      done
+
+      install -Dm644 "${{github.workspace}}/resources/desktop/harvest.svg" "${pkgdir}/usr/share/icons/hicolor/scalable/apps/harvest.svg"
+
+	    install -Dm755 "${{github.workspace}}/resources/desktop/harvest.desktop" "${pkgdir}/usr/share/applications/harvest.desktop"
+
+    -name: Add copyright
+    run: |
+      echo 'Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/                                                                                                                                                                                                                                                                                                ✔ 
+Upstream-Name: harvesttimer-qt
+Upstream-Contact: Jorge Barroso <jorge_barroso_11@hotmail.com>
+Source: https://github.com/jorge-barroso/harvesttimer-qt
+
+Files: *
+Copyright: 2022 Jorge Barroso <jorge_barroso_11@hotmail.com>
+
+License: GPL-3.0+
+
+Files: debian/*
+Copyright: 2022 Jorge Barroso <jorge_barroso_11@hotmail.com>
+License: GPL-3.0+
+
+License: GPL-3.0+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ .
+ This package is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <https://www.gnu.org/licenses/>.
+ .
+ On Debian systems, the complete text of the GNU General
+ Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".' > .debpkg/DEBIAN/copyright
+    - uses: jiro4989/build-deb-action@v2
+      with:
+        package: harvesttimer-qt
+        package_root: .debpkg
+        maintainer: Jorge Barroso <jorge_barroso_11@hotmail.com>
+        version: ${{ github.ref }} # refs/tags/v*.*.*
+        arch: 'amd64'
+        depends: 'qt6-base-dev, libqt6svg6'
+        desc: 'Desktop app for Harvest, a simple time tracker and reporting tool for businesses with billing and expenses tracking.'

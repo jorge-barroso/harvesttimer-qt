@@ -69,6 +69,7 @@ jobs:
       with:
         name: binary-and-resources
         path: ./res
+        retention-days: 1
 
   build-archives:
     runs-on: ubuntu-latest
@@ -100,6 +101,7 @@ jobs:
           path: |
             dist/*.tar.gz
             dist/*.zip
+          retention-days: 1
 
   build-deb-package:
     runs-on: ubuntu-latest
@@ -139,3 +141,4 @@ jobs:
         with:
           name: deb-package
           path: ./*.deb
+          retention-days: 1

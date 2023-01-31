@@ -9,9 +9,11 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 		, ui(new Ui::MainWindow)
 		, favourites_form(config_dir, this)
 		, harvest_handler{ HarvestHandler::get_instance(config_dir) }
-		, tray_icon(this)
+		, tray_icon{ nullptr }
 {
 	ui->setupUi(this);
+
+    tray_icon = new CustomTrayIcon(this, this->isDarkTheme());
 
 	network_information = QNetworkInformation::instance();
 	if(network_information!=nullptr)
@@ -52,6 +54,7 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 MainWindow::~MainWindow()
 {
 	delete ui;
+    delete tray_icon;
 	HarvestHandler::reset_instance();
 }
 
@@ -153,4 +156,19 @@ void MainWindow::reachability_changed(const QNetworkInformation::Reachability& r
 		harvest_handler->set_network_reachability(reachability);
 		this->harvest_handler_ready();
 	}
+}
+
+// We can just grab any widget and check whether the text is darker/lighter than the base
+bool MainWindow::isDarkTheme() {
+    auto textColor{this->palette().windowText().color()};
+    auto bgColor{this->palette().base().color()};
+    return textColor.rgb() > bgColor.rgb();
+}
+
+void MainWindow::changeEvent(QEvent * event) {
+    QWidget::changeEvent(event);
+    if (event->type() == QEvent::PaletteChange)
+    {
+        tray_icon->reset_icon(this->isDarkTheme());
+    }
 }

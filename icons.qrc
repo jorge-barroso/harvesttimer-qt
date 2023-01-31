@@ -8,6 +8,7 @@
         <file>resources/icons/stop.png</file>
         <file>resources/icons/today.png</file>
         <file>resources/icons/bin.png</file>
-        <file>resources/icons/monochrome/harvest.svg</file>
+        <file>resources/icons/monochrome/dark/harvest.svg</file>
+        <file>resources/icons/monochrome/light/harvest.svg</file>
     </qresource>
 </RCC>

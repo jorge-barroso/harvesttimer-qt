@@ -6,4 +6,4 @@
 #include <QApplication>
 
 AddTaskAction::AddTaskAction(QObject *parent)
-    : QAction(QIcon::fromTheme("list-add"), QApplication::translate("Tray Icon", "Add Task"), parent){}
+    : QAction(QIcon::fromTheme("list-add-symbolic"), QApplication::translate("Tray Icon", "Add Task"), parent){}

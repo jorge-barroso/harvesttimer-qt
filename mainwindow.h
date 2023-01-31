@@ -44,6 +44,8 @@ class MainWindow : public QMainWindow
 
 		void on_favourites_button_clicked();
 
+        void changeEvent(QEvent * event) override;
+
 		void task_started(Task* task);
 
 		void harvest_handler_ready();
@@ -63,9 +65,11 @@ class MainWindow : public QMainWindow
 		const QNetworkInformation* network_information;
 
 		// systray menu
-		CustomTrayIcon tray_icon;
+		CustomTrayIcon *tray_icon;
 
 		void closeEvent(QCloseEvent* event) override;
+
+        bool isDarkTheme();
 };
 
 #endif // MAINWINDOW_H

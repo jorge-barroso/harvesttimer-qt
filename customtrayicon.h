@@ -17,9 +17,11 @@ class CustomTrayIcon : public QSystemTrayIcon
 {
 	public:
 
-		explicit CustomTrayIcon(QObject* parent);
+		explicit CustomTrayIcon(QObject* parent, bool is_dark);
 
 		~CustomTrayIcon() override;
+
+        void reset_icon(bool is_dark);
 
 	private slots:
 
@@ -41,6 +43,8 @@ class CustomTrayIcon : public QSystemTrayIcon
 		AddTaskAction add_task_action;
 
 		QMenu tray_menu;
+
+    static QIcon get_icon(bool is_dark);
 };
 
 

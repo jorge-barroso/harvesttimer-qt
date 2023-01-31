@@ -6,9 +6,9 @@
 #include "mainwindow.h"
 #include <QApplication>
 
-CustomTrayIcon::CustomTrayIcon(QObject* parent)
+CustomTrayIcon::CustomTrayIcon(QObject* parent, const bool is_dark)
 	: QSystemTrayIcon(parent)
-	, tray_icon{ QSystemTrayIcon(QIcon(":/icons/resources/icons/monochrome/harvest.svg"), this) }
+    , tray_icon{QSystemTrayIcon(CustomTrayIcon::get_icon(is_dark), this)}
 	, tray_menu()
 	, add_task_action{ AddTaskAction(&tray_icon) }
 	, quit_action{ QuitAction(&tray_icon) }
@@ -79,4 +79,14 @@ void CustomTrayIcon::show_hide(const QSystemTrayIcon::ActivationReason& activati
 		default:
 			break;
 	}
+}
+
+void CustomTrayIcon::reset_icon(bool is_dark) {
+    tray_icon.setIcon(CustomTrayIcon::get_icon(is_dark));
+}
+
+QIcon CustomTrayIcon::get_icon(const bool is_dark) {
+    const QString resource = is_dark ? ":/icons/resources/icons/monochrome/dark/harvest.svg"
+                                     : ":/icons/resources/icons/monochrome/light/harvest.svg";
+    return QIcon(resource);
 }

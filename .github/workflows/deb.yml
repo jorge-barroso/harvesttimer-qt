@@ -57,7 +57,10 @@ jobs:
 
         install -Dm755 "${{github.workspace}}/resources/desktop/harvest.desktop" "${{github.workspace}}/build/.debpkg/usr/share/applications/harvest.desktop"
 
-        install -Dm644 "${{github.workspace}}/debian/*" "${{github.workspace}}/build/.debpkg/DEBIAN/"
+        for file in "${{github.workspace}}/debian/*";do
+          install -Dm644 "$file" "${{github.workspace}}/build/.debpkg/DEBIAN/";
+        done
+
         sed -i "s/\${copyright_year}/$(date '+%Y')/g" ${{github.workspace}}/build/.debpkg/DEBIAN/copyright
 
         ls -lart ${{github.workspace}}/build/.debpkg

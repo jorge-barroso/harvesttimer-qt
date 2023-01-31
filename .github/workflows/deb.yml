@@ -49,11 +49,14 @@ jobs:
         echo "Building binary"
         cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-  build-tar:
+  build-archives:
     runs-on: ubuntu-latest
     needs: build
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Building Archives
         run: |
           assets="${{ env.APP_NAME }}_$(echo "${{ runner.os }}" | tr '[:upper:]' '[:lower:]')"
           echo "$assets"

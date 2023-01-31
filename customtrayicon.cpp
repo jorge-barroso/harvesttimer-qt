@@ -8,7 +8,7 @@
 
 CustomTrayIcon::CustomTrayIcon(QObject* parent)
 	: QSystemTrayIcon(parent)
-	, tray_icon{ QSystemTrayIcon(QIcon(":/icons/resources/icons/monochrome/32x32.png"), this) }
+	, tray_icon{ QSystemTrayIcon(QIcon(":/icons/resources/icons/monochrome/harvest.svg"), this) }
 	, tray_menu()
 	, add_task_action{ AddTaskAction(&tray_icon) }
 	, quit_action{ QuitAction(&tray_icon) }

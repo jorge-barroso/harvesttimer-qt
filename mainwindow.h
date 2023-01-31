@@ -63,9 +63,11 @@ class MainWindow : public QMainWindow
 		const QNetworkInformation* network_information;
 
 		// systray menu
-		CustomTrayIcon tray_icon;
+		CustomTrayIcon *tray_icon;
 
 		void closeEvent(QCloseEvent* event) override;
+
+        bool isDarkTheme();
 };
 
 #endif // MAINWINDOW_H

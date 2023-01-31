@@ -52,16 +52,21 @@ jobs:
         echo '###################################'
         ls -lart build
 
+    - name: Preparing Artifact
+      run: |
+        dist_dir="${{github.workspace}}/res"
+        mkdir -p "${dist_dir}"
+        make DESTDIR="${dist_dir}" install
+        cp -r resources "${dist_dir}"
+        cp -r debian "${dist_dir}"
+        cp -r LICENSE "${dist_dir}"
+        cp -r *.md "${dist_dir}"
+
     - name: Archive Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: binary-and-resources
-        path: |
-          build/harvest
-          resources
-          debian
-          LICENSE
-          *.md
+        path: ./res
 
   build-archives:
     runs-on: ubuntu-latest
@@ -79,7 +84,7 @@ jobs:
           echo "$assets"
           mkdir -p "dist/$assets"
           pwd; ls -lart
-          cp -r harvest LICENSE README.* "dist/$assets/"
+          cp -r res/harvest res/LICENSE res/*.md "dist/$assets/"
           (
             cd dist
             zip -r "$assets.zip" "$assets"
@@ -89,7 +94,7 @@ jobs:
         shell: bash
       - uses: actions/upload-artifact@v3
         with:
-          name: artifact-${{ matrix.os }}
+          name: archives
           path: |
             dist/*.tar.gz
             dist/*.zip
@@ -109,23 +114,24 @@ jobs:
           mkdir -p ${{github.workspace}}/.debpkg/usr/bin
           mkdir -p ${{github.workspace}}/.debpkg/DEBIAN
           
+          cd res
           install -Dm755 ./harvest "${{github.workspace}}/.debpkg/usr/bin"
-          install -Dm644 "${{github.workspace}}/resources/desktop/harvest.svg" "${{github.workspace}}/.debpkg/usr/share/icons/hicolor/scalable/apps/harvest.svg"
-          install -Dm755 "${{github.workspace}}/resources/desktop/harvest.desktop" "${{github.workspace}}/.debpkg/usr/share/applications/harvest.desktop"
-          install -Dm644 "${{github.workspace}}/debian/copyright" "${{github.workspace}}/.debpkg/DEBIAN/copyright";
+          install -Dm644 "./resources/desktop/harvest.svg" "${{github.workspace}}/.debpkg/usr/share/icons/hicolor/scalable/apps/harvest.svg"
+          install -Dm755 "./resources/desktop/harvest.desktop" "${{github.workspace}}/.debpkg/usr/share/applications/harvest.desktop"
+          install -Dm644 "./debian/copyright" "${{github.workspace}}/.debpkg/DEBIAN/copyright";
           sed -i "s/\${copyright_year}/$(date '+%Y')/g" ${{github.workspace}}/.debpkg/DEBIAN/copyright
           
           for _size in 16 24 32 48 64 96 128 256 512; do
-            install -Dm644 "${{github.workspace}}/resources/icons/hicolor/${_size}x${_size}.png" "${{github.workspace}}/.debpkg/usr/share/icons/hicolor/${_size}x${_size}/apps/harvest.png"
+            install -Dm644 "./resources/icons/hicolor/${_size}x${_size}.png" "${{github.workspace}}/.debpkg/usr/share/icons/hicolor/${_size}x${_size}/apps/harvest.png"
           done
   
           ls -lart ${{github.workspace}}/.debpkg
       - uses: jiro4989/build-deb-action@v2
         with:
           package: ${{ env.APP_NAME }}
-          package_root: ${{github.workspace}}/build/.debpkg
+          package_root: ${{github.workspace}}/.debpkg
           maintainer: ${{ env.MAINTAINER }}
-          version: ${{ inputs.logLevel }} || ${{ github.ref }}
+          version: ${{ inputs.version }} || ${{ github.ref }}
           arch: 'amd64'
           depends: 'qt6-base-dev, libqt6svg6'
           desc: ${{ env.DESC }}

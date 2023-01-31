@@ -52,6 +52,7 @@ jobs:
           install -Dm644 "${{github.workspace}}/resources/icons/hicolor/${_size}x${_size}.png" "${{github.workspace}}/build/.debpkg/usr/share/icons/hicolor/${_size}x${_size}/apps/harvest.png"
         done
 
+        ls -lart
         install -Dm644 "${{github.workspace}}/resources/desktop/harvest.svg" "${{github.workspace}}/build/.debpkg/usr/share/icons/hicolor/scalable/apps/harvest.svg"
 
         install -Dm755 "${{github.workspace}}/resources/desktop/harvest.desktop" "${{github.workspace}}/build/.debpkg/usr/share/applications/harvest.desktop"

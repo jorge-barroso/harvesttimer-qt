@@ -56,6 +56,7 @@ jobs:
       run: |
         dist_dir="${{github.workspace}}/res"
         mkdir -p "${dist_dir}"
+        cd "${{github.workspace}}/build"
         make DESTDIR="${dist_dir}" install
         cp -r resources "${dist_dir}"
         cp -r debian "${dist_dir}"

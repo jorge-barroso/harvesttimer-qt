@@ -57,6 +57,10 @@ jobs:
 
         install -Dm755 "${{github.workspace}}/resources/desktop/harvest.desktop" "${{github.workspace}}/build/.debpkg/usr/share/applications/harvest.desktop"
 
+        sudo ls -lart "${{github.workspace}}/debian/"
+        echo "##########################################"
+        ls -lart "${{github.workspace}}/debian/"
+        
         for file in "${{github.workspace}}/debian/*";do
           install -Dm644 "$file" "${{github.workspace}}/build/.debpkg/DEBIAN/";
         done

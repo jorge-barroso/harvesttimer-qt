@@ -86,7 +86,7 @@ jobs:
           echo "$assets"
           mkdir -p "dist/$assets"
           pwd; ls -lart
-          cp -r res/harvest res/LICENSE res/*.md "dist/$assets/"
+          cp -r usr LICENSE *.md "dist/$assets/"
           (
             cd dist
             zip -r "$assets.zip" "$assets"

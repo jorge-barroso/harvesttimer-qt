@@ -42,7 +42,7 @@ jobs:
         ls -lart .
         mkdir -p ${{github.workspace}}/build/.debpkg/usr/bin
         mkdir -p ${{github.workspace}}/build/.debpkg/DEBIAN
-        make DESTDIR=".debpkg/" install || echo "'make install' failed" ; exit 1
+        make DESTDIR=".debpkg/" install || (echo "'make install' failed" ; exit 1)
         for _size in 16 24 32 48 64 96 128 256 512; do
           install -Dm644 "${{github.workspace}}/resources/icons/hicolor/${_size}x${_size}.png" "${{github.workspace}}/build/.debpkg/usr/share/icons/hicolor/${_size}x${_size}/apps/harvest.png"
         done

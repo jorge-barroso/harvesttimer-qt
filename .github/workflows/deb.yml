@@ -48,6 +48,9 @@ jobs:
       run: |
         echo "Building binary"
         cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+        ls -lart ${{github.workspace}}/build
+        echo '###################################'
+        ls -lart build
 
     - name: Archive Artifacts
       uses: actions/upload-artifact@v3
@@ -91,7 +94,7 @@ jobs:
             dist/*.tar.gz
             dist/*.zip
 
-  build-linux-packages:
+  build-deb-package:
     runs-on: ubuntu-latest
     needs: build
     steps:

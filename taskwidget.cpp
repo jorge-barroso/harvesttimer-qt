@@ -142,21 +142,21 @@ void TaskWidget::set_favourited()
 void TaskWidget::set_unfavourited()
 {
 	ui->add_favourite_button->setChecked(false);
-    ui->add_favourite_button->setIcon(QIcon::fromTheme("bookmark-new"));
+    ui->add_favourite_button->setIcon(QIcon::fromTheme("bookmark-new-symbolic"));
 	task->favourited = false;
 }
 
 void TaskWidget::set_started()
 {
 	ui->stop_resume_button->setChecked(true);
-    ui->stop_resume_button->setIcon(QIcon::fromTheme("media-playback-stop"));
+    ui->stop_resume_button->setIcon(QIcon::fromTheme("media-playback-stop-symbolic"));
 	task->started = true;
 }
 
 void TaskWidget::set_stopped()
 {
 	ui->stop_resume_button->setChecked(false);
-    ui->stop_resume_button->setIcon(QIcon::fromTheme("media-playback-start"));
+    ui->stop_resume_button->setIcon(QIcon::fromTheme("media-playback-start-symbolic"));
 	task->started = false;
 }
 

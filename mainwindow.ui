@@ -144,7 +144,8 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset theme="bookmarks"/>
+          <iconset theme="bookmarks">
+           <normaloff>.</normaloff>.</iconset>
          </property>
         </widget>
        </item>

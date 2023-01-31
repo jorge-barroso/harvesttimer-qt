@@ -39,6 +39,7 @@ jobs:
     - name: Install to DEB
       run: |
         cd ${{github.workspace}}/build
+        ls -lart .
         mkdir -p .debpkg/usr/bin
         mkdir -p .debpkg/DEBIAN
         make DESTDIR=".debpkg/" install || echo "'make install' failed" ; exit 1
@@ -82,7 +83,7 @@ jobs:
                .
                On Debian systems, the complete text of the GNU General
                Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".' > .debpkg/DEBIAN/copyright
-        ls -l .debpkg
+        ls -lart .debpkg
     - uses: jiro4989/build-deb-action@v2
       with:
         package: harvesttimer-qt

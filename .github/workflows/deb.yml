@@ -41,32 +41,42 @@ jobs:
         echo "Building binary"
         cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-    - name: Install to DEB
-      run: |
-        echo "Adding do deb package directory"
-        cd ${{github.workspace}}/build
-        mkdir -p ${{github.workspace}}/build/.debpkg/usr/bin
-        mkdir -p ${{github.workspace}}/build/.debpkg/DEBIAN
-        make DESTDIR=".debpkg/" install || (echo "'make install' failed" ; exit 1)
-        for _size in 16 24 32 48 64 96 128 256 512; do
-          install -Dm644 "${{github.workspace}}/resources/icons/hicolor/${_size}x${_size}.png" "${{github.workspace}}/build/.debpkg/usr/share/icons/hicolor/${_size}x${_size}/apps/harvest.png"
-        done
+  build-linux-packages:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Install to DEB
+        run: |
+          echo "Adding do deb package directory"
+          cd ${{github.workspace}}/build
+          mkdir -p ${{github.workspace}}/build/.debpkg/usr/bin
+          mkdir -p ${{github.workspace}}/build/.debpkg/DEBIAN
+          make DESTDIR=".debpkg/" install || (echo "'make install' failed" ; exit 1)
+          for _size in 16 24 32 48 64 96 128 256 512; do
+            install -Dm644 "${{github.workspace}}/resources/icons/hicolor/${_size}x${_size}.png" "${{github.workspace}}/build/.debpkg/usr/share/icons/hicolor/${_size}x${_size}/apps/harvest.png"
+          done
+  
+          ls -lart "${{github.workspace}}"
+          install -Dm644 "${{github.workspace}}/resources/desktop/harvest.svg" "${{github.workspace}}/build/.debpkg/usr/share/icons/hicolor/scalable/apps/harvest.svg"
+  
+          install -Dm755 "${{github.workspace}}/resources/desktop/harvest.desktop" "${{github.workspace}}/build/.debpkg/usr/share/applications/harvest.desktop"
+          
+          install -Dm644 "${{github.workspace}}/debian/copyright" "${{github.workspace}}/build/.debpkg/DEBIAN/copyright";
+          sed -i "s/\${copyright_year}/$(date '+%Y')/g" ${{github.workspace}}/build/.debpkg/DEBIAN/copyright
+  
+          ls -lart ${{github.workspace}}/build/.debpkg
+      - uses: jiro4989/build-deb-action@v2
+        with:
+          package: harvesttimer-qt
+          package_root: ${{github.workspace}}/build/.debpkg
+          maintainer: Jorge Barroso <jorge_barroso_11@hotmail.com>
+          version: 1.0.3
+          arch: 'amd64'
+          depends: 'qt6-base-dev, libqt6svg6'
+          desc: 'Desktop app for Harvest, a simple time tracker and reporting tool for businesses with billing and expenses tracking.'
 
-        ls -lart "${{github.workspace}}"
-        install -Dm644 "${{github.workspace}}/resources/desktop/harvest.svg" "${{github.workspace}}/build/.debpkg/usr/share/icons/hicolor/scalable/apps/harvest.svg"
-
-        install -Dm755 "${{github.workspace}}/resources/desktop/harvest.desktop" "${{github.workspace}}/build/.debpkg/usr/share/applications/harvest.desktop"
-        
-        install -Dm644 "${{github.workspace}}/debian/copyright" "${{github.workspace}}/build/.debpkg/DEBIAN/copyright";
-        sed -i "s/\${copyright_year}/$(date '+%Y')/g" ${{github.workspace}}/build/.debpkg/DEBIAN/copyright
-
-        ls -lart ${{github.workspace}}/build/.debpkg
-    - uses: jiro4989/build-deb-action@v2
-      with:
-        package: harvesttimer-qt
-        package_root: ${{github.workspace}}/build/.debpkg
-        maintainer: Jorge Barroso <jorge_barroso_11@hotmail.com>
-        version: 1.0.3
-        arch: 'amd64'
-        depends: 'qt6-base-dev, libqt6svg6'
-        desc: 'Desktop app for Harvest, a simple time tracker and reporting tool for businesses with billing and expenses tracking.'
+      - uses: actions/upload-artifact@v3
+        with:
+          name: artifact-deb
+          path: |
+            ${{github.workspace}}/build/*.deb

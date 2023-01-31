@@ -40,16 +40,16 @@ jobs:
       run: |
         cd ${{github.workspace}}/build
         ls -lart .
-        mkdir -p .debpkg/usr/bin
-        mkdir -p .debpkg/DEBIAN
+        mkdir -p ${{github.workspace}}/build/.debpkg/usr/bin
+        mkdir -p ${{github.workspace}}/build/.debpkg/DEBIAN
         make DESTDIR=".debpkg/" install || echo "'make install' failed" ; exit 1
         for _size in 16 24 32 48 64 96 128 256 512; do
-          install -Dm644 "${{github.workspace}}/resources/icons/hicolor/${_size}x${_size}.png" ".debpkg/usr/share/icons/hicolor/${_size}x${_size}/apps/harvest.png"
+          install -Dm644 "${{github.workspace}}/resources/icons/hicolor/${_size}x${_size}.png" "${{github.workspace}}/build/.debpkg/usr/share/icons/hicolor/${_size}x${_size}/apps/harvest.png"
         done
 
-        install -Dm644 "${{github.workspace}}/resources/desktop/harvest.svg" ".debpkg/usr/share/icons/hicolor/scalable/apps/harvest.svg"
+        install -Dm644 "${{github.workspace}}/resources/desktop/harvest.svg" "${{github.workspace}}/build/.debpkg/usr/share/icons/hicolor/scalable/apps/harvest.svg"
 
-        install -Dm755 "${{github.workspace}}/resources/desktop/harvest.desktop" ".debpkg/usr/share/applications/harvest.desktop"
+        install -Dm755 "${{github.workspace}}/resources/desktop/harvest.desktop" "${{github.workspace}}/build/.debpkg/usr/share/applications/harvest.desktop"
 
     - name: Add copyright
       run: |
@@ -82,7 +82,7 @@ jobs:
                along with this program. If not, see <https://www.gnu.org/licenses/>.
                .
                On Debian systems, the complete text of the GNU General
-               Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".' > .debpkg/DEBIAN/copyright
+               Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".' > ${{github.workspace}}/build/.debpkg/DEBIAN/copyright
         ls -lart .debpkg
     - uses: jiro4989/build-deb-action@v2
       with:

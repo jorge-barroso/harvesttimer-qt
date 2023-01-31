@@ -41,7 +41,7 @@ jobs:
         cd ${{github.workspace}}/build
         mkdir -p .debpkg/usr/bin
         mkdir -p .debpkg/DEBIAN
-        make DESTDIR=".debpkg/" install || echo "'make install' failed" ; return 1
+        make DESTDIR=".debpkg/" install || echo "'make install' failed" ; exit 1
         for _size in 16 24 32 48 64 96 128 256 512; do
           install -Dm644 "${{github.workspace}}/resources/icons/hicolor/${_size}x${_size}.png" ".debpkg/usr/share/icons/hicolor/${_size}x${_size}/apps/harvest.png"
         done
@@ -82,6 +82,7 @@ jobs:
                .
                On Debian systems, the complete text of the GNU General
                Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".' > .debpkg/DEBIAN/copyright
+        ls -l .debpkg
     - uses: jiro4989/build-deb-action@v2
       with:
         package: harvesttimer-qt

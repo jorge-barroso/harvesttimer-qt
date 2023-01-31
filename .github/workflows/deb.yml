@@ -112,12 +112,10 @@ jobs:
       - name: Install to DEB
         run: |
           echo "Adding to deb package directory"
-          ls -lart ${{github.workspace}}
-          mkdir -p ${{github.workspace}}/.debpkg/usr/bin
-          mkdir -p ${{github.workspace}}/.debpkg/DEBIAN
+          ls -lart
+          mkdir -p .debpkg/DEBIAN
           
-          cd res
-          install -Dm755 ./harvest "${{github.workspace}}/.debpkg/usr/bin"
+          install -Dm755 ./usr "${{github.workspace}}/.debpkg/"
           install -Dm644 "./resources/desktop/harvest.svg" "${{github.workspace}}/.debpkg/usr/share/icons/hicolor/scalable/apps/harvest.svg"
           install -Dm755 "./resources/desktop/harvest.desktop" "${{github.workspace}}/.debpkg/usr/share/applications/harvest.desktop"
           install -Dm644 "./debian/copyright" "${{github.workspace}}/.debpkg/DEBIAN/copyright";
@@ -127,11 +125,11 @@ jobs:
             install -Dm644 "./resources/icons/hicolor/${_size}x${_size}.png" "${{github.workspace}}/.debpkg/usr/share/icons/hicolor/${_size}x${_size}/apps/harvest.png"
           done
   
-          ls -lart ${{github.workspace}}/.debpkg
+          ls -lart ${{github.workspace}}
       - uses: jiro4989/build-deb-action@v2
         with:
           package: ${{ env.APP_NAME }}
-          package_root: ${{github.workspace}}/.debpkg
+          package_root: .debpkg
           maintainer: ${{ env.MAINTAINER }}
           version: ${{ inputs.version }} || ${{ github.ref }}
           arch: 'amd64'

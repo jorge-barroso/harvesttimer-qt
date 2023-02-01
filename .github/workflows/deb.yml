@@ -268,22 +268,3 @@ jobs:
           asset_path: ${{ steps.vars.outputs.asset_name }}
           asset_name: ${{ steps.vars.outputs.asset_name }}
           asset_content_type: ${{ matrix.asset_content_type }}
-
-changelog:
-  exclude:
-    labels:
-      - ignore-for-release
-    authors:
-      - jorge-barroso
-  categories:
-    - title: Breaking Changes 🛠
-      labels:
-        - Semver-Major
-        - breaking-change
-    - title: Exciting New Features 🎉
-      labels:
-        - Semver-Minor
-        - enhancement
-    - title: Other Changes
-      labels:
-        - "*"

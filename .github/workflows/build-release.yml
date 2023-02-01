@@ -45,6 +45,7 @@ jobs:
       run: |
         echo "Building binary"
         cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+        chmod +x ${{github.workspace}}/build/usr/bin/*
     - name: Preparing Artifact
       run: |
         dist_dir="${{github.workspace}}/res"

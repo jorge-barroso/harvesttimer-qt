@@ -63,7 +63,7 @@ The app has very few dependencies, but you need to bear these in mind especially
   - Ubuntu: [libqt6svg6](https://packages.ubuntu.com/search?suite=all&section=all&arch=any&keywords=libqt6svg6&searchon=names)
   - Fedora: [qt6-qtsvg](https://src.fedoraproject.org/rpms/qt6-qtsvg)
   - Arch: [qt6-svg](https://archlinux.org/packages/extra/x86_64/qt6-svg)
-- If you are running Harvest in a wayland system, installing the *Qt6 Wayland* package to allow Qt to interact directly with the compositor:
+- If you are running Harvest in a wayland system, installing the **Qt6 Wayland** package to allow Qt to interact directly with the compositor:
   - Ubuntu: [qt6-wayland](https://packages.ubuntu.com/search?suite=all&section=all&arch=any&keywords=qt6-wayland&searchon=names)
   - Fedora: [qt6-qtwayland](https://src.fedoraproject.org/rpms/qt6-qtwayland)
   - Arch: [qt6-wayland](https://archlinux.org/packages/extra/x86_64/qt6-wayland)

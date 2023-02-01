@@ -103,7 +103,7 @@ jobs:
             dist/*.zip
           retention-days: 1
 
-  build-deb-package:
+  prepare-package-dir:
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -115,24 +115,43 @@ jobs:
         run: |
           echo "Adding to deb package directory"
           ls -lart
-          mkdir -p .debpkg/DEBIAN
+          mkdir -p .pkg/DEBIAN
           
           ls -lartR ./usr
-          find ./usr -type f -exec install -Dm755 '{}' "${{github.workspace}}/.debpkg/{}" \;
-          install -Dm644 "./resources/desktop/harvest.svg" "${{github.workspace}}/.debpkg/usr/share/icons/hicolor/scalable/apps/harvest.svg"
-          install -Dm755 "./resources/desktop/harvest.desktop" "${{github.workspace}}/.debpkg/usr/share/applications/harvest.desktop"
-          install -Dm644 "./debian/copyright" "${{github.workspace}}/.debpkg/DEBIAN/copyright";
-          sed -i "s/\${copyright_year}/$(date '+%Y')/g" ${{github.workspace}}/.debpkg/DEBIAN/copyright
+          find ./usr -type f -exec install -Dm755 '{}' "${{github.workspace}}/.pkg/{}" \;
+          install -Dm644 "./resources/desktop/harvest.svg" "${{github.workspace}}/.pkg/usr/share/icons/hicolor/scalable/apps/harvest.svg"
+          install -Dm755 "./resources/desktop/harvest.desktop" "${{github.workspace}}/.pkg/usr/share/applications/harvest.desktop"
+          install -Dm644 "./debian/copyright" "${{github.workspace}}/.pkg/DEBIAN/copyright";
+          sed -i "s/\${copyright_year}/$(date '+%Y')/g" ${{github.workspace}}/.pkg/DEBIAN/copyright
           
           for _size in 16 24 32 48 64 96 128 256 512; do
-            install -Dm644 "./resources/icons/hicolor/${_size}x${_size}.png" "${{github.workspace}}/.debpkg/usr/share/icons/hicolor/${_size}x${_size}/apps/harvest.png"
+            install -Dm644 "./resources/icons/hicolor/${_size}x${_size}.png" "${{github.workspace}}/.pkg/usr/share/icons/hicolor/${_size}x${_size}/apps/harvest.png"
           done
   
           ls -lart ${{github.workspace}}
+      - name: Archive Package Directory
+        uses: actions/upload-artifact@v3
+        with:
+          name: deb-rpm-dirs
+          path: ./.pkg
+          retention-days: 1
+
+  build-deb-package:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - prepare-package-dir
+    steps:
+      - name: Download Binary and Resources
+        uses: actions/download-artifact@v3
+        with:
+          name: deb-rpm-dirs
+      - name: Install to DEB
+        run: ls -lartR
       - uses: jiro4989/build-deb-action@v2
         with:
           package: ${{ env.APP_NAME }}
-          package_root: .debpkg
+          package_root: .
           maintainer: ${{ env.MAINTAINER }}
           version: ${{ inputs.version || github.ref }}
           arch: 'amd64'

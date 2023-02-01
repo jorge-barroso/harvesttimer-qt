@@ -177,10 +177,33 @@
     </message>
 </context>
 <context>
+    <name>Logout</name>
+    <message>
+        <source>Logout</source>
+        <translation>Logout</translation>
+    </message>
+    <message>
+        <source>Logout? You will not lose your tasks but your saved favourites will be deleted</source>
+        <translation>Logout? You will not lose your tasks but your saved favorites will be deleted</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>Harvest Timer</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>File</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Logout</translation>
+    </message>
+    <message>
+        <source>Quit</source>
+        <translation>Quit</translation>
     </message>
 </context>
 <context>
@@ -209,8 +232,8 @@
         <translation></translation>
     </message>
     <message>
-        <source>Exit</source>
-        <translation></translation>
+        <source>Quit</source>
+        <translation>Quit</translation>
     </message>
     <message>
         <source>Show/Hide</source>

@@ -187,7 +187,8 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionLogout">
    <property name="icon">
-    <iconset theme="system-log-out"/>
+    <iconset theme="system-log-out">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Logout</string>
@@ -195,10 +196,14 @@
   </action>
   <action name="actionQuit">
    <property name="icon">
-    <iconset theme="application-exit"/>
+    <iconset theme="application-exit">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
    </property>
   </action>
  </widget>

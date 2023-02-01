@@ -27,7 +27,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-
     - name: Install Dependencies
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
@@ -35,23 +34,17 @@ jobs:
         echo "Installing dependencies"
         sudo apt update
         sudo apt install zip build-essential libgl1-mesa-dev qt6-base-dev qt6-l10n-tools qt6-tools-dev qt6-tools-dev-tools libqt6svg6
-
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: |
         echo "Configuring a CMake Release environment"
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=/usr/bin
-
     - name: Build
       # Build your program with the given configuration
       run: |
         echo "Building binary"
         cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-        ls -lart ${{github.workspace}}/build
-        echo '###################################'
-        ls -lart build
-
     - name: Preparing Artifact
       run: |
         dist_dir="${{github.workspace}}/res"
@@ -82,11 +75,9 @@ jobs:
       - name: Building Archives
         run: |
           echo "Creating tar and zip archives"
-          ls -lart
           assets="${{ env.APP_NAME }}_$(echo "${{ runner.os }}" | tr '[:upper:]' '[:lower:]')"
           echo "$assets"
           mkdir -p "dist/$assets"
-          pwd; ls -lart
           cp -r usr LICENSE *.md "dist/$assets/"
           (
             cd dist
@@ -114,10 +105,8 @@ jobs:
       - name: Install to DEB
         run: |
           echo "Adding to deb package directory"
-          ls -lart
           mkdir -p .pkg/DEBIAN
           
-          ls -lartR ./usr
           find ./usr -type f -exec install -Dm755 '{}' "${{github.workspace}}/.pkg/{}" \;
           install -Dm644 "./resources/desktop/harvest.svg" "${{github.workspace}}/.pkg/usr/share/icons/hicolor/scalable/apps/harvest.svg"
           install -Dm755 "./resources/desktop/harvest.desktop" "${{github.workspace}}/.pkg/usr/share/applications/harvest.desktop"
@@ -127,8 +116,6 @@ jobs:
           for _size in 16 24 32 48 64 96 128 256 512; do
             install -Dm644 "./resources/icons/hicolor/${_size}x${_size}.png" "${{github.workspace}}/.pkg/usr/share/icons/hicolor/${_size}x${_size}/apps/harvest.png"
           done
-  
-          ls -lart ${{github.workspace}}
       - name: Archive Package Directory
         uses: actions/upload-artifact@v3
         with:
@@ -146,8 +133,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: deb-rpm-dirs
-      - name: Install to DEB
-        run: ls -lartR
       - uses: jiro4989/build-deb-action@v2
         with:
           package: ${{ env.APP_NAME }}
@@ -162,3 +147,150 @@ jobs:
           name: deb-package
           path: ./*.deb
           retention-days: 1
+
+  build-rpm-package:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - prepare-package-dir
+    steps:
+      - name: Download Binary and Resources
+        uses: actions/download-artifact@v3
+        with:
+          name: deb-rpm-dirs
+      - uses: jiro4989/build-rpm-action@v2
+        with:
+          summary: ${{ env.DESC }}
+          package: ${{ env.APP_NAME }}
+          package_root: .
+          maintainer: ${{ env.MAINTAINER }}
+          version: ${{ inputs.version || github.ref }}
+          arch: 'amd64'
+          depends: 'qt6-base-dev, libqt6svg6'
+          desc: ${{ env.DESC }}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: rpm-package
+          path: |
+            ./*.rpm
+            !./*-debuginfo-*.rpm
+          retention-days: 1
+  create-release:
+    runs-on: ubuntu-latest
+    needs:
+      - build-archives
+      - build-deb-package
+      - build-rpm-package
+    steps:
+      - name: Download Binary and Resources
+        uses: actions/download-artifact@v3
+        with:
+          name:
+            - archives
+            - deb-package
+            - rpm-package
+      - name: Create Release
+        id: create-release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: true
+          prerelease: false
+
+      - name: Write upload_url to file
+        run: echo '${{ steps.create-release.outputs.upload_url }}' > upload_url.txt
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: create-release
+          path: upload_url.txt
+
+  upload-release:
+    runs-on: ubuntu-latest
+    needs: create-release
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            asset_name_suffix: linux.tar.gz
+            asset_content_type: application/gzip
+          - os: windows-latest
+            asset_name_suffix: windows.zip
+            asset_content_type: application/zip
+          - os: macOS-latest
+            asset_name_suffix: macos.tar.gz
+            asset_content_type: application/gzip
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name:
+            - archives
+            - create-release
+
+      - id: vars
+        run: |
+          echo "::set-output name=upload_url::$(cat upload_url.txt)"
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.vars.outputs.upload_url }}
+          asset_path: ${{ env.APP_NAME }}_${{ matrix.asset_name_suffix }}
+          asset_name: ${{ env.APP_NAME }}_${{ matrix.asset_name_suffix }}
+          asset_content_type: ${{ matrix.asset_content_type }}
+
+  upload-linux-packages:
+    runs-on: ubuntu-latest
+    needs: create-release
+    strategy:
+      matrix:
+        include:
+          - pkg: deb
+            asset_content_type: application/vnd.debian.binary-package
+          - pkg: rpm
+            asset_content_type: application/x-rpm
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name:
+            - create-release
+            - build-${{ matrix.pkg }}-package
+
+      - id: vars
+        run: |
+          echo "::set-output name=upload_url::$(cat upload_url.txt)"
+          echo "::set-output name=asset_name::$(ls *.${{ matrix.pkg }} | head -n 1)"
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.vars.outputs.upload_url }}
+          asset_path: ${{ steps.vars.outputs.asset_name }}
+          asset_name: ${{ steps.vars.outputs.asset_name }}
+          asset_content_type: ${{ matrix.asset_content_type }}
+
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+    authors:
+      - jorge-barroso
+  categories:
+    - title: Breaking Changes 🛠
+      labels:
+        - Semver-Major
+        - breaking-change
+    - title: Exciting New Features 🎉
+      labels:
+        - Semver-Minor
+        - enhancement
+    - title: Other Changes
+      labels:
+        - "*"

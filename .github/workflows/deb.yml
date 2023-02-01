@@ -134,7 +134,7 @@ jobs:
           package: ${{ env.APP_NAME }}
           package_root: .debpkg
           maintainer: ${{ env.MAINTAINER }}
-          version: ${{ inputs.version }} || ${{ github.ref }}
+          version: ${{ inputs.version }}
           arch: 'amd64'
           depends: 'qt6-base-dev, libqt6svg6'
           desc: ${{ env.DESC }}

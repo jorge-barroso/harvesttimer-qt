@@ -141,7 +141,7 @@ jobs:
           package: ${{ env.APP_NAME }}
           package_root: .
           maintainer: ${{ env.MAINTAINER }}
-          version: ${{ inputs.version || github.ref }}
+          version: ${{ inputs.version || github.ref_name }}
           arch: 'amd64'
           depends: 'qt6-base-dev, libqt6svg6'
           desc: ${{ env.DESC }}
@@ -171,7 +171,7 @@ jobs:
           package: ${{ env.APP_NAME }}
           package_root: .
           maintainer: ${{ env.MAINTAINER }}
-          version: ${{ inputs.version || github.ref }}
+          version: ${{ inputs.version || github.ref_name }}
           arch: 'x86_64'
           desc: ${{ env.DESC }}
       - uses: actions/upload-artifact@v3
@@ -213,7 +213,7 @@ jobs:
             ${{ env.APP_NAME }}_linux.zip
             ${{ steps.vars.outputs.deb_name }}
             ${{ steps.vars.outputs.rpm_name }}
-          tag_name: ${{ inputs.version || github.ref }}
+          tag_name: ${{ (inputs.version || github.ref_name)  }}
           generate_release_notes: true
           draft: false
           prerelease: false

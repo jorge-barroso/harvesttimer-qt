@@ -83,7 +83,6 @@
        <widget class="DateLabel" name="date_label">
         <property name="font">
          <font>
-          <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
@@ -116,8 +115,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>473</width>
-         <height>321</height>
+         <width>467</width>
+         <height>335</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="scroll_area_widget_layout"/>
@@ -173,11 +172,35 @@
      <x>0</x>
      <y>0</y>
      <width>485</width>
-     <height>30</height>
+     <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionLogout"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionLogout">
+   <property name="icon">
+    <iconset theme="system-log-out"/>
+   </property>
+   <property name="text">
+    <string>Logout</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="icon">
+    <iconset theme="application-exit"/>
+   </property>
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -192,8 +215,6 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="icons.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

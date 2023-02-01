@@ -41,6 +41,8 @@ class Favourites : public QDialog
 
 		void remove_favourite_task(const Task* task);
 
+        void logout_cleanup();
+
 	private slots:
 
 		void new_task_selected(const Task* task);

@@ -113,3 +113,12 @@ void Favourites::new_task_selected(const Task* task)
 	emit add_task(const_cast<Task*>(task));
 	this->close();
 }
+
+void Favourites::logout_cleanup() {
+    if(favourites_file.isOpen())
+    {
+        favourites_file.close();
+    }
+
+    favourites_file.remove();
+}

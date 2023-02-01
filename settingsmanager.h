@@ -19,6 +19,9 @@ class SettingsManager
 		void add_setting(const QString& key, const QString& value);
 
 		QVariant get_setting(const QString& key);
+
+        void remove_setting(const QString& key);
+
 	protected:
 		explicit SettingsManager(const QDir& config_dir);
 

@@ -49,6 +49,8 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 	connect(&favourites_form, &Favourites::add_task, &add_task_form, &AddTaskForm::add_task_from_favourites);
 	connect(&favourites_form, &Favourites::task_removed_from_favourites, ui->scrollArea, &TasksScrollArea::uncheck_task_favourite);
 	connect(&favourites_form, &Favourites::task_added_to_favourites, ui->scrollArea, &TasksScrollArea::check_task_favourite);
+	connect(this, &MainWindow::logged_out, &favourites_form, &Favourites::logout_cleanup);
+	connect(this, &MainWindow::logged_out, harvest_handler, &HarvestHandler::logout_cleanup);
 }
 
 MainWindow::~MainWindow()
@@ -172,3 +174,22 @@ void MainWindow::changeEvent(QEvent * event) {
         tray_icon->reset_icon(this->isDarkTheme());
     }
 }
+
+void MainWindow::on_actionQuit_triggered()
+{
+    QApplication::quit();
+}
+
+
+void MainWindow::on_actionLogout_triggered()
+{
+    QMessageBox::StandardButton reply{ QMessageBox::question(this,
+                                                             QApplication::translate("Logout", "Logout"),
+                                                             QApplication::translate("Logout", "Logout? You will not lose your tasks but your saved favourites will be deleted"),
+                                                             QMessageBox::Yes|QMessageBox::No) };
+    if (reply == QMessageBox::Yes) {
+        emit logged_out();
+        QApplication::quit();
+    }
+}
+

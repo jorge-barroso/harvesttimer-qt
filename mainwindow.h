@@ -30,6 +30,9 @@ class MainWindow : public QMainWindow
 
 		~MainWindow() override;
 
+    signals:
+        void logged_out();
+
 	public slots:
 
 		void on_new_task_button_clicked();
@@ -54,7 +57,11 @@ class MainWindow : public QMainWindow
 
 		void reachability_changed(const QNetworkInformation::Reachability& reachability);
 
-	private:
+        void on_actionQuit_triggered();
+
+        void on_actionLogout_triggered();
+
+private:
 		Ui::MainWindow* ui;
 		AddTaskForm add_task_form;
 		EditTaskForm edit_task_form;

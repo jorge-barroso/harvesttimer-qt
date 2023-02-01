@@ -61,7 +61,9 @@ add_executable(harvest
         showorhideaction.cpp
         showorhideaction.h)
 
-#
+if (QT_VERSION VERSION_LESS 6.4)
+    set_property(TARGET harvest PROPERTY AUTORCC_OPTIONS "--no-zstd")
+endif()
 
 install(TARGETS harvest
         DESTINATION ${CMAKE_INSTALL_PREFIX}

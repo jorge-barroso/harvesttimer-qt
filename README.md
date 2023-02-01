@@ -28,19 +28,20 @@ Once you have logged in and see the message "Authentication successful, you may 
 
 
 ## Installation
-You can build the app for yourself, 
+You can build the app for yourself,
 or simply grab the prebuilt binary in the [releases section](https://github.com/jorge-barroso/harvesttimer-qt/releases).
-Additionally, the distros listed below have the app in their repos.
+
+Additionally, in Arch-based distros you can find a package in the [AUR repository](https://aur.archlinux.org/packages/harvest-timer-qt).
 
 ### Binary File
 If you are happy with just grabbing the binary file,
 you can do so from the latest release in the [releases section](https://github.com/jorge-barroso/harvesttimer-qt/releases),
 download the binary pack and use it on your system as you prefer.
 
-### DEB File
-You can install the deb package attached on every [release](https://github.com/jorge-barroso/harvesttimer-qt/releases).
+### DEB and RPM Files
+You can install both the deb and rpm packages attached on every [release](https://github.com/jorge-barroso/harvesttimer-qt/releases).
 
-### Arch Linux (AUR-based distros)
+### Arch Linux (AUR-enabled distros)
 You can use your favourite installation method (yay, software centre, etc.) to install [harvest-timer-qt](https://aur.archlinux.org/packages/harvest-timer-qt)
 
 ### Dependencies
@@ -55,6 +56,7 @@ The app has very few dependencies, but you need to bear these in mind especially
   - Arch: [qt6-tools](https://archlinux.org/packages/extra/x86_64/qt6-tools/)
 
 #### Runtime Dependencies
+##### Required
 - The **Qt6 Base** package, some namings for this, depending on distros, are
   - Ubuntu: [qt6-base-dev](https://packages.ubuntu.com/search?keywords=qt6-base-dev&searchon=names&suite=all&section=all)
   - Fedora: [qt6-qtbase](https://src.fedoraproject.org/rpms/qt6-qtbase)
@@ -63,6 +65,8 @@ The app has very few dependencies, but you need to bear these in mind especially
   - Ubuntu: [libqt6svg6](https://packages.ubuntu.com/search?suite=all&section=all&arch=any&keywords=libqt6svg6&searchon=names)
   - Fedora: [qt6-qtsvg](https://src.fedoraproject.org/rpms/qt6-qtsvg)
   - Arch: [qt6-svg](https://archlinux.org/packages/extra/x86_64/qt6-svg)
+
+##### Optional
 - If you are running Harvest in a wayland system, installing the **Qt6 Wayland** package to allow Qt to interact directly with the compositor:
   - Ubuntu: [qt6-wayland](https://packages.ubuntu.com/search?suite=all&section=all&arch=any&keywords=qt6-wayland&searchon=names)
   - Fedora: [qt6-qtwayland](https://src.fedoraproject.org/rpms/qt6-qtwayland)

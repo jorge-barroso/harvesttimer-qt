@@ -45,7 +45,6 @@ jobs:
       run: |
         echo "Building binary"
         cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-        chmod +x ${{github.workspace}}/build/harvest
     - name: Preparing Artifact
       run: |
         dist_dir="${{github.workspace}}/res"
@@ -109,6 +108,7 @@ jobs:
           mkdir -p .pkg/DEBIAN
           
           find ./usr -type f -exec install -Dm755 '{}' "${{github.workspace}}/.pkg/{}" \;
+          ls -lartR .pkg
           install -Dm644 "./resources/desktop/harvest.svg" "${{github.workspace}}/.pkg/usr/share/icons/hicolor/scalable/apps/harvest.svg"
           install -Dm755 "./resources/desktop/harvest.desktop" "${{github.workspace}}/.pkg/usr/share/applications/harvest.desktop"
           install -Dm644 "./debian/copyright" "${{github.workspace}}/.pkg/DEBIAN/copyright";

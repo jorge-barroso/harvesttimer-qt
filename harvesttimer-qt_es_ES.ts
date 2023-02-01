@@ -288,37 +288,37 @@
     <message>
         <location filename="addtaskaction.cpp" line="+9"/>
         <source>Add Task</source>
-        <translation type="unfinished">Añadir Tarea</translation>
+        <translation>Añadir Tarea</translation>
     </message>
     <message>
         <location filename="logoutaction.cpp" line="+9"/>
         <source>Logout</source>
-        <translation type="unfinished">Cerrar Sesión</translation>
+        <translation>Cerrar Sesión</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Logs you out from Harvest and closes the application</source>
-        <translation type="unfinished"></translation>
+        <translation>Termina tu sesión con Harvest y cierra la aplicación</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="-176"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Archivo</translation>
     </message>
     <message>
         <location filename="quitaction.cpp" line="+9"/>
         <source>Quit</source>
-        <translation type="unfinished">Salir</translation>
+        <translation>Salir</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Closes the application</source>
-        <translation type="unfinished"></translation>
+        <translation>Cierra la Aplicación</translation>
     </message>
     <message>
         <location filename="showorhideaction.cpp" line="+9"/>
         <source>Show/Hide</source>
-        <translation type="unfinished">Mostrar/Ocultar</translation>
+        <translation>Mostrar/Ocultar</translation>
     </message>
 </context>
 <context>

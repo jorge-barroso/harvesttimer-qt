@@ -135,7 +135,6 @@ jobs:
           name: deb-rpm-dirs
       - name:
         run: |
-          ls -lartR
           chmod +x ./usr/bin/harvest
       - uses: jiro4989/build-deb-action@v2
         with:
@@ -165,9 +164,7 @@ jobs:
       - name: Prepare files
         run: |
           sudo rm -r DEBIAN
-          ls -lartR
           chmod +x ./usr/bin/harvest
-          ls -lartR
       - uses: jiro4989/build-rpm-action@v2
         with:
           summary: ${{ env.DESC }}
@@ -177,8 +174,6 @@ jobs:
           version: ${{ inputs.version || github.ref }}
           arch: 'x86_64'
           desc: ${{ env.DESC }}
-      - name: Remove unnecessary DEBIAN directory
-        run: ls -lart
       - uses: actions/upload-artifact@v3
         with:
           name: rpm-package
@@ -203,8 +198,6 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: deb-package
-      - name: Test Loaded Artifacts
-        run: ls -lartR
       - id: vars
         run: |
           echo "deb_name=$(ls *.deb | head -n 1)" >> $GITHUB_OUTPUT

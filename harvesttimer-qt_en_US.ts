@@ -194,16 +194,43 @@
         <translation></translation>
     </message>
     <message>
-        <source>File</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Logout</source>
-        <translation>Logout</translation>
+        <translation type="vanished">Logout</translation>
     </message>
     <message>
         <source>Quit</source>
-        <translation>Quit</translation>
+        <translation type="vanished">Quit</translation>
+    </message>
+</context>
+<context>
+    <name>Menu</name>
+    <message>
+        <source>Add Task</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation type="unfinished">Logout</translation>
+    </message>
+    <message>
+        <source>Logs you out from Harvest and closes the application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quit</source>
+        <translation type="unfinished">Quit</translation>
+    </message>
+    <message>
+        <source>Closes the application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show/Hide</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -228,16 +255,8 @@
 <context>
     <name>Tray Icon</name>
     <message>
-        <source>Add Task</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Quit</source>
-        <translation>Quit</translation>
-    </message>
-    <message>
-        <source>Show/Hide</source>
-        <translation></translation>
+        <translation type="vanished">Quit</translation>
     </message>
 </context>
 </TS>

@@ -13,6 +13,7 @@
 #include "harvesthandler.h"
 #include "customtrayicon.h"
 #include "edittaskform.h"
+#include "logoutaction.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -57,9 +58,9 @@ class MainWindow : public QMainWindow
 
 		void reachability_changed(const QNetworkInformation::Reachability& reachability);
 
-        void on_actionQuit_triggered();
+        static void quit_triggered();
 
-        void on_actionLogout_triggered();
+        void logout_triggered();
 
 private:
 		Ui::MainWindow* ui;
@@ -77,6 +78,11 @@ private:
 		void closeEvent(QCloseEvent* event) override;
 
         bool isDarkTheme();
+
+        QMenu *file_menu;
+        QuitAction quit_action;
+        LogoutAction logout_action;
+
 };
 
 #endif // MAINWINDOW_H

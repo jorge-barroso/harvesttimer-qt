@@ -10,10 +10,15 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 		, favourites_form(config_dir, this)
 		, harvest_handler{ HarvestHandler::get_instance(config_dir) }
 		, tray_icon{ nullptr }
+        , quit_action(this)
+        , logout_action(this)
 {
 	ui->setupUi(this);
 
     tray_icon = new CustomTrayIcon(this, this->isDarkTheme());
+    file_menu = menuBar()->addMenu(QApplication::translate("Menu", "&File"));
+    file_menu->addAction(&logout_action);
+    file_menu->addAction(&quit_action);
 
 	network_information = QNetworkInformation::instance();
 	if(network_information!=nullptr)
@@ -49,6 +54,8 @@ MainWindow::MainWindow(const QDir& config_dir, QWidget* parent)
 	connect(&favourites_form, &Favourites::add_task, &add_task_form, &AddTaskForm::add_task_from_favourites);
 	connect(&favourites_form, &Favourites::task_removed_from_favourites, ui->scrollArea, &TasksScrollArea::uncheck_task_favourite);
 	connect(&favourites_form, &Favourites::task_added_to_favourites, ui->scrollArea, &TasksScrollArea::check_task_favourite);
+    connect(&quit_action, &QuitAction::triggered, this, &MainWindow::quit_triggered);
+    connect(&logout_action, &LogoutAction::triggered, this, &MainWindow::logout_triggered);
 	connect(this, &MainWindow::logged_out, &favourites_form, &Favourites::logout_cleanup);
 	connect(this, &MainWindow::logged_out, harvest_handler, &HarvestHandler::logout_cleanup);
 }
@@ -175,13 +182,13 @@ void MainWindow::changeEvent(QEvent * event) {
     }
 }
 
-void MainWindow::on_actionQuit_triggered()
+void MainWindow::quit_triggered()
 {
     QApplication::quit();
 }
 
 
-void MainWindow::on_actionLogout_triggered()
+void MainWindow::logout_triggered()
 {
     QMessageBox::StandardButton reply{ QMessageBox::question(this,
                                                              QApplication::translate("Logout", "Logout"),

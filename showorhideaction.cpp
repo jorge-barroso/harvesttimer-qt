@@ -6,5 +6,5 @@
 #include <QApplication>
 
 ShowOrHideAction::ShowOrHideAction(QObject *parent)
-        : QAction(QIcon::fromTheme("view-visible"), QApplication::translate("Tray Icon", "Show/Hide"), parent)
+        : QAction(QIcon::fromTheme("view-visible"), QApplication::translate("Menu", "Show/Hide"), parent)
 {}

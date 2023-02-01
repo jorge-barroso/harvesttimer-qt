@@ -253,7 +253,7 @@
 <context>
     <name>Logout</name>
     <message>
-        <location filename="mainwindow.cpp" line="+187"/>
+        <location filename="mainwindow.cpp" line="+194"/>
         <source>Logout</source>
         <translation>Cerrar Sesión</translation>
     </message>
@@ -271,19 +271,54 @@
         <translation></translation>
     </message>
     <message>
-        <location line="+166"/>
         <source>File</source>
-        <translation>Archivo</translation>
+        <translation type="vanished">Archivo</translation>
     </message>
     <message>
-        <location line="+13"/>
         <source>Logout</source>
-        <translation>Cerrar Sesión</translation>
+        <translation type="vanished">Cerrar Sesión</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Quit</source>
-        <translation>Salir</translation>
+        <translation type="vanished">Salir</translation>
+    </message>
+</context>
+<context>
+    <name>Menu</name>
+    <message>
+        <location filename="addtaskaction.cpp" line="+9"/>
+        <source>Add Task</source>
+        <translation type="unfinished">Añadir Tarea</translation>
+    </message>
+    <message>
+        <location filename="logoutaction.cpp" line="+9"/>
+        <source>Logout</source>
+        <translation type="unfinished">Cerrar Sesión</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Logs you out from Harvest and closes the application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="-176"/>
+        <source>&amp;File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="quitaction.cpp" line="+9"/>
+        <source>Quit</source>
+        <translation type="unfinished">Salir</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Closes the application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="showorhideaction.cpp" line="+9"/>
+        <source>Show/Hide</source>
+        <translation type="unfinished">Mostrar/Ocultar</translation>
     </message>
 </context>
 <context>
@@ -316,23 +351,20 @@
 <context>
     <name>Tray Icon</name>
     <message>
-        <location filename="addtaskaction.cpp" line="+9"/>
         <source>Add Task</source>
-        <translation>Añadir Tarea</translation>
+        <translation type="vanished">Añadir Tarea</translation>
     </message>
     <message>
         <source>Exit</source>
         <translation type="vanished">Salir</translation>
     </message>
     <message>
-        <location filename="showorhideaction.cpp" line="+9"/>
         <source>Show/Hide</source>
-        <translation>Mostrar/Ocultar</translation>
+        <translation type="vanished">Mostrar/Ocultar</translation>
     </message>
     <message>
-        <location filename="quitaction.cpp" line="+9"/>
         <source>Quit</source>
-        <translation>Salir</translation>
+        <translation type="vanished">Salir</translation>
     </message>
 </context>
 </TS>

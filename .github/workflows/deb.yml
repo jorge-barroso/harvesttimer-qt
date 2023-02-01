@@ -158,6 +158,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: deb-rpm-dirs
+      - name: Remove unnecessary DEBIAN directory
+        run: sudo rm -r DEBIAN; ls -lart
       - uses: jiro4989/build-rpm-action@v2
         with:
           summary: ${{ env.DESC }}
@@ -166,8 +168,9 @@ jobs:
           maintainer: ${{ env.MAINTAINER }}
           version: ${{ inputs.version || github.ref }}
           arch: 'x86_64'
-          depends: 'qt6-base-dev, libqt6svg6'
           desc: ${{ env.DESC }}
+      - name: Remove unnecessary DEBIAN directory
+        run: ls -lart
       - uses: actions/upload-artifact@v3
         with:
           name: rpm-package

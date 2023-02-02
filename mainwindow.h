@@ -13,6 +13,7 @@
 #include "harvesthandler.h"
 #include "customtrayicon.h"
 #include "edittaskform.h"
+#include "logoutaction.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -29,6 +30,9 @@ class MainWindow : public QMainWindow
 		explicit MainWindow(const QDir& config_dir, QWidget* parent = nullptr);
 
 		~MainWindow() override;
+
+    signals:
+        void logged_out();
 
 	public slots:
 
@@ -54,7 +58,11 @@ class MainWindow : public QMainWindow
 
 		void reachability_changed(const QNetworkInformation::Reachability& reachability);
 
-	private:
+        static void quit_triggered();
+
+        void logout_triggered();
+
+private:
 		Ui::MainWindow* ui;
 		AddTaskForm add_task_form;
 		EditTaskForm edit_task_form;
@@ -70,6 +78,11 @@ class MainWindow : public QMainWindow
 		void closeEvent(QCloseEvent* event) override;
 
         bool isDarkTheme();
+
+        QMenu *file_menu;
+        QuitAction quit_action;
+        LogoutAction logout_action;
+
 };
 
 #endif // MAINWINDOW_H

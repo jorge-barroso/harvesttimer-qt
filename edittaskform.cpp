@@ -110,11 +110,10 @@ void EditTaskForm::on_confirm_button_clicked()
 
 void EditTaskForm::on_delete_button_clicked()
 {
-	QMessageBox::StandardButton reply;
-	reply = QMessageBox::question(this,
+	QMessageBox::StandardButton reply{ QMessageBox::question(this,
 								  QApplication::translate("DeleteTask", "Delete Task"),
 								  QApplication::translate("DeleteTask", "Are you sure about deleting this task? This action cannot be undone."),
-								  QMessageBox::Yes|QMessageBox::No);
+								  QMessageBox::Yes|QMessageBox::No) };
 	if (reply == QMessageBox::Yes) {
 		emit widget_to_modify->task_deleted(task_to_modify, widget_to_modify);
 		this->reset_and_close();

@@ -14,6 +14,8 @@
 #include "harvestproject.h"
 #include "task.h"
 
+static const char *const account_id_key = "account_id";
+
 class HarvestHandler : public QObject
 {
 	Q_OBJECT
@@ -21,6 +23,8 @@ class HarvestHandler : public QObject
 	public slots:
 
 		void new_connection();
+
+        void logout_cleanup();
 
 	public:
 		static HarvestHandler* get_instance(const QDir& config_dir);

@@ -370,13 +370,13 @@ void HarvestHandler::get_projects_data(const QJsonDocument& json_payload, std::v
 void HarvestHandler::get_new_account_id(QString& scope)
 {
 	account_id = scope.split("%3A")[1];
-	settings_manager->add_setting("account_id", account_id);
+	settings_manager->add_setting(account_id_key, account_id);
 }
 
 // the account id was previously extracted and saved in a settings file
 void HarvestHandler::load_account_id()
 {
-	account_id = settings_manager->get_setting("account_id").toString();
+	account_id = settings_manager->get_setting(account_id_key).toString();
 }
 
 bool HarvestHandler::is_ready() const
@@ -677,4 +677,9 @@ QString HarvestHandler::get_http_message(const QString& message) {
     final_message.append("</body>");
     final_message.append("</html>");
     return final_message;
+}
+
+void HarvestHandler::logout_cleanup() {
+    auth_file.remove();
+    settings_manager->remove_setting(account_id_key);
 }

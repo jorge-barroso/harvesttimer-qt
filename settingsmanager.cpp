@@ -39,3 +39,7 @@ QVariant SettingsManager::get_setting(const QString& key)
 	return settings.value(key);
 
 }
+
+void SettingsManager::remove_setting(const QString& key) {
+    settings.remove(key);
+}

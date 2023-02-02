@@ -6,5 +6,8 @@
 #include<QApplication>
 
 QuitAction::QuitAction(QObject *parent)
-        : QAction(QIcon::fromTheme("application-exit"), QApplication::translate("Tray Icon", "Quit"), parent)
-{}
+        : QAction(QIcon::fromTheme("application-exit"), QApplication::translate("Menu", "Quit"), parent)
+{
+    this->setShortcut(QKeySequence::Quit);
+    this->setStatusTip(QApplication::translate("Menu", "Closes the application"));
+}

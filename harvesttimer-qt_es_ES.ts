@@ -43,8 +43,8 @@
 <context>
     <name>DeleteTask</name>
     <message>
-        <location filename="edittaskform.cpp" line="+115"/>
-        <location filename="taskwidget.cpp" line="+90"/>
+        <location filename="edittaskform.cpp" line="+114"/>
+        <location filename="taskwidget.cpp" line="+89"/>
         <source>Delete Task</source>
         <translation>Eliminar Tarea</translation>
     </message>
@@ -234,7 +234,7 @@
         <translation>Error Eliminando Tarea</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="+35"/>
+        <location filename="main.cpp" line="+39"/>
         <source>Error Loading Network Information</source>
         <translation>Error Cargando Información de Red</translation>
     </message>
@@ -251,18 +251,81 @@
     </message>
 </context>
 <context>
+    <name>Logout</name>
+    <message>
+        <location filename="mainwindow.cpp" line="+194"/>
+        <source>Logout</source>
+        <translation>Cerrar Sesión</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Logout? You will not lose your tasks but your saved favourites will be deleted</source>
+        <translation>¿Cerrar Sesión? Tus tareas no se verán afectadas, pero perderás tus favoritos</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="mainwindow.ui" line="+14"/>
         <source>Harvest Timer</source>
         <translation></translation>
     </message>
+    <message>
+        <source>File</source>
+        <translation type="vanished">Archivo</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation type="vanished">Cerrar Sesión</translation>
+    </message>
+    <message>
+        <source>Quit</source>
+        <translation type="vanished">Salir</translation>
+    </message>
+</context>
+<context>
+    <name>Menu</name>
+    <message>
+        <location filename="addtaskaction.cpp" line="+9"/>
+        <source>Add Task</source>
+        <translation>Añadir Tarea</translation>
+    </message>
+    <message>
+        <location filename="logoutaction.cpp" line="+9"/>
+        <source>Logout</source>
+        <translation>Cerrar Sesión</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Logs you out from Harvest and closes the application</source>
+        <translation>Termina tu sesión con Harvest y cierra la aplicación</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="-176"/>
+        <source>&amp;File</source>
+        <translation>&amp;Archivo</translation>
+    </message>
+    <message>
+        <location filename="quitaction.cpp" line="+9"/>
+        <source>Quit</source>
+        <translation>Salir</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Closes the application</source>
+        <translation>Cierra la Aplicación</translation>
+    </message>
+    <message>
+        <location filename="showorhideaction.cpp" line="+9"/>
+        <source>Show/Hide</source>
+        <translation>Mostrar/Ocultar</translation>
+    </message>
 </context>
 <context>
     <name>TaskForm</name>
     <message>
         <location filename="addtaskform.cpp" line="+80"/>
-        <location filename="edittaskform.cpp" line="-84"/>
+        <location filename="edittaskform.cpp" line="-83"/>
         <source>Could not find project</source>
         <translation>Proyecto No Encontrado</translation>
     </message>
@@ -288,19 +351,20 @@
 <context>
     <name>Tray Icon</name>
     <message>
-        <location filename="customtrayicon.cpp" line="+13"/>
         <source>Add Task</source>
-        <translation>Añadir Tarea</translation>
+        <translation type="vanished">Añadir Tarea</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Exit</source>
-        <translation>Salir</translation>
+        <translation type="vanished">Salir</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Show/Hide</source>
-        <translation>Mostrar/Ocultar</translation>
+        <translation type="vanished">Mostrar/Ocultar</translation>
+    </message>
+    <message>
+        <source>Quit</source>
+        <translation type="vanished">Salir</translation>
     </message>
 </context>
 </TS>

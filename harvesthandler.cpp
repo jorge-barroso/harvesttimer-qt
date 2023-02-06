@@ -343,9 +343,6 @@ std::vector<HarvestProject> HarvestHandler::update_user_data()
 
 void HarvestHandler::get_projects_data(const QJsonDocument& json_payload, std::vector<HarvestProject>& projects_vector)
 {
-    qDebug() << json_payload;
-    qDebug() << json_payload["project_assignments"];
-    qDebug() << json_payload["project_assignments"].toArray();
 	for (const QJsonValue project_assignment: json_payload["project_assignments"].toArray())
 	{
 		std::vector<HarvestTask> project_tasks_vector;

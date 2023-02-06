@@ -129,7 +129,7 @@
         <translation>Error de Autenticación</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+28"/>
         <source>It was not possible to save your credentials, you will have to log in again the next time you open Harvest Timer</source>
         <translation>No fue posible guardar sus credenciales, tendrá que volver a iniciar sesión la próxima vez que abra Harvest Timer</translation>
     </message>
@@ -141,8 +141,8 @@
     <message>
         <location line="+13"/>
         <location line="+42"/>
-        <location line="+82"/>
-        <location line="+19"/>
+        <location line="+93"/>
+        <location line="+20"/>
         <location line="+28"/>
         <location line="+27"/>
         <location line="+14"/>
@@ -151,10 +151,10 @@
         <translation>Sin Conexión</translation>
     </message>
     <message>
-        <location line="-225"/>
+        <location line="-237"/>
         <location line="+42"/>
-        <location line="+82"/>
-        <location line="+19"/>
+        <location line="+93"/>
+        <location line="+20"/>
         <location line="+28"/>
         <location line="+27"/>
         <location line="+14"/>
@@ -245,7 +245,7 @@
         <translation>Hubo un error cargando el sistema de información de red, la aplicación no desconocerá posibles cambios en el estado de red</translation>
     </message>
     <message>
-        <location filename="harvesthandler.cpp" line="-472"/>
+        <location filename="harvesthandler.cpp" line="-482"/>
         <source>Authentication successful, you may now close this tab</source>
         <translation>Inicio de sesión completado, puedes cerrar esta pestaña</translation>
     </message>

@@ -29,7 +29,7 @@ SettingsManager::SettingsManager(const QDir& config_dir)
 
 SettingsManager::~SettingsManager() = default;
 
-void SettingsManager::add_setting(const QString& key, const QString& value)
+void SettingsManager::add_setting(const QString& key, const QVariant &value)
 {
 	settings.setValue(key, value);
 }

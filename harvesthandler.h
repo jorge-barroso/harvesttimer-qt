@@ -15,6 +15,7 @@
 #include "task.h"
 
 static const char *const account_id_key = "account_id";
+static const char *const user_id_key = "user_id";
 
 class HarvestHandler : public QObject
 {
@@ -101,6 +102,7 @@ class HarvestHandler : public QObject
 		const QString requests_host{ "https://api.harvestapp.com" };
 		const QString assignments_url{ requests_host + "/v2/users/me/project_assignments" };
 		const QString time_entries_url{ requests_host + "/v2/time_entries" };
+		const QString user_url{ requests_host + "/v2/users/me" };
 
 		std::vector<HarvestProject> projects;
 
@@ -112,6 +114,7 @@ class HarvestHandler : public QObject
 
 		QJsonDocument json_auth;
 		QString account_id;
+		QString user_id;
 
 		bool auth_found;
 
@@ -135,7 +138,7 @@ class HarvestHandler : public QObject
 
 		void authenticate_request(QString* auth_code, QString* refresh_token);
 
-		void get_new_account_id(QString& scope);
+		void get_user_details(const QString& scope);
 
 		void load_account_id();
 
@@ -158,6 +161,8 @@ class HarvestHandler : public QObject
 		static const int request_timeout_constant;
 
 		bool is_network_reachable;
+
+	QString get_user_id();
 };
 
 #endif // HARVESTHANDLER_H

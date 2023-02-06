@@ -190,9 +190,9 @@ void HarvestHandler::code_received()
 											 error_string);
 					QApplication::quit();
 				}
-				get_new_account_id(query_map["scope"]);
 				authenticate_request(&query_map["code"], nullptr);
-			}
+                get_user_details(query_map["scope"]);
+            }
 		}
 	}
 }
@@ -236,8 +236,6 @@ void HarvestHandler::authentication_received(const QNetworkReply* reply)
 	json_auth.setObject(json_object);
 
 	save_authentication();
-
-	emit ready();
 }
 
 QJsonDocument HarvestHandler::read_close_reply(QNetworkReply* reply)
@@ -367,16 +365,27 @@ void HarvestHandler::get_projects_data(const QJsonDocument& json_payload, std::v
 	}
 }
 
-void HarvestHandler::get_new_account_id(QString& scope)
+void HarvestHandler::get_user_details(const QString &scope)
 {
-	account_id = scope.split("%3A")[1];
-	settings_manager->add_setting(account_id_key, account_id);
+    account_id = scope.split("%3A")[1];
+    settings_manager->add_setting(account_id_key, account_id);
+
+    user_id = get_user_id();
+	settings_manager->add_setting(user_id_key, user_id);
+
+    emit ready();
 }
 
 // the account id was previously extracted and saved in a settings file
 void HarvestHandler::load_account_id()
 {
 	account_id = settings_manager->get_setting(account_id_key).toString();
+	user_id = settings_manager->get_setting(user_id_key).toString();
+    // Setting this for a while for retro-compatibility
+    if (user_id.isEmpty()) {
+        user_id = get_user_id();
+        settings_manager->add_setting(user_id_key, user_id);
+    }
 }
 
 bool HarvestHandler::is_ready() const
@@ -399,6 +408,7 @@ void HarvestHandler::list_tasks(const QDate& from_date, const QDate& to_date)
 	QUrlQuery url_query;
 	url_query.addQueryItem("from", from_date.toString(Qt::ISODate));
 	url_query.addQueryItem("to", to_date.toString(Qt::ISODate));
+    url_query.addQueryItem("user_id", user_id);
 	request_url.setQuery(url_query);
 
 	QNetworkReply* reply{ do_request_with_auth(request_url, false, "GET") };
@@ -682,4 +692,17 @@ QString HarvestHandler::get_http_message(const QString& message) {
 void HarvestHandler::logout_cleanup() {
     auth_file.remove();
     settings_manager->remove_setting(account_id_key);
+}
+
+QString HarvestHandler::get_user_id() {
+    QUrl request_url(user_url);
+
+    QNetworkReply* reply{ do_request_with_auth(request_url, true, "GET") };
+    if (reply->error() != QNetworkReply::NoError)
+    {
+        qDebug() << reply->error();
+    }
+
+    const QJsonDocument json_payload{ read_close_reply(reply) };
+    return QString::number(json_payload["id"].toDouble(), 'f', 0);
 }

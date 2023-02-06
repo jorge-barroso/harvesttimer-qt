@@ -296,7 +296,7 @@ void HarvestHandler::authenticate_request(QString* auth_code, QString* refresh_t
 
 	QNetworkReply* reply{ network_manager.post(request, url_query.toString().toUtf8()) };
 
-	connect(reply, &QNetworkReply::readyRead, &loop, &QEventLoop::quit);
+	connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
 	loop.exec();
 
 	authentication_received(reply);
@@ -402,7 +402,7 @@ void HarvestHandler::list_tasks(const QDate& from_date, const QDate& to_date)
 	request_url.setQuery(url_query);
 
 	QNetworkReply* reply{ do_request_with_auth(request_url, false, "GET") };
-	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::tasks_list_ready);
+	connect(reply, &QNetworkReply::finished, this, &HarvestHandler::tasks_list_ready);
 }
 
 void HarvestHandler::add_task(Task* task)
@@ -430,7 +430,7 @@ void HarvestHandler::add_task(Task* task)
 	tasks_queue.insert({ key, task });
 
 	QNetworkReply* reply{ do_request_with_auth(time_entries_url, false, "POST", QJsonDocument(request_payload)) };
-	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::add_task_checks);
+	connect(reply, &QNetworkReply::finished, this, &HarvestHandler::add_task_checks);
 }
 
 void HarvestHandler::update_task(const Task* updated_task)
@@ -456,7 +456,7 @@ void HarvestHandler::update_task(const Task* updated_task)
 
 	QString update_url{ time_entries_url+"/"+QString::number(updated_task->time_entry_id) };
 	QNetworkReply* reply{ do_request_with_auth(update_url, false, "PATCH", QJsonDocument(request_payload)) };
-	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::update_task_checks);
+	connect(reply, &QNetworkReply::finished, this, &HarvestHandler::update_task_checks);
 }
 
 
@@ -471,7 +471,7 @@ void HarvestHandler::start_task(const Task& task)
 
 	const QUrl url{ time_entries_url + "/" + QString::number(task.time_entry_id) + "/restart" };
 	QNetworkReply* reply{ do_request_with_auth(url, false, "PATCH") };
-	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::start_task_checks);
+	connect(reply, &QNetworkReply::finished, this, &HarvestHandler::start_task_checks);
 }
 
 void HarvestHandler::stop_task(const Task& task)
@@ -485,7 +485,7 @@ void HarvestHandler::stop_task(const Task& task)
 
 	const QUrl url{ time_entries_url + "/" + QString::number(task.time_entry_id) + "/stop" };
 	QNetworkReply* reply{ do_request_with_auth(url, false, "PATCH") };
-	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::stop_task_checks);
+	connect(reply, &QNetworkReply::finished, this, &HarvestHandler::stop_task_checks);
 }
 
 void HarvestHandler::delete_task(const Task& task)
@@ -499,7 +499,7 @@ void HarvestHandler::delete_task(const Task& task)
 
 	const QUrl url{ time_entries_url + "/" + QString::number(task.time_entry_id) };
 	QNetworkReply* reply{ do_request_with_auth(url, false, "DELETE") };
-	connect(reply, &QNetworkReply::readyRead, this, &HarvestHandler::delete_task_checks);
+	connect(reply, &QNetworkReply::finished, this, &HarvestHandler::delete_task_checks);
 }
 
 QNetworkReply* HarvestHandler::do_request_with_auth(const QUrl& url, const bool sync_request, const QByteArray& verb,
@@ -527,7 +527,7 @@ QNetworkReply* HarvestHandler::do_request_with_auth(const QUrl& url, const bool 
 	{
 		// Execute the event loop here, now we will wait here until readyRead() signal is emitted
 		// which in turn will trigger event loop quit.
-		connect(reply, &QNetworkReply::readyRead, &loop, &QEventLoop::quit);
+		connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
 		loop.exec();
 	}
 

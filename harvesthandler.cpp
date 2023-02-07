@@ -325,10 +325,10 @@ HarvestHandler::get_projects_data(const QJsonDocument &json_payload, std::vector
 
 void HarvestHandler::get_user_details(const QString &scope) {
     account_id = scope.split("%3A")[1];
-    settings_manager->add_setting(account_id_key, account_id);
+    settings_manager->add_setting(user_details_group, account_id_key, account_id);
 
     user_id = get_user_id();
-    settings_manager->add_setting(user_id_key, user_id);
+	settings_manager->add_setting(user_details_group, user_id_key, user_id);
 
     emit ready();
 }
@@ -340,7 +340,7 @@ void HarvestHandler::load_account_id() {
     // Setting this for a while for retro-compatibility
     if (user_id.isEmpty()) {
         user_id = get_user_id();
-        settings_manager->add_setting(user_id_key, user_id);
+        settings_manager->add_setting(user_details_group, user_id_key, user_id);
     }
 }
 
@@ -624,7 +624,7 @@ QString HarvestHandler::get_http_message(const QString &message) {
 
 void HarvestHandler::logout_cleanup() {
     auth_file.remove();
-    settings_manager->remove_setting(account_id_key);
+    settings_manager->remove_setting(user_details_group);
 }
 
 QString HarvestHandler::get_user_id() {

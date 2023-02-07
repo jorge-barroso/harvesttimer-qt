@@ -29,9 +29,11 @@ SettingsManager::SettingsManager(const QDir& config_dir)
 
 SettingsManager::~SettingsManager() = default;
 
-void SettingsManager::add_setting(const QString& key, const QVariant &value)
+void SettingsManager::add_setting(const QString& group, const QString& key, const QVariant &value)
 {
+    settings.beginGroup(group);
 	settings.setValue(key, value);
+    settings.endGroup();
 }
 
 QVariant SettingsManager::get_setting(const QString& key)

@@ -16,6 +16,7 @@
 
 static const char *const account_id_key = "account_id";
 static const char *const user_id_key = "user_id";
+static const char *const user_details_group{"User"};
 
 class HarvestHandler : public QObject
 {

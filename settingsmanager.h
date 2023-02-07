@@ -16,7 +16,7 @@ class SettingsManager
 
 		static void reset_instance();
 
-		void add_setting(const QString& key, const QVariant &value);
+		void add_setting(const QString& group, const QString& key, const QVariant &value);
 
 		QVariant get_setting(const QString& key);
 

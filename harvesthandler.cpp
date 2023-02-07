@@ -55,7 +55,7 @@ HarvestHandler::HarvestHandler(const QDir &config_dir)
     if (!auth_found) {
         login();
     } else {
-        load_account_id();
+        load_user_ids();
         emit ready();
     }
 }
@@ -334,7 +334,7 @@ void HarvestHandler::get_user_details(const QString &scope) {
 }
 
 // the account id was previously extracted and saved in a settings file
-void HarvestHandler::load_account_id() {
+void HarvestHandler::load_user_ids() {
     account_id = settings_manager->get_setting(account_id_key).toString();
     user_id = settings_manager->get_setting(user_id_key).toString();
     // Setting this for a while for retro-compatibility

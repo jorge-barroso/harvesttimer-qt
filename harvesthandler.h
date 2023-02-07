@@ -141,7 +141,7 @@ class HarvestHandler : public QObject
 
 		void get_user_details(const QString& scope);
 
-		void load_account_id();
+		void load_user_ids();
 
 		QNetworkReply* do_request_with_auth(const QUrl& url, bool sync_request, const QByteArray& verb,
 											const std::optional<QJsonDocument>& payload = std::nullopt);

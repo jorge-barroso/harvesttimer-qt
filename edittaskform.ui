@@ -18,10 +18,10 @@
     <widget class="QTextEdit" name="notes_text_edit"/>
    </item>
    <item row="1" column="0" colspan="2">
-    <widget class="QComboBox" name="task_dropdown"/>
+    <widget class="CustomComboBox" name="task_dropdown"/>
    </item>
    <item row="0" column="0" colspan="2">
-    <widget class="QComboBox" name="project_dropdown"/>
+    <widget class="CustomComboBox" name="project_dropdown"/>
    </item>
    <item row="4" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -56,6 +56,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CustomComboBox</class>
+   <extends>QComboBox</extends>
+   <header>customcombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

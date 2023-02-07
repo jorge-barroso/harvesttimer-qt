@@ -9,7 +9,12 @@
         <translation>Tareas</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+6"/>
+        <source>Add A Custom Note…</source>
+        <translation>Añade Una Nota Personal…</translation>
+    </message>
+    <message>
+        <location line="+29"/>
         <source>Start</source>
         <translation>Iniciar</translation>
     </message>
@@ -78,7 +83,7 @@
 <context>
     <name>HarvestHandler</name>
     <message>
-        <location filename="harvesthandler.cpp" line="+115"/>
+        <location filename="harvesthandler.cpp" line="+96"/>
         <source>Error while waiting for Harvest authorization</source>
         <translation>Error esperando autorización de Harvest</translation>
     </message>
@@ -88,7 +93,7 @@
         <translation>Error</translation>
     </message>
     <message>
-        <location line="+71"/>
+        <location line="+62"/>
         <source>The details received from Harvest did not contain the minimum details required</source>
         <translation>Los datos recibidos de Harvest no contenían los detalles mínimos requeridos</translation>
     </message>
@@ -98,7 +103,7 @@
         <translation>Detalles Incompletos</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+29"/>
         <source>Error while authenticating with Harvest services: </source>
         <oldsource>Error while authenticating with Harvest </oldsource>
         <translation>Error de autenticación con los servicios de Harvest: </translation>
@@ -109,7 +114,7 @@
         <translation>Error de Autenticación</translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="+25"/>
         <source>It was not possible to save your credentials, you will have to log in again the next time you open Harvest Timer</source>
         <translation>No fue posible guardar sus credenciales, tendrá que volver a iniciar sesión la próxima vez que abra Harvest Timer</translation>
     </message>
@@ -119,31 +124,31 @@
         <translation>Error Guardando Autenticación</translation>
     </message>
     <message>
-        <location line="+13"/>
-        <location line="+42"/>
-        <location line="+93"/>
-        <location line="+20"/>
-        <location line="+28"/>
+        <location line="+12"/>
+        <location line="+38"/>
+        <location line="+86"/>
+        <location line="+19"/>
         <location line="+27"/>
-        <location line="+14"/>
-        <location line="+14"/>
+        <location line="+26"/>
+        <location line="+13"/>
+        <location line="+13"/>
         <source>Network Unreachable</source>
         <translation>Sin Conexión</translation>
     </message>
     <message>
-        <location line="-237"/>
-        <location line="+42"/>
-        <location line="+93"/>
-        <location line="+20"/>
-        <location line="+28"/>
+        <location line="-221"/>
+        <location line="+38"/>
+        <location line="+86"/>
+        <location line="+19"/>
         <location line="+27"/>
-        <location line="+14"/>
-        <location line="+14"/>
+        <location line="+26"/>
+        <location line="+13"/>
+        <location line="+13"/>
         <source>You are currently not connected to the internet, please reconnect and try again</source>
         <translation>Conexión a internet no disponible, por favor reconéctese y vuelva a intentarlo</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+39"/>
         <source>Error Loading Tasks</source>
         <translation>Error Cargando Tareas</translation>
     </message>
@@ -154,13 +159,13 @@
         <translation>No se pudieron cargar sus tareas: </translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+46"/>
         <source>Could not add your task: </source>
         <oldsource>Could not add your </oldsource>
         <translation>No se pudo añadir la tarea: </translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+26"/>
         <source>Error Updating Task</source>
         <translation>Error Actualizando Tarea</translation>
     </message>
@@ -171,17 +176,17 @@
         <translation>No se pudo actualizar esta tarea: </translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+29"/>
         <source>the request timed out.</source>
         <translation>se agotó el tiempo de espera de la petición.</translation>
     </message>
     <message>
-        <location line="-64"/>
+        <location line="-57"/>
         <source>Error Adding Task</source>
         <translation>Error Añadiendo Tarea</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+35"/>
         <source>Could not start this task: </source>
         <oldsource>Could not start this </oldsource>
         <translation>No se pudo iniciar la tarea: </translation>
@@ -192,7 +197,7 @@
         <translation>Error Iniciando Tarea</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+7"/>
         <source>Error Stopping Task</source>
         <translation>Error Deteniendo Tarea</translation>
     </message>
@@ -203,7 +208,7 @@
         <translation>No se pudo parar esta tarea: </translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+7"/>
         <source>Could not delete this task: </source>
         <oldsource>Could not delete this </oldsource>
         <translation>No se pudo eliminar esta tarea: </translation>
@@ -225,7 +230,7 @@
         <translation>Hubo un error cargando el sistema de información de red, la aplicación no desconocerá posibles cambios en el estado de red</translation>
     </message>
     <message>
-        <location filename="harvesthandler.cpp" line="-482"/>
+        <location filename="harvesthandler.cpp" line="-443"/>
         <source>Authentication successful, you may now close this tab</source>
         <translation>Inicio de sesión completado, puedes cerrar esta pestaña</translation>
     </message>
@@ -292,7 +297,7 @@
 <context>
     <name>TaskForm</name>
     <message>
-        <location filename="addtaskform.cpp" line="+80"/>
+        <location filename="addtaskform.cpp" line="+72"/>
         <location filename="edittaskform.cpp" line="-83"/>
         <source>Could not find project</source>
         <translation>Proyecto No Encontrado</translation>

@@ -19,6 +19,10 @@
         <source>Cancel</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Add A Custom Note…</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>DeleteTask</name>

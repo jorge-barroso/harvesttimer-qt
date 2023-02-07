@@ -328,7 +328,7 @@ void HarvestHandler::get_user_details(const QString &scope) {
     settings_manager->add_setting(user_details_group, account_id_key, account_id);
 
     user_id = get_user_id();
-	settings_manager->add_setting(user_details_group, user_id_key, user_id);
+    settings_manager->add_setting(user_details_group, user_id_key, user_id);
 
     emit ready();
 }
@@ -599,7 +599,12 @@ bool HarvestHandler::default_error_check(QNetworkReply *reply, const QString &ba
     }
     if (reply->error() != QNetworkReply::NetworkError::NoError) {
         const QJsonDocument error_report{read_close_reply(const_cast<QNetworkReply *>(reply))};
-        const QString error_string{base_error_body + error_report["error"].toString()};
+        qDebug() << "received error: " << reply->error();
+        qDebug() << "error message: " << error_report;
+
+        const QString error_string{(error_report["error"].isNull() ?
+                                    error_report["error"] :
+                                    error_report["message"]).toString()};
         QMessageBox::information(nullptr, base_error_title, error_string);
         return true;
     }

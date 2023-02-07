@@ -9,12 +9,8 @@
 #include <QMessageBox>
 
 TasksScrollArea::TasksScrollArea(QWidget *widget)
-        : CustomScrollArea(widget)
-        , timer{QTimer(this)}
-        , runningTask{}
-        , runningTaskWidget{nullptr}
-        , lookup_date{QDate::currentDate()}
-        {
+        : CustomScrollArea(widget), timer{QTimer(this)}, runningTask{}, runningTaskWidget{nullptr},
+          lookup_date{QDate::currentDate()} {
     timer.setInterval(timer_seconds * 1000);
 }
 
@@ -61,7 +57,7 @@ void TasksScrollArea::start_task(const Task *task, TaskWidget *task_widget) {
 
 void TasksScrollArea::start_task_locally(const Task *task, TaskWidget *task_widget) {
     // If there is a currently running task we want to set_stopped it, because we're only allowed to track one task at a time
-    stop_current_task();
+    stop_task_locally();
 
     // Restart timer
     timer.start();
@@ -96,9 +92,6 @@ void TasksScrollArea::delete_task(const Task *task, TaskWidget *task_widget) {
 }
 
 void TasksScrollArea::stop_current_task() {
-    if (runningTaskWidget == nullptr)
-        return;
-
     // stopping remotely takes longer due to the network overhead, so we kick it first and then stop locally
     // to try and be as accurate as possible
     // TODO maybe stop locally on success response received instead of always stopping locally
@@ -108,6 +101,9 @@ void TasksScrollArea::stop_current_task() {
 }
 
 void TasksScrollArea::stop_task_locally() {
+    if (runningTaskWidget == nullptr)
+        return;
+
     disconnect(runningTaskWidget, &TaskWidget::task_stopped, nullptr, nullptr);
     runningTaskWidget->set_stopped();
     runningTaskWidget = nullptr;
@@ -132,7 +128,7 @@ void TasksScrollArea::task_added(const Task *task) {
     connect(task_widget, &TaskWidget::task_unfavourited, this, &TasksScrollArea::unfavourite_task);
     bool inserted{MapUtils::map_insert_or_create_set(task_widgets, task->date, task_widget)};
 
-    if(!inserted) {
+    if (!inserted) {
         delete task_widget;
         return;
     }

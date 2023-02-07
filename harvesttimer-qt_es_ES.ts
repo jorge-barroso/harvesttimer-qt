@@ -23,22 +23,6 @@
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
-    <message>
-        <source>Could not find project</source>
-        <translation type="vanished">Proyecto No Encontrado</translation>
-    </message>
-    <message>
-        <source>The project this task is assigned to does not exist or has been renamed, please update your favourites to keep using them</source>
-        <translation type="vanished">El proyecto de esta tarea no existe o ha sido renombrado, por favor, actualice sus favoritos para seguir usándolos</translation>
-    </message>
-    <message>
-        <source>Could not find task</source>
-        <translation type="vanished">Tarea No Encontrada</translation>
-    </message>
-    <message>
-        <source>The task selected does not exist or has been renamed, please update your favourites to keep using them</source>
-        <translation type="vanished">La tarea seleccionada no existe o ha sido renombrada, por favor, actualice sus favoritos para seguir usándolos</translation>
-    </message>
 </context>
 <context>
     <name>DeleteTask</name>
@@ -47,10 +31,6 @@
         <location filename="taskwidget.cpp" line="+89"/>
         <source>Delete Task</source>
         <translation>Eliminar Tarea</translation>
-    </message>
-    <message>
-        <source>Are you sure about deleting this task? This action can&apos;t be undone.</source>
-        <translation type="vanished">¿Seguro que quieres eliminar esta tarea? Esta acción no se puede deshacer.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -270,18 +250,6 @@
         <source>Harvest Timer</source>
         <translation></translation>
     </message>
-    <message>
-        <source>File</source>
-        <translation type="vanished">Archivo</translation>
-    </message>
-    <message>
-        <source>Logout</source>
-        <translation type="vanished">Cerrar Sesión</translation>
-    </message>
-    <message>
-        <source>Quit</source>
-        <translation type="vanished">Salir</translation>
-    </message>
 </context>
 <context>
     <name>Menu</name>
@@ -346,25 +314,6 @@
         <location filename="edittaskform.cpp" line="+1"/>
         <source>The task selected does not exist or has been renamed, please update your favourites to keep using them</source>
         <translation>La tarea seleccionada no existe o ha sido renombrada, por favor, actualice sus favoritos para seguir usándolos</translation>
-    </message>
-</context>
-<context>
-    <name>Tray Icon</name>
-    <message>
-        <source>Add Task</source>
-        <translation type="vanished">Añadir Tarea</translation>
-    </message>
-    <message>
-        <source>Exit</source>
-        <translation type="vanished">Salir</translation>
-    </message>
-    <message>
-        <source>Show/Hide</source>
-        <translation type="vanished">Mostrar/Ocultar</translation>
-    </message>
-    <message>
-        <source>Quit</source>
-        <translation type="vanished">Salir</translation>
     </message>
 </context>
 </TS>

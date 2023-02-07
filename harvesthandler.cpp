@@ -343,13 +343,14 @@ void HarvestHandler::get_projects_data(const QJsonDocument& json_payload, std::v
 {
 	for (const QJsonValue project_assignment: json_payload["project_assignments"].toArray())
 	{
+        const QString client_name{project_assignment["client"]["name"].toString()};
 		std::vector<HarvestTask> project_tasks_vector;
 		for (const QJsonValue json_task: project_assignment["task_assignments"].toArray())
 		{
 			const QJsonValue json_task_details{ json_task["task"] };
 			const HarvestTask task = HarvestTask{
 					json_task_details["id"].toInteger(),
-					json_task_details["name"].toString()
+					json_task_details["name"].toString() + " (" + client_name + ")"
 			};
 
 			project_tasks_vector.emplace_back(task);
@@ -563,6 +564,7 @@ void HarvestHandler::tasks_list_ready()
 		const long long int task_entry_id{ task_object["id"].toInteger() };
 		const long long int project_id{ task_object["project"]["id"].toInteger() };
 		const QString project_name{ task_object["project"]["name"].toString() };
+		const QString client_name{ task_object["client"]["name"].toString() };
 		const long long int task_id{ task_object["task"]["id"].toInteger() };
 		const QString task_name{ task_object["task"]["name"].toString() };
 		const QString note{ task_object["notes"].toString() };
@@ -579,7 +581,7 @@ void HarvestHandler::tasks_list_ready()
 				project_id,
 				task_id,
 				task_entry_id,
-				project_name,
+				project_name + " (" + client_name + ")",
 				task_name,
 				time_tracked,
 				note,

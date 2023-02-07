@@ -5,64 +5,64 @@
 #include <QIcon>
 #include "task.h"
 
-namespace Ui
-{
-	class TaskWidget;
+namespace Ui {
+    class TaskWidget;
 }
 
-class TaskWidget : public QWidget
-{
-	Q_OBJECT
+class TaskWidget : public QWidget {
+Q_OBJECT
 
-	public:
-		explicit TaskWidget(Task* task, QWidget* parent);
+public:
+    explicit TaskWidget(Task *task, QWidget *parent);
 
-		~TaskWidget() override;
+    ~TaskWidget() override;
 
-		void set_stopped();
+    void set_stopped();
 
-		void addMinute();
+    void addMinute();
 
-		bool is_task(const Task* task) const;
+    bool is_task(const Task *task) const;
 
-		void set_favourited();
+    void set_favourited();
 
-		void set_unfavourited();
+    void set_unfavourited();
 
-		void update_task(Task* new_task);
+    void update_task(Task *new_task);
 
-	signals:
+    const Task* task() const;
 
-		void task_stopped();
+signals:
 
-		void task_started(const Task* task, TaskWidget* task_widget);
+    void task_stopped();
 
-		void task_edited(const Task* task, TaskWidget* task_widget);
+    void task_started(const Task *task, TaskWidget *task_widget);
 
-		void task_deleted(const Task* task, TaskWidget* task_widget);
+    void task_edited(const Task *task, TaskWidget *task_widget);
 
-		void task_favourited(const Task* task);
+    void task_deleted(const Task *task, TaskWidget *task_widget);
 
-		void task_unfavourited(const Task* task);
+    void task_favourited(const Task *task);
 
-	private slots:
+    void task_unfavourited(const Task *task);
 
-		void on_delete_button_clicked();
+private slots:
 
-		void on_stop_resume_button_clicked();
+    void on_delete_button_clicked();
 
-		void on_add_favourite_button_clicked();
+    void on_stop_resume_button_clicked();
 
-		void on_edit_button_clicked();
+    void on_add_favourite_button_clicked();
 
-	private:
-		Ui::TaskWidget* ui;
+    void on_edit_button_clicked();
 
-		Task* task;
+private:
+    Ui::TaskWidget *ui;
 
-		void set_started();
+    Task *m_task;
 
-		void update_internal_widgets();
+    void set_started();
+
+    void update_internal_widgets();
 };
 
 #endif // TASKWIDGET_H

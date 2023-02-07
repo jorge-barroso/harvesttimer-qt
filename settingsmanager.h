@@ -18,7 +18,7 @@ class SettingsManager
 
 		void add_setting(const QString& group, const QString& key, const QVariant &value);
 
-		QVariant get_setting(const QString& key);
+		QVariant get_setting(const QString &group, const QString &key);
 
         void remove_setting(const QString& key);
 

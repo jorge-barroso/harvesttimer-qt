@@ -335,8 +335,8 @@ void HarvestHandler::get_user_details(const QString &scope) {
 
 // the account id was previously extracted and saved in a settings file
 void HarvestHandler::load_user_ids() {
-    account_id = settings_manager->get_setting(account_id_key).toString();
-    user_id = settings_manager->get_setting(user_id_key).toString();
+    account_id = settings_manager->get_setting(user_details_group, account_id_key).toString();
+    user_id = settings_manager->get_setting(user_details_group, user_id_key).toString();
     // Setting this for a while for retro-compatibility
     if (user_id.isEmpty()) {
         user_id = get_user_id();

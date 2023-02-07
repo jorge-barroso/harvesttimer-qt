@@ -36,10 +36,14 @@ void SettingsManager::add_setting(const QString& group, const QString& key, cons
     settings.endGroup();
 }
 
-QVariant SettingsManager::get_setting(const QString& key)
+QVariant SettingsManager::get_setting(const QString &group, const QString &key)
 {
-	return settings.value(key);
-
+	QVariant value{settings.value(group + "/" + key)};
+    // Setting this for a while for retro-compatibility
+    if (value.isNull()) {
+        value = settings.value(key);
+    }
+    return value;
 }
 
 void SettingsManager::remove_setting(const QString& key) {

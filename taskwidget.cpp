@@ -23,7 +23,7 @@ TaskWidget::~TaskWidget()
 
 void TaskWidget::update_internal_widgets()
 {
-	ui->project_name_label->setText(m_task->project_name + " (" + m_task->client_name + ")");
+	ui->project_name_label->setText(m_task->get_project_label());
 	ui->task_name_label->setText(m_task->task_name);
 	ui->time_label->setText(m_task->time_tracked.toString("hh:mm"));
 

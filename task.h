@@ -28,7 +28,7 @@ struct Task
 	friend QTextStream& operator<<(QTextStream& stream, const Task& task)
 	{
 		stream << task.project_id << values_separator << task.task_id << values_separator << task.time_entry_id
-			   << values_separator << task.client_name << task.project_name << values_separator
+			   << values_separator << task.client_name << values_separator << task.project_name << values_separator
 			   << task.task_name << values_separator << task.time_tracked.toString() << values_separator << task.note
 			   << values_separator << task.started << values_separator
 			   << task.date.toString() << end_line_separator;

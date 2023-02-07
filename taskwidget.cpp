@@ -6,9 +6,9 @@
 #include <QMessageBox>
 
 TaskWidget::TaskWidget(Task* task, QWidget* parent) :
-		QWidget(parent),
-		ui(new Ui::TaskWidget),
-		task{ task }
+        QWidget(parent),
+        ui(new Ui::TaskWidget),
+        m_task{task }
 {
 	ui->setupUi(this);
 
@@ -23,11 +23,11 @@ TaskWidget::~TaskWidget()
 
 void TaskWidget::update_internal_widgets()
 {
-	ui->project_name_label->setText(task->project_name + " (" + task->client_name + ")");
-	ui->task_name_label->setText(task->task_name);
-	ui->time_label->setText(task->time_tracked.toString("hh:mm"));
+	ui->project_name_label->setText(m_task->project_name + " (" + m_task->client_name + ")");
+	ui->task_name_label->setText(m_task->task_name);
+	ui->time_label->setText(m_task->time_tracked.toString("hh:mm"));
 
-	if (task->started)
+	if (m_task->started)
 	{
 		// It's running
 		set_started();
@@ -38,7 +38,7 @@ void TaskWidget::update_internal_widgets()
 		set_stopped();
 	}
 
-	if(task->favourited)
+	if(m_task->favourited)
 	{
 		set_favourited();
 	}
@@ -50,12 +50,12 @@ void TaskWidget::update_internal_widgets()
 
 void TaskWidget::update_task(Task* new_task)
 {
-	task->project_id = new_task->project_id;
-	task->project_name = new_task->project_name;
-	task->task_id = new_task->task_id;
-	task->task_name = new_task->task_name;
-	task->note = new_task->note;
-	task->time_tracked = new_task->time_tracked;
+    m_task->project_id = new_task->project_id;
+    m_task->project_name = new_task->project_name;
+    m_task->task_id = new_task->task_id;
+    m_task->task_name = new_task->task_name;
+    m_task->note = new_task->note;
+    m_task->time_tracked = new_task->time_tracked;
 
 	delete new_task;
 
@@ -90,7 +90,7 @@ void TaskWidget::on_delete_button_clicked()
 								  QApplication::translate("DeleteTask", "Are you sure about deleting this task? This action cannot be undone."),
 								  QMessageBox::Yes|QMessageBox::No) };
 	if (reply == QMessageBox::Yes) {
-		emit task_deleted(task, this);
+		emit task_deleted(m_task, this);
 	}
 }
 
@@ -100,7 +100,7 @@ void TaskWidget::on_stop_resume_button_clicked()
 	if (ui->stop_resume_button->isChecked())  // If the button has been checked, it wasn't running
 	{
 		set_started();
-		emit task_started(task, this);
+		emit task_started(m_task, this);
 	}
 	else
 	{
@@ -112,15 +112,15 @@ void TaskWidget::on_stop_resume_button_clicked()
 
 void TaskWidget::on_add_favourite_button_clicked()
 {
-	if (!task->favourited)
+	if (!m_task->favourited)
 	{
 		set_favourited();
-		emit task_favourited(task);
+		emit task_favourited(m_task);
 	}
 	else
 	{
 		set_unfavourited();
-		emit task_unfavourited(task);
+		emit task_unfavourited(m_task);
 	}
 
 }
@@ -128,39 +128,43 @@ void TaskWidget::on_add_favourite_button_clicked()
 
 void TaskWidget::on_edit_button_clicked()
 {
-	emit task_edited(task, this);
+	emit task_edited(m_task, this);
 }
 
 void TaskWidget::set_favourited()
 {
 	ui->add_favourite_button->setChecked(true);
     ui->add_favourite_button->setIcon(QIcon::fromTheme("bookmark-remove"));
-	task->favourited = true;
+    m_task->favourited = true;
 }
 
 void TaskWidget::set_unfavourited()
 {
 	ui->add_favourite_button->setChecked(false);
     ui->add_favourite_button->setIcon(QIcon::fromTheme("bookmark-new-symbolic"));
-	task->favourited = false;
+    m_task->favourited = false;
 }
 
 void TaskWidget::set_started()
 {
 	ui->stop_resume_button->setChecked(true);
     ui->stop_resume_button->setIcon(QIcon::fromTheme("media-playback-stop-symbolic"));
-	task->started = true;
+    m_task->started = true;
 }
 
 void TaskWidget::set_stopped()
 {
 	ui->stop_resume_button->setChecked(false);
     ui->stop_resume_button->setIcon(QIcon::fromTheme("media-playback-start-symbolic"));
-	task->started = false;
+    m_task->started = false;
 }
 
 bool TaskWidget::is_task(const Task* task) const
 {
-	return task->project_id==this->task->project_id &&
-			task->task_id==this->task->task_id;
+	return task->project_id==this->m_task->project_id &&
+			task->task_id==this->m_task->task_id;
+}
+
+const Task *TaskWidget::task() const {
+    return this->m_task;
 }

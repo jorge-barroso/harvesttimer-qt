@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
     QNetworkProxyFactory::setUseSystemConfiguration(true);
 
     QApplication a(argc, argv);
-
+    QGuiApplication::setDesktopFileName(QStringLiteral("org.jb.harvest"));
     QGuiApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("org.jb.harvest")));
 
 	QTranslator translator;

@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: CC0-1.0
+# SPDX-FileCopyrightText: 2023 Jorge Barroso <jorge_barroso_11 at hotmail dot com>
+[Desktop Entry]
+Name=Harvest Timer
+GenericName=Timer for Harvest
+Comment=Simple time tracking and powerful reporting.
+Exec=harvest %u
+Terminal=false
+Icon=org.jb.harvest
+Type=Application
+Version=1.0.6
+Categories=Network;
+SingleMainWindow=true

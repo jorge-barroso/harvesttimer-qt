@@ -1,18 +1,24 @@
 #include "mainwindow.h"
 
 #include <QApplication>
+#include <QNetworkProxyFactory>
 #include <QLocale>
 #include <QDir>
 #include <QString>
 #include <QTranslator>
 #include <QStandardPaths>
 #include <QMessageBox>
+#include <QStyleFactory>
 
 QDir get_config_directory(const QString&);
 
 int main(int argc, char* argv[])
 {
-	QApplication a(argc, argv);
+    QNetworkProxyFactory::setUseSystemConfiguration(true);
+
+    QApplication a(argc, argv);
+
+    QGuiApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("org.jb.harvest")));
 
 	QTranslator translator;
 	const QStringList uiLanguages = QLocale::system().uiLanguages();

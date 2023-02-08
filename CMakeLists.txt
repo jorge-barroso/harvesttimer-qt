@@ -70,9 +70,10 @@ if (QT_VERSION VERSION_LESS 6.4)
 endif()
 
 install(TARGETS harvest
-        DESTINATION ${CMAKE_INSTALL_PREFIX}
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
         )
-
+install(FILES resources/desktop/org.jb.harvest.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications/)
+install(FILES resources/desktop/org.jb.harvest.svg DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps)
 
 find_package(Qt6 ${QT6_MIN_VERSION} REQUIRED
         Core
@@ -80,11 +81,15 @@ find_package(Qt6 ${QT6_MIN_VERSION} REQUIRED
         Widgets
         Network
         LinguistTools
+#        Multimedia
+        Svg
         )
 
-target_link_libraries(harvest Qt6::Core Qt6::Widgets Qt6::Gui Qt6::Network)
+target_link_libraries(harvest Qt6::Core Qt6::Widgets Qt6::Gui Qt6::Network Qt6::Svg)
 
 qt6_add_translations(harvest TS_FILES
         harvesttimer-qt_es_ES.ts
         harvesttimer-qt_en_US.ts
         )
+
+feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)

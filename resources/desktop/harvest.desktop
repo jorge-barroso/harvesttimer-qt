@@ -1,8 +1,0 @@
-[Desktop Entry]
-Version=0.8
-Type=Application
-Name=Harvest Timer
-Comment=Simple time tracking and powerful reporting.
-Icon=harvest
-Exec=harvest %u
-Terminal=false

@@ -314,10 +314,10 @@ HarvestHandler::get_projects_data(const QJsonDocument &json_payload, std::vector
         }
 
         const HarvestProject project{
-                project_assignment["client"]["name"].toString(),
-                project_assignment["project"]["name"].toString(),
-                project_assignment["project"]["id"].toInteger(),
-                project_tasks_vector
+                .client_name=project_assignment["client"]["name"].toString(),
+                .project_name=project_assignment["project"]["name"].toString(),
+                .project_id=project_assignment["project"]["id"].toInteger(),
+                .task=project_tasks_vector
         };
         projects_vector.emplace_back(project);
     }

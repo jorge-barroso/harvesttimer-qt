@@ -73,7 +73,7 @@ struct Task {
             return project_name;
         }
 
-        return project_name + " (" + client_name + ")";
+        return QString("%1 (%2)").arg(project_name, client_name);
     }
 };
 

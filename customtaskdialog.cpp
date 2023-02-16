@@ -27,7 +27,7 @@ void CustomTaskDialog::add_projects(const std::vector<HarvestProject>& new_proje
 	projects = new_projects;
 	for (const HarvestProject& project: projects)
 	{
-		project_dropdown->addItem(project.project_name);
+		project_dropdown->addItem(project.get_project_label());
 	}
 
 	new_project_chosen(0, task_dropdown);

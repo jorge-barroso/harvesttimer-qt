@@ -81,7 +81,6 @@ find_package(Qt6 ${QT6_MIN_VERSION} REQUIRED
         Widgets
         Network
         LinguistTools
-#        Multimedia
         Svg
         )
 

@@ -39,7 +39,7 @@ jobs:
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: |
         echo "Configuring a CMake Release environment"
-        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=/usr/bin
+        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=/usr
     - name: Build
       # Build your program with the given configuration
       run: |
@@ -108,14 +108,7 @@ jobs:
           mkdir -p .pkg/DEBIAN
           
           find ./usr -type f -exec install -Dm755 '{}' "${{github.workspace}}/.pkg/{}" \;
-          install -Dm644 "./resources/desktop/harvest.svg" "${{github.workspace}}/.pkg/usr/share/icons/hicolor/scalable/apps/harvest.svg"
-          install -Dm755 "./resources/desktop/harvest.desktop" "${{github.workspace}}/.pkg/usr/share/applications/harvest.desktop"
-          install -Dm644 "./debian/copyright" "${{github.workspace}}/.pkg/DEBIAN/copyright";
           sed -i "s/\${copyright_year}/$(date '+%Y')/g" ${{github.workspace}}/.pkg/DEBIAN/copyright
-          
-          for _size in 16 24 32 48 64 96 128 256 512; do
-            install -Dm644 "./resources/icons/hicolor/${_size}x${_size}.png" "${{github.workspace}}/.pkg/usr/share/icons/hicolor/${_size}x${_size}/apps/harvest.png"
-          done
       - name: Archive Package Directory
         uses: actions/upload-artifact@v3
         with:

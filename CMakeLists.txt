@@ -81,10 +81,9 @@ find_package(Qt6 ${QT6_MIN_VERSION} REQUIRED
         Widgets
         Network
         LinguistTools
-        Svg
         )
 
-target_link_libraries(harvest Qt6::Core Qt6::Widgets Qt6::Gui Qt6::Network Qt6::Svg)
+target_link_libraries(harvest Qt6::Core Qt6::Widgets Qt6::Gui Qt6::Network)
 
 qt6_add_translations(harvest TS_FILES
         harvesttimer-qt_es_ES.ts

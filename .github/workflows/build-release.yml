@@ -108,6 +108,7 @@ jobs:
           mkdir -p .pkg/DEBIAN
           
           find ./usr -type f -exec install -Dm755 '{}' "${{github.workspace}}/.pkg/{}" \;
+          install -Dm644 "./debian/copyright" "${{github.workspace}}/.pkg/DEBIAN/copyright";
           sed -i "s/\${copyright_year}/$(date '+%Y')/g" ${{github.workspace}}/.pkg/DEBIAN/copyright
       - name: Archive Package Directory
         uses: actions/upload-artifact@v3

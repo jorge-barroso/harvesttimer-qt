@@ -11,10 +11,18 @@
 
 struct HarvestProject
 {
-	QString company_name;
+	QString client_name;
 	QString project_name;
 	qint64 project_id;
 	std::vector<HarvestTask> task;
+
+    [[nodiscard]] QString get_project_label() const {
+        if(client_name.isNull() || client_name.isEmpty()) {
+            return project_name;
+        }
+
+        return QString("%1 (%2)").arg(project_name, client_name);
+    }
 };
 
 
